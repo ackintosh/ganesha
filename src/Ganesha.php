@@ -4,9 +4,9 @@ namespace Ackintosh;
 class Ganesha
 {
     /**
-     * @var int
+     * @var int[]
      */
-    private $failureCount = 0;
+    private $failureCount = [];
 
     /**
      * @var int
@@ -38,9 +38,9 @@ class Ganesha
      *
      * @return void
      */
-    public function recordFailure()
+    public function recordFailure($serviceName)
     {
-        $this->failureCount++;
+        $this->incrementFailureCount($serviceName);
     }
 
     /**
@@ -48,40 +48,66 @@ class Ganesha
      *
      * @return void
      */
-    public function recordSuccess()
+    public function recordSuccess($serviceName)
     {
-        if ($this->failureCount > 0) {
-            $this->failureCount--;
+        if ($this->getFailureCount($serviceName) > 0) {
+            $this->failureCount[$serviceName]--;
         }
     }
 
     /**
-     * @return bool
+     * returns failure count
+     *
+     * @param  string $serviceName
+     * @return int
      */
-    public function isAvailable()
+    private function getFailureCount($serviceName)
     {
-        return $this->isClosed() || $this->isHalfOpen();
+        if (!isset($this->failureCount[$serviceName])) {
+            $this->failureCount[$serviceName] = 0;
+        }
+
+        return $this->failureCount[$serviceName];
+    }
+
+    /**
+     * increments failure count
+     *
+     * @param  string $serviceName
+     * @return void
+     */
+    private function incrementFailureCount($serviceName)
+    {
+        $this->failureCount[$serviceName] = $this->getFailureCount($serviceName) + 1;
     }
 
     /**
      * @return bool
      */
-    private function isClosed()
+    public function isAvailable($serviceName)
     {
-        return $this->failureCount < $this->failureThreshold;
+        return $this->isClosed($serviceName) || $this->isHalfOpen($serviceName);
     }
 
     /**
      * @return bool
      */
-    private function isHalfOpen()
+    private function isClosed($serviceName)
+    {
+        return $this->getFailureCount($serviceName) < $this->failureThreshold;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isHalfOpen($serviceName)
     {
         if (is_null($this->lastFailureTime)) {
             return false;
         }
 
         if ((microtime(true) - $this->lastFailureTime) > $this->resetTimeout) {
-            $this->failureCount = $this->failureThreshold;
+            $this->failureCount[$serviceName] = $this->failureThreshold;
             return true;
         }
 

@@ -8,12 +8,13 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function recordsFailureAndTrips()
     {
+        $serviceName = 'test';
         $ganesha = new Ganesha(2);
-        $this->assertTrue($ganesha->isAvailable());
+        $this->assertTrue($ganesha->isAvailable($serviceName));
 
-        $ganesha->recordFailure();
-        $ganesha->recordFailure();
-        $this->assertFalse($ganesha->isAvailable());
+        $ganesha->recordFailure($serviceName);
+        $ganesha->recordFailure($serviceName);
+        $this->assertFalse($ganesha->isAvailable($serviceName));
     }
 
     /**
@@ -22,11 +23,12 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     public function recordsSuccessAndClose()
     {
         $ganesha = new Ganesha(2);
-        $ganesha->recordFailure();
-        $ganesha->recordFailure();
-        $this->assertFalse($ganesha->isAvailable());
+        $serviceName = 'test';
+        $ganesha->recordFailure($serviceName);
+        $ganesha->recordFailure($serviceName);
+        $this->assertFalse($ganesha->isAvailable($serviceName));
 
-        $ganesha->recordSuccess();
-        $this->assertTrue($ganesha->isAvailable());
+        $ganesha->recordSuccess($serviceName);
+        $this->assertTrue($ganesha->isAvailable($serviceName));
     }
 }

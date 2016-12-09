@@ -14,6 +14,16 @@ class Ganesha
     private $failureThreshold;
 
     /**
+     * @var float
+     */
+    private $resetTimeout = 0.1;
+
+    /**
+     * @var float
+     */
+    private $lastFailureTime;
+
+    /**
      * Ganesha constructor.
      *
      * @param int $failureThreshold
@@ -48,8 +58,33 @@ class Ganesha
     /**
      * @return bool
      */
-    public function isClosed()
+    public function isAvailable()
+    {
+        return $this->isClosed() || $this->isHalfOpen();
+    }
+
+    /**
+     * @return bool
+     */
+    private function isClosed()
     {
         return $this->failureCount < $this->failureThreshold;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isHalfOpen()
+    {
+        if (is_null($this->lastFailureTime)) {
+            return false;
+        }
+
+        if ((microtime(true) - $this->lastFailureTime) > $this->resetTimeout) {
+            $this->failureCount = $this->failureThreshold;
+            return true;
+        }
+
+        return false;
     }
 }

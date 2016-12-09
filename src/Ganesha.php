@@ -1,12 +1,14 @@
 <?php
 namespace Ackintosh;
 
+use Ackintosh\Ganesha\Storage;
+
 class Ganesha
 {
     /**
-     * @var int[]
+     * @var Strage
      */
-    private $failureCount = [];
+    private $storage;
 
     /**
      * @var int
@@ -30,6 +32,7 @@ class Ganesha
      */
     public function __construct($failureThreshold = 10)
     {
+        $this->storage = new Storage();
         $this->failureThreshold = $failureThreshold;
     }
 
@@ -40,7 +43,7 @@ class Ganesha
      */
     public function recordFailure($serviceName)
     {
-        $this->incrementFailureCount($serviceName);
+        $this->storage->incrementFailureCount($serviceName);
     }
 
     /**
@@ -50,35 +53,9 @@ class Ganesha
      */
     public function recordSuccess($serviceName)
     {
-        if ($this->getFailureCount($serviceName) > 0) {
-            $this->failureCount[$serviceName]--;
+        if ($this->storage->getFailureCount($serviceName) > 0) {
+            $this->storage->decrementFailureCount($serviceName);
         }
-    }
-
-    /**
-     * returns failure count
-     *
-     * @param  string $serviceName
-     * @return int
-     */
-    private function getFailureCount($serviceName)
-    {
-        if (!isset($this->failureCount[$serviceName])) {
-            $this->failureCount[$serviceName] = 0;
-        }
-
-        return $this->failureCount[$serviceName];
-    }
-
-    /**
-     * increments failure count
-     *
-     * @param  string $serviceName
-     * @return void
-     */
-    private function incrementFailureCount($serviceName)
-    {
-        $this->failureCount[$serviceName] = $this->getFailureCount($serviceName) + 1;
     }
 
     /**
@@ -94,7 +71,7 @@ class Ganesha
      */
     private function isClosed($serviceName)
     {
-        return $this->getFailureCount($serviceName) < $this->failureThreshold;
+        return $this->storage->getFailureCount($serviceName) < $this->failureThreshold;
     }
 
     /**
@@ -107,7 +84,7 @@ class Ganesha
         }
 
         if ((microtime(true) - $this->lastFailureTime) > $this->resetTimeout) {
-            $this->failureCount[$serviceName] = $this->failureThreshold;
+            $this->storage->setFailureCount($serviceName, $this->failureThreshold);
             return true;
         }
 

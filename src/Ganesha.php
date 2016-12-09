@@ -50,6 +50,6 @@ class Ganesha
      */
     public function isClosed()
     {
-        return $this->failureCount >= $this->failureThreshold;
+        return $this->failureCount < $this->failureThreshold;
     }
 }

@@ -15,4 +15,18 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $ganesha->recordFailure();
         $this->assertTrue($ganesha->isClosed());
     }
+
+    /**
+     * @test
+     */
+    public function recordsSuccessAndClose()
+    {
+        $ganesha = new Ganesha(2);
+        $ganesha->recordFailure();
+        $ganesha->recordFailure();
+        $this->assertTrue($ganesha->isClosed());
+
+        $ganesha->recordSuccess();
+        $this->assertFalse($ganesha->isClosed());
+    }
 }

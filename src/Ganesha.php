@@ -34,6 +34,18 @@ class Ganesha
     }
 
     /**
+     * records success
+     *
+     * @return void
+     */
+    public function recordSuccess()
+    {
+        if ($this->failureCount > 0) {
+            $this->failureCount--;
+        }
+    }
+
+    /**
      * @return bool
      */
     public function isClosed()

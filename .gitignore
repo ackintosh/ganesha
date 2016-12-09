@@ -1,0 +1,11 @@
+/composer.lock
+/composer.phar
+/vendor/*
+/build/
+!/vendor/splclassloader
+GPATH
+GRTAGS
+GTAGS
+.php-version
+.DS_Store
+.idea

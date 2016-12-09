@@ -9,6 +9,11 @@ class Storage
     private $failureCount = [];
 
     /**
+     * @var float
+     */
+    private $lastFailureTime;
+
+    /**
      * returns failure count
      *
      * @param  string $serviceName
@@ -54,5 +59,26 @@ class Storage
     public function setFailureCount($serviceName, $failureCount)
     {
         $this->failureCount[$serviceName] = $failureCount;
+    }
+
+    /**
+     * sets last failure time
+     *
+     * @param  float $lastFailureTime
+     * @return void
+     */
+    public function setLastFailureTime($lastFailureTime)
+    {
+        $this->lastFailureTime = $lastFailureTime;
+    }
+
+    /**
+     * returns last failure time
+     *
+     * @return float | null
+     */
+    public function getLastFailureTime()
+    {
+        return $this->lastFailureTime;
     }
 }

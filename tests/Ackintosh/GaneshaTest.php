@@ -6,8 +6,13 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function ganesha()
+    public function recordsFailureAndTrips()
     {
-        $this->assertInstanceOf('\Ackintosh\Ganesha', new Ganesha());
+        $ganesha = new Ganesha(2);
+        $this->assertFalse($ganesha->isClosed());
+
+        $ganesha->recordFailure();
+        $ganesha->recordFailure();
+        $this->assertTrue($ganesha->isClosed());
     }
 }

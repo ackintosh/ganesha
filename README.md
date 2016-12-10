@@ -5,7 +5,7 @@ PHP implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/Ci
 ![ganesha](https://dl.dropboxusercontent.com/u/22083548/ganesha.png)
 
 For now, Ganesha is under development heavily. :muscle:
-Don't miss it !
+It's going to be awesome !
 
 ### Usage
 

@@ -7,7 +7,7 @@ PHP implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/Ci
 For now, Ganesha is under development heavily. :muscle:
 It's going to be awesome !
 
-### Usage
+## Usage
 
 ```php
 $ganesha = new Ackintosh\Ganesha();
@@ -25,3 +25,11 @@ try {
     die($e->getMessage());
 }
 ```
+
+## Great predecessors
+
+Ganesha respects the following libraries.
+
+- [ejsmont-artur/php-circuit-breaker](https://github.com/ejsmont-artur/php-circuit-breaker)
+- [itsoneiota/circuit-breaker](https://github.com/itsoneiota/circuit-breaker)
+

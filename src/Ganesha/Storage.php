@@ -1,6 +1,8 @@
 <?php
 namespace Ackintosh\Ganesha;
 
+use Ackintosh\Ganesha;
+
 class Storage
 {
     /**
@@ -12,6 +14,8 @@ class Storage
      * @var float
      */
     private $lastFailureTime;
+
+    private $status = Ganesha::STATUS_CLOSE;
 
     /**
      * returns failure count
@@ -80,5 +84,15 @@ class Storage
     public function getLastFailureTime()
     {
         return $this->lastFailureTime;
+    }
+
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

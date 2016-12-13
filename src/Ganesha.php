@@ -20,6 +20,9 @@ class Ganesha
      */
     private $resetTimeout = 0.1;
 
+    const STATUS_CLOSE = 1;
+    const STATUS_OPEN  = 2;
+
     /**
      * Ganesha constructor.
      *
@@ -40,6 +43,12 @@ class Ganesha
     {
         $this->storage->setLastFailureTime(microtime(true));
         $this->storage->incrementFailureCount($serviceName);
+
+        if ($this->storage->getFailureCount($serviceName) >= $this->failureThreshold
+            && $this->storage->getStatus() !== self::STATUS_CLOSE
+        ) {
+            $this->storage->setStatus(self::STATUS_OPEN);
+        }
     }
 
     /**
@@ -51,6 +60,12 @@ class Ganesha
     {
         if ($this->storage->getFailureCount($serviceName) > 0) {
             $this->storage->decrementFailureCount($serviceName);
+        }
+
+        if ($this->storage->getFailureCount($serviceName) === 0
+            && $this->storage->getStatus() !== self::STATUS_OPEN
+        ) {
+            $this->storage->setStatus(self::STATUS_CLOSE);
         }
     }
 

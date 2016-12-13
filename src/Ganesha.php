@@ -21,11 +21,6 @@ class Ganesha
     private $resetTimeout = 0.1;
 
     /**
-     * @var float
-     */
-    private $lastFailureTime;
-
-    /**
      * Ganesha constructor.
      *
      * @param int $failureThreshold

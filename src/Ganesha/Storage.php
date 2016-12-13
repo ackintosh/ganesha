@@ -15,6 +15,9 @@ class Storage
      */
     private $lastFailureTime;
 
+    /**
+     * @var int
+     */
     private $status = Ganesha::STATUS_CLOSE;
 
     /**
@@ -86,11 +89,22 @@ class Storage
         return $this->lastFailureTime;
     }
 
+    /**
+     * sets status
+     *
+     * @param  int $status
+     * @return void
+     */
     public function setStatus($status)
     {
         $this->status = $status;
     }
 
+    /**
+     * returns status
+     *
+     * @return int
+     */
     public function getStatus()
     {
         return $this->status;

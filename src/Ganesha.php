@@ -20,6 +20,9 @@ class Ganesha
      */
     private $resetTimeout = 0.1;
 
+    /**
+     * @var int
+     */
     const STATUS_CLOSE = 1;
     const STATUS_OPEN  = 2;
 

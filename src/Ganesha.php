@@ -21,6 +21,11 @@ class Ganesha
     private $resetTimeout = 0.1;
 
     /**
+     * @var callable
+     */
+    private $behavior;
+
+    /**
      * @var int
      */
     const STATUS_CLOSE = 1;
@@ -48,9 +53,12 @@ class Ganesha
         $this->storage->incrementFailureCount($serviceName);
 
         if ($this->storage->getFailureCount($serviceName) >= $this->failureThreshold
-            && $this->storage->getStatus() !== self::STATUS_CLOSE
+            && $this->storage->getStatus() === self::STATUS_CLOSE
         ) {
             $this->storage->setStatus(self::STATUS_OPEN);
+            if ($this->behavior) {
+                call_user_func($this->behavior);
+            }
         }
     }
 
@@ -103,5 +111,15 @@ class Ganesha
         }
 
         return false;
+    }
+
+    /**
+     * sets behavior which will be invoked when Ganesha trips
+     *
+     * @param callable $callback
+     */
+    public function onTrip($callback)
+    {
+        $this->behavior = $callback;
     }
 }

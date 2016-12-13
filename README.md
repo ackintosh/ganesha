@@ -7,6 +7,12 @@ PHP implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/Ci
 For now, Ganesha is under development heavily. :muscle:
 It's going to be awesome !
 
+## Unveil Ganesha
+
+```
+composer require ackintosh/ganesha:dev-master
+```
+
 ## Usage
 
 ```php

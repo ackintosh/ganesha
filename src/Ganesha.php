@@ -117,9 +117,14 @@ class Ganesha
      * sets behavior which will be invoked when Ganesha trips
      *
      * @param callable $callback
+     * @throws \InvalidArgumentException
      */
     public function onTrip($callback)
     {
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException(__METHOD__ . ' allows only callable.');
+        }
+
         $this->behavior = $callback;
     }
 }

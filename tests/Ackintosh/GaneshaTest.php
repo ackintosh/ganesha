@@ -53,4 +53,14 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $ganesha->recordFailure($serviceName);
         $ganesha->recordFailure($serviceName);
     }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    public function onTripThrowsException()
+    {
+        $ganesha = new Ganesha();
+        $ganesha->onTrip(1);
+    }
 }

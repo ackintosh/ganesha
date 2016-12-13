@@ -11,23 +11,24 @@ It's going to be awesome !
 
 ```php
 $ganesha = new Ackintosh\Ganesha();
+$serviceName = 'external_api';
 
 // We can set the behavior that will be invoked when Ganesha has tripped.
-$ganesha->onTrip(function ($serviceName) {
-    Slack::notify("Ganesha has tripped. Something's wrong in {$serviceName} !");
+$ganesha->onTrip(function ($unavailableServiceName) {
+    Slack::notify("Ganesha has tripped. Something's wrong in {$unavailableServiceName} !");
 });
 
-if (!$ganesha->isAvailable('external_api')) {
+if (!$ganesha->isAvailable($serviceName)) {
     die('external api is not available');
 }
 
 try {
     $response = ExternalApi::send($request);
-    $ganesha->recordSuccess('external_api');
+    $ganesha->recordSuccess($serviceName);
     echo $response->getBody();
 } catch (ExternalApi\NetworkErrorException $e) {
     // If a network error occurred, it must be recorded as failure.
-    $ganesha->recordFailure('external_api');
+    $ganesha->recordFailure($serviceName);
     die($e->getMessage());
 }
 ```

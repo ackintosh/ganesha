@@ -38,18 +38,19 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     public function invokesItsBehaviorWhenGaneshaHasTripped()
     {
         $ganesha = new Ganesha(2);
+        $serviceName = 'test';
 
         $mock = $this->getMockBuilder(\stdClass::class)
             ->setMethods(['foo'])
             ->getMock();
         $mock->expects($this->once())
-            ->method('foo');
+            ->method('foo')
+            ->with($serviceName);
 
-        $ganesha->onTrip(function () use ($mock) {
-            $mock->foo();
+        $ganesha->onTrip(function ($serviceName) use ($mock) {
+            $mock->foo($serviceName);
         });
 
-        $serviceName = 'test';
         $ganesha->recordFailure($serviceName);
         $ganesha->recordFailure($serviceName);
     }

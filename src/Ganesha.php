@@ -57,7 +57,7 @@ class Ganesha
         ) {
             $this->storage->setStatus(self::STATUS_OPEN);
             if ($this->behavior) {
-                call_user_func($this->behavior);
+                call_user_func($this->behavior, $serviceName);
             }
         }
     }

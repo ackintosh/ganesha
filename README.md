@@ -13,8 +13,8 @@ It's going to be awesome !
 $ganesha = new Ackintosh\Ganesha();
 
 // We can set the behavior that will be invoked when Ganesha has tripped.
-$ganesha->onTrip(function () {
-    Slack::notify("Ganesha has tripped. Something's wrong !");
+$ganesha->onTrip(function ($serviceName) {
+    Slack::notify("Ganesha has tripped. Something's wrong in {$serviceName} !");
 });
 
 if (!$ganesha->isAvailable('external_api')) {

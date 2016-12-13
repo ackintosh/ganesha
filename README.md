@@ -14,7 +14,7 @@ $ganesha = new Ackintosh\Ganesha();
 
 // We can set the behavior that will be invoked when Ganesha has tripped.
 $ganesha->onTrip(function () {
-    SlackApi::notify("Ganesha has tripped. Something's wrong !");
+    Slack::notify("Ganesha has tripped. Something's wrong !");
 });
 
 if (!$ganesha->isAvailable('external_api')) {
@@ -22,10 +22,11 @@ if (!$ganesha->isAvailable('external_api')) {
 }
 
 try {
-    $response = $externalApi->send($request);
+    $response = ExternalApi::send($request);
     $ganesha->recordSuccess('external_api');
     echo $response->getBody();
-} catch (\RuntimeException $e) {
+} catch (ExternalApi\NetworkErrorException $e) {
+    // If a network error occurred, it must be recorded as failure.
     $ganesha->recordFailure('external_api');
     die($e->getMessage());
 }

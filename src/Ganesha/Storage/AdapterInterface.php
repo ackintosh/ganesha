@@ -17,6 +17,18 @@ interface AdapterInterface
     public function save($serviceName, $count);
 
     /**
+     * @param  string $serviceName
+     * @return void
+     */
+    public function increment($serviceName);
+
+    /**
+     * @param  string $serviceName
+     * @return void
+     */
+    public function decrement($serviceName);
+
+    /**
      * sets last failure time
      *
      * @param  float $lastFailureTime

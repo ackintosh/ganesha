@@ -34,7 +34,7 @@ class Storage
      */
     public function incrementFailureCount($serviceName)
     {
-        $this->setFailureCount($serviceName, $this->getFailureCount($serviceName) + 1);
+        $this->adapter->increment($serviceName);
     }
 
     /**
@@ -45,7 +45,7 @@ class Storage
      */
     public function decrementFailureCount($serviceName)
     {
-        $this->setFailureCount($serviceName, $this->getFailureCount($serviceName) - 1);
+        $this->adapter->decrement($serviceName);
     }
 
     /**

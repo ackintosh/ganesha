@@ -48,6 +48,24 @@ class Hash implements AdapterInterface
     }
 
     /**
+     * @param  string $serviceName
+     * @return void
+     */
+    public function increment($serviceName)
+    {
+        $this->save($serviceName, $this->load($serviceName) + 1);
+    }
+
+    /**
+     * @param  string $serviceName
+     * @return void
+     */
+    public function decrement($serviceName)
+    {
+        $this->save($serviceName, $this->load($serviceName) - 1);
+    }
+
+    /**
      * sets last failure time
      *
      * @param  float $lastFailureTime

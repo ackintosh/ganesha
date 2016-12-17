@@ -1,6 +1,9 @@
 <?php
 namespace Ackintosh;
 
+use Ackintosh\Ganesha\Builder;
+use Ackintosh\Ganesha\Storage\Adapter\Hash;
+
 class GaneshaTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -9,7 +12,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     public function recordsFailureAndTrips()
     {
         $serviceName = 'test';
-        $ganesha = new Ganesha(2);
+        $ganesha = $this->buildGaneshaWithHashAdapter(2);
         $this->assertTrue($ganesha->isAvailable($serviceName));
 
         $ganesha->recordFailure($serviceName);
@@ -22,7 +25,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function recordsSuccessAndClose()
     {
-        $ganesha = new Ganesha(2);
+        $ganesha = $this->buildGaneshaWithHashAdapter(2);
         $serviceName = 'test';
         $ganesha->recordFailure($serviceName);
         $ganesha->recordFailure($serviceName);
@@ -37,7 +40,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function invokesItsBehaviorWhenGaneshaHasTripped()
     {
-        $ganesha = new Ganesha(2);
+        $ganesha = $this->buildGaneshaWithHashAdapter(2);
         $serviceName = 'test';
 
         $mock = $this->getMockBuilder(\stdClass::class)
@@ -61,7 +64,15 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function onTripThrowsException()
     {
-        $ganesha = new Ganesha();
+        $ganesha = $this->buildGaneshaWithHashAdapter(2);
         $ganesha->onTrip(1);
+    }
+
+    private function buildGaneshaWithHashAdapter($threshold)
+    {
+        return Builder::create()
+            ->withFailureThreshold($threshold)
+            ->withStorageAdapter(new Hash)
+            ->build();
     }
 }

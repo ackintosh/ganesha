@@ -2,6 +2,7 @@
 namespace Ackintosh;
 
 use Ackintosh\Ganesha\Storage;
+use Ackintosh\Ganesha\Storage\AdapterInterface;
 
 class Ganesha
 {
@@ -36,10 +37,14 @@ class Ganesha
      *
      * @param int $failureThreshold
      */
-    public function __construct($failureThreshold = 10)
+    public function __construct($failureThreshold)
     {
-        $this->storage = new Storage(new Storage\Adapter\Hash());
         $this->failureThreshold = $failureThreshold;
+    }
+
+    public function setupStorage(AdapterInterface $adapter)
+    {
+        $this->storage = new Storage($adapter);
     }
 
     /**

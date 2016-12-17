@@ -4,6 +4,9 @@ namespace Ackintosh\Ganesha\Storage\Adapter;
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 
+/**
+ * Can only be used for tests.
+ */
 class Hash implements AdapterInterface
 {
     /**

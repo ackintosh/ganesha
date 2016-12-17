@@ -7,7 +7,7 @@ use Ackintosh\Ganesha\Storage\AdapterInterface;
 class Ganesha
 {
     /**
-     * @var Strage
+     * @var Storage
      */
     private $storage;
 

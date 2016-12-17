@@ -16,7 +16,11 @@ composer require ackintosh/ganesha:dev-master
 ## Usage
 
 ```php
-$ganesha = new Ackintosh\Ganesha();
+$ganesha = Ackintosh\Ganesha\Builder::create()
+               ->withFailureThreshold(10)
+               ->withStorageAdapter(new Ackintosh\Ganesha\Storage\Adapter\Hash)
+               ->build();
+
 $serviceName = 'external_api';
 
 // We can set the behavior that will be invoked when Ganesha has tripped.

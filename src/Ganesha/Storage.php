@@ -1,14 +1,16 @@
 <?php
 namespace Ackintosh\Ganesha;
 
+use Ackintosh\Ganesha\Storage\AdapterInterface;
+
 class Storage
 {
     /**
-     * @var Acintosh\Ganesha\Storage\Adapter\Hash
+     * @var Storage\AdapterInterface
      */
     private $adapter;
 
-    public function __construct($adapter)
+    public function __construct(AdapterInterface $adapter)
     {
         $this->adapter = $adapter;
     }

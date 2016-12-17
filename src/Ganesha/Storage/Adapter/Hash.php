@@ -2,8 +2,9 @@
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha;
+use Ackintosh\Ganesha\Storage\AdapterInterface;
 
-class Hash
+class Hash implements AdapterInterface
 {
     /**
      * @var int[]

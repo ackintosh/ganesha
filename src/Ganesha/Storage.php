@@ -1,24 +1,17 @@
 <?php
 namespace Ackintosh\Ganesha;
 
-use Ackintosh\Ganesha;
-
 class Storage
 {
     /**
-     * @var int[]
+     * @var Acintosh\Ganesha\Storage\Adapter\Hash
      */
-    private $failureCount = [];
+    private $adapter;
 
-    /**
-     * @var float
-     */
-    private $lastFailureTime;
-
-    /**
-     * @var int
-     */
-    private $status = Ganesha::STATUS_CLOSE;
+    public function __construct($adapter)
+    {
+        $this->adapter = $adapter;
+    }
 
     /**
      * returns failure count
@@ -28,11 +21,7 @@ class Storage
      */
     public function getFailureCount($serviceName)
     {
-        if (!isset($this->failureCount[$serviceName])) {
-            $this->failureCount[$serviceName] = 0;
-        }
-
-        return $this->failureCount[$serviceName];
+        return $this->adapter->load($serviceName);
     }
 
     /**
@@ -43,7 +32,7 @@ class Storage
      */
     public function incrementFailureCount($serviceName)
     {
-        $this->failureCount[$serviceName] = $this->getFailureCount($serviceName) + 1;
+        $this->adapter->save($serviceName, $this->getFailureCount($serviceName) + 1);
     }
 
     /**
@@ -54,7 +43,7 @@ class Storage
      */
     public function decrementFailureCount($serviceName)
     {
-        $this->failureCount[$serviceName] = $this->getFailureCount($serviceName) - 1;
+        $this->adapter->save($serviceName, $this->getFailureCount($serviceName) - 1);
     }
 
     /**
@@ -65,7 +54,7 @@ class Storage
      */
     public function setFailureCount($serviceName, $failureCount)
     {
-        $this->failureCount[$serviceName] = $failureCount;
+        $this->adapter->save($serviceName, $failureCount);
     }
 
     /**
@@ -76,7 +65,7 @@ class Storage
      */
     public function setLastFailureTime($lastFailureTime)
     {
-        $this->lastFailureTime = $lastFailureTime;
+        $this->adapter->saveLastFailureTime($lastFailureTime);
     }
 
     /**
@@ -86,7 +75,7 @@ class Storage
      */
     public function getLastFailureTime()
     {
-        return $this->lastFailureTime;
+        return $this->adapter->loadLastFailureTime();
     }
 
     /**
@@ -97,7 +86,7 @@ class Storage
      */
     public function setStatus($status)
     {
-        $this->status = $status;
+        $this->adapter->saveStatus($status);
     }
 
     /**
@@ -107,6 +96,6 @@ class Storage
      */
     public function getStatus()
     {
-        return $this->status;
+        return $this->adapter->loadStatus();
     }
 }

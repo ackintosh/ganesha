@@ -38,7 +38,7 @@ class Ganesha
      */
     public function __construct($failureThreshold = 10)
     {
-        $this->storage = new Storage();
+        $this->storage = new Storage(new Storage\Adapter\Hash());
         $this->failureThreshold = $failureThreshold;
     }
 

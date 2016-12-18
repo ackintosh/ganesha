@@ -1,23 +1,23 @@
 {
-    "name": "ackintosh/ganesha",
-    "description": "PHP implementation of Circuit Breaker pattern",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "akihito.nakano",
-            "email": "sora.akatsuki@gmail.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.6.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "*"
-    },
-    "autoload": {
-        "psr-4": {
-            "Ackintosh\\": "src/"
-        }
+  "name": "ackintosh/ganesha",
+  "description": "PHP implementation of Circuit Breaker pattern",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "akihito.nakano",
+      "email": "sora.akatsuki@gmail.com"
     }
+  ],
+  "require": {
+    "php": ">=5.6.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Ackintosh\\": "src/"
+    }
+  }
 }

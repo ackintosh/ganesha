@@ -43,6 +43,41 @@ try {
 }
 ```
 
+## Examples of Ganesha behavior
+
+(in japanese)
+
+
+###### 設定
+
+- 失敗数のしきい値
+	- 10回 ( `withFailureThreshold(10)` )
+- リトライ時間
+	- 5秒 ( `withRetryTimeout(5)` )
+- リセット時間
+	- 60秒 ( `withResetTimeout(60)` )
+
+```php
+$ganesha = Ackintosh\Ganesha\Builder::create()
+               ->withFailureThreshold(10)
+               ->withStorageAdapter(new Ackintosh\Ganesha\Storage\Adapter\Hash)
+               ->withRetryTimeout(5) // not implemented yet
+               ->withResetTimeout(60) // not implemented yet
+               ->build();
+```
+
+###### 挙動
+
+- 失敗/成功時に失敗数カウントを増減する
+- 失敗数カウントが10回を超えると Ganesha が open 状態になる
+	- `Ganesha::isAvailable()` が常に `false` を返す
+	- open から5秒後、half-open 状態になり、特定のアクセスのみ許可される
+		- 特定のアクセス = 5秒経過した後の最初のアクセス
+	- そのアクセスが成功すれば、失敗数カウントがしきい値を下回り close 状態になる
+		- ( = `Ganesha::isAvailable()` が `true` を返す )
+- 60秒間、失敗/成功のどちらもなければカウントがリセットされる
+
+
 ## Great predecessors
 
 Ganesha respects the following libraries.

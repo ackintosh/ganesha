@@ -18,6 +18,7 @@ composer require ackintosh/ganesha:dev-master
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::create()
                ->withFailureThreshold(10)
+               // Hash adapter can only be used for tests.
                ->withStorageAdapter(new Ackintosh\Ganesha\Storage\Adapter\Hash)
                ->build();
 

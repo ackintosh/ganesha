@@ -85,3 +85,6 @@ Ganesha respects the following libraries.
 - [ejsmont-artur/php-circuit-breaker](https://github.com/ejsmont-artur/php-circuit-breaker)
 - [itsoneiota/circuit-breaker](https://github.com/itsoneiota/circuit-breaker)
 
+## Requirements
+
+Ganesha supports PHP 5.6 or higher.

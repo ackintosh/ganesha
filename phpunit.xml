@@ -5,6 +5,10 @@
             <directory>./tests/*</directory>
         </testsuite>
     </testsuites>
+    <logging>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false" />
+    </logging>
     <filter>
       <whitelist processUncoveredFilesFromWhitelist="true">
         <directory suffix=".php">./src</directory>

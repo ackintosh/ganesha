@@ -2,6 +2,8 @@
 
 PHP implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/CircuitBreaker.html)
 
+[![Build Status](https://travis-ci.org/ackintosh/ganesha.svg?branch=master)](https://travis-ci.org/ackintosh/ganesha) [![Coverage Status](https://coveralls.io/repos/github/ackintosh/ganesha/badge.svg?branch=master)](https://coveralls.io/github/ackintosh/ganesha?branch=master)
+
 ![ganesha](https://dl.dropboxusercontent.com/u/22083548/ganesha.png)
 
 For now, Ganesha is under development heavily. :muscle:

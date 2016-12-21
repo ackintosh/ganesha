@@ -85,21 +85,23 @@ class Storage
     /**
      * sets status
      *
-     * @param  int $status
+     * @param  string $serviceName
+     * @param  int    $status
      * @return void
      */
-    public function setStatus($status)
+    public function setStatus($serviceName, $status)
     {
-        $this->adapter->saveStatus($status);
+        $this->adapter->saveStatus($serviceName, $status);
     }
 
     /**
      * returns status
      *
+     * @param  string $serviceName
      * @return int
      */
-    public function getStatus()
+    public function getStatus($serviceName)
     {
-        return $this->adapter->loadStatus();
+        return $this->adapter->loadStatus($serviceName);
     }
 }

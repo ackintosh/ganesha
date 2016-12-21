@@ -47,15 +47,17 @@ interface AdapterInterface
     /**
      * sets status
      *
-     * @param  int $status
+     * @param  string $serviceName
+     * @param  int    $status
      * @return void
      */
-    public function saveStatus($status);
+    public function saveStatus($serviceName, $status);
 
     /**
      * returns status
      *
+     * @param  string $serviceName
      * @return int
      */
-    public function loadStatus();
+    public function loadStatus($serviceName);
 }

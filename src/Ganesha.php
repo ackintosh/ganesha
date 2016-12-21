@@ -58,9 +58,9 @@ class Ganesha
         $this->storage->incrementFailureCount($serviceName);
 
         if ($this->storage->getFailureCount($serviceName) >= $this->failureThreshold
-            && $this->storage->getStatus() === self::STATUS_CLOSE
+            && $this->storage->getStatus($serviceName) === self::STATUS_CLOSE
         ) {
-            $this->storage->setStatus(self::STATUS_OPEN);
+            $this->storage->setStatus($serviceName, self::STATUS_OPEN);
             if ($this->behavior) {
                 call_user_func($this->behavior, $serviceName);
             }
@@ -79,9 +79,9 @@ class Ganesha
         }
 
         if ($this->storage->getFailureCount($serviceName) === 0
-            && $this->storage->getStatus() !== self::STATUS_OPEN
+            && $this->storage->getStatus($serviceName) !== self::STATUS_OPEN
         ) {
-            $this->storage->setStatus(self::STATUS_CLOSE);
+            $this->storage->setStatus($serviceName, self::STATUS_CLOSE);
         }
     }
 

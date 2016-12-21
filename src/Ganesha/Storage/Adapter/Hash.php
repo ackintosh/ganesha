@@ -20,9 +20,9 @@ class Hash implements AdapterInterface
     private $lastFailureTime = [];
 
     /**
-     * @var int
+     * @var int[]
      */
-    private $status = Ganesha::STATUS_CLOSE;
+    private $status = [];
 
     /**
      * @param  string $serviceName
@@ -90,21 +90,27 @@ class Hash implements AdapterInterface
     /**
      * sets status
      *
+     * @param  string $serviceName
      * @param  int $status
      * @return void
      */
-    public function saveStatus($status)
+    public function saveStatus($serviceName, $status)
     {
-        $this->status = $status;
+        $this->status[$serviceName] = $status;
     }
 
     /**
      * returns status
      *
+     * @param  string $serviceName
      * @return int
      */
-    public function loadStatus()
+    public function loadStatus($serviceName)
     {
-        return $this->status;
+        if (!isset($this->status[$serviceName])) {
+            return Ganesha::STATUS_CLOSE;
+        }
+
+        return $this->status[$serviceName];
     }
 }

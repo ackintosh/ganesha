@@ -11,9 +11,10 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     public function savesStatus()
     {
+        $serviceName = 'test';
         $storage = new Storage(new Hash());
-        $this->assertSame($storage->getStatus(), Ganesha::STATUS_CLOSE);
-        $storage->setStatus(Ganesha::STATUS_OPEN);
-        $this->assertSame($storage->getStatus(), Ganesha::STATUS_OPEN);
+        $this->assertSame($storage->getStatus($serviceName), Ganesha::STATUS_CLOSE);
+        $storage->setStatus($serviceName, Ganesha::STATUS_OPEN);
+        $this->assertSame($storage->getStatus($serviceName), Ganesha::STATUS_OPEN);
     }
 }

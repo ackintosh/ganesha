@@ -62,22 +62,24 @@ class Storage
     /**
      * sets last failure time
      *
-     * @param  float $lastFailureTime
+     * @param  string $serviceName
+     * @param  float  $lastFailureTime
      * @return void
      */
-    public function setLastFailureTime($lastFailureTime)
+    public function setLastFailureTime($serviceName, $lastFailureTime)
     {
-        $this->adapter->saveLastFailureTime($lastFailureTime);
+        $this->adapter->saveLastFailureTime($serviceName, $lastFailureTime);
     }
 
     /**
      * returns last failure time
      *
+     * @param  string $serviceName
      * @return float | null
      */
-    public function getLastFailureTime()
+    public function getLastFailureTime($serviceName)
     {
-        return $this->adapter->loadLastFailureTime();
+        return $this->adapter->loadLastFailureTime($serviceName);
     }
 
     /**

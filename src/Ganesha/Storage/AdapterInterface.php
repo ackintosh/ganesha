@@ -31,17 +31,18 @@ interface AdapterInterface
     /**
      * sets last failure time
      *
-     * @param  float $lastFailureTime
+     * @param  string $serviceName
+     * @param  float  $lastFailureTime
      * @return void
      */
-    public function saveLastFailureTime($lastFailureTime);
+    public function saveLastFailureTime($serviceName, $lastFailureTime);
 
     /**
      * returns last failure time
      *
      * @return float | null
      */
-    public function loadLastFailureTime();
+    public function loadLastFailureTime($serviceName);
 
     /**
      * sets status

@@ -54,7 +54,7 @@ class Ganesha
      */
     public function recordFailure($serviceName)
     {
-        $this->storage->setLastFailureTime(microtime(true));
+        $this->storage->setLastFailureTime($serviceName, microtime(true));
         $this->storage->incrementFailureCount($serviceName);
 
         if ($this->storage->getFailureCount($serviceName) >= $this->failureThreshold
@@ -106,7 +106,7 @@ class Ganesha
      */
     private function isHalfOpen($serviceName)
     {
-        if (is_null($lastFailureTime = $this->storage->getLastFailureTime())) {
+        if (is_null($lastFailureTime = $this->storage->getLastFailureTime($serviceName))) {
             return false;
         }
 

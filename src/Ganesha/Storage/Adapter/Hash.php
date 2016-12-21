@@ -15,9 +15,9 @@ class Hash implements AdapterInterface
     private $failureCount = [];
 
     /**
-     * @var float
+     * @var float[]
      */
-    private $lastFailureTime;
+    private $lastFailureTime = [];
 
     /**
      * @var int
@@ -68,12 +68,13 @@ class Hash implements AdapterInterface
     /**
      * sets last failure time
      *
-     * @param  float $lastFailureTime
+     * @param  string $serviceName
+     * @param  float  $lastFailureTime
      * @return void
      */
-    public function saveLastFailureTime($lastFailureTime)
+    public function saveLastFailureTime($serviceName, $lastFailureTime)
     {
-        $this->lastFailureTime = $lastFailureTime;
+        $this->lastFailureTime[$serviceName] = $lastFailureTime;
     }
 
     /**
@@ -81,9 +82,9 @@ class Hash implements AdapterInterface
      *
      * @return float | null
      */
-    public function loadLastFailureTime()
+    public function loadLastFailureTime($serviceName)
     {
-        return $this->lastFailureTime;
+        return $this->lastFailureTime[$serviceName];
     }
 
     /**

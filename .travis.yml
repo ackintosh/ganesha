@@ -9,6 +9,12 @@ matrix:
   allow_failures:
     - php: nightly
 
+services:
+  - memcached
+
+before_install:
+  - phpenv config-add .travis.ini
+
 before_script:
   - composer install --dev
 

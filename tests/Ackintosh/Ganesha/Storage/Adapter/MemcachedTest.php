@@ -9,6 +9,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      * @var Memcached
      */
     private $memcachedAdaper;
+    private $ttl = 60;
 
     /**
      * @var string
@@ -29,7 +30,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function saveAndLoad()
     {
-        $this->memcachedAdaper->save($this->serviceName, 1);
+        $this->memcachedAdaper->save($this->serviceName, 1, $this->ttl);
         $this->assertSame(1, $this->memcachedAdaper->load($this->serviceName));
     }
 
@@ -38,9 +39,9 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function increment()
     {
-        $this->memcachedAdaper->increment($this->serviceName);
+        $this->memcachedAdaper->increment($this->serviceName, $this->ttl);
         $this->assertSame(1, $this->memcachedAdaper->load($this->serviceName));
-        $this->memcachedAdaper->increment($this->serviceName);
+        $this->memcachedAdaper->increment($this->serviceName, $this->ttl);
         $this->assertSame(2, $this->memcachedAdaper->load($this->serviceName));
     }
 
@@ -49,13 +50,13 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function decrement()
     {
-        $this->memcachedAdaper->decrement($this->serviceName);
+        $this->memcachedAdaper->decrement($this->serviceName, $this->ttl);
         $this->assertSame(0, $this->memcachedAdaper->load($this->serviceName));
 
-        $this->memcachedAdaper->increment($this->serviceName);
-        $this->memcachedAdaper->increment($this->serviceName);
-        $this->memcachedAdaper->increment($this->serviceName);
-        $this->memcachedAdaper->decrement($this->serviceName);
+        $this->memcachedAdaper->increment($this->serviceName, $this->ttl);
+        $this->memcachedAdaper->increment($this->serviceName, $this->ttl);
+        $this->memcachedAdaper->increment($this->serviceName, $this->ttl);
+        $this->memcachedAdaper->decrement($this->serviceName, $this->ttl);
         $this->assertSame(2, $this->memcachedAdaper->load($this->serviceName));
     }
 

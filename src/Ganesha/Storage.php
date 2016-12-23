@@ -10,9 +10,21 @@ class Storage
      */
     private $adapter;
 
-    public function __construct(AdapterInterface $adapter)
+    /**
+     * @var int
+     */
+    private $countTTL;
+
+    /**
+     * Storage constructor.
+     *
+     * @param AdapterInterface $adapter
+     * @param int              $countTTL
+     */
+    public function __construct(AdapterInterface $adapter, $countTTL)
     {
         $this->adapter = $adapter;
+        $this->countTTL = $countTTL;
     }
 
     /**
@@ -34,7 +46,7 @@ class Storage
      */
     public function incrementFailureCount($serviceName)
     {
-        $this->adapter->increment($serviceName);
+        $this->adapter->increment($serviceName, $this->countTTL);
     }
 
     /**
@@ -45,7 +57,7 @@ class Storage
      */
     public function decrementFailureCount($serviceName)
     {
-        $this->adapter->decrement($serviceName);
+        $this->adapter->decrement($serviceName, $this->countTTL);
     }
 
     /**
@@ -56,7 +68,7 @@ class Storage
      */
     public function setFailureCount($serviceName, $failureCount)
     {
-        $this->adapter->save($serviceName, $failureCount);
+        $this->adapter->save($serviceName, $failureCount, $this->countTTL);
     }
 
     /**

@@ -17,9 +17,14 @@ class Ganesha
     private $failureThreshold;
 
     /**
+     * @var int
+     */
+    private $counterTTL;
+
+    /**
      * @var float
      */
-    private $resetTimeout = 0.1;
+    private $resetTimeout = 100.0;
 
     /**
      * @var callable
@@ -44,11 +49,12 @@ class Ganesha
 
     /**
      * @param  callable $setupFunction
+     * @param  int      $counterTTL
      * @return void
      */
-    public function setupStorage(callable $setupFunction)
+    public function setupStorage(callable $setupFunction, $counterTTL)
     {
-        $this->storage = new Storage(call_user_func($setupFunction));
+        $this->storage = new Storage(call_user_func($setupFunction), $counterTTL);
     }
 
     /**

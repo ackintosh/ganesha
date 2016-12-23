@@ -56,6 +56,16 @@ class Builder
     }
 
     /**
+     * @param  int $countTTL
+     * @return Builder
+     */
+    public function withCountTTL($countTTL)
+    {
+        $this->configuration->setCountTTL($countTTL);
+        return $this;
+    }
+
+    /**
      * @return Ganesha
      * @throws \Exception
      */
@@ -68,7 +78,10 @@ class Builder
         }
 
         $ganesha = new Ganesha($this->configuration->getFailureThreshold());
-        $ganesha->setupStorage($this->configuration->getAdapterSetupFunction());
+        $ganesha->setupStorage(
+            $this->configuration->getAdapterSetupFunction(),
+            $this->configuration->getCountTTL()
+        );
 
         return $ganesha;
     }

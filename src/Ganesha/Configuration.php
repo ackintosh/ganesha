@@ -21,6 +21,11 @@ class Configuration
     private $failureThreshold = 10;
 
     /**
+     * @var int
+     */
+    private $countTTL = 60;
+
+    /**
      * @throws \LogicException
      * @return void
      */
@@ -50,7 +55,7 @@ class Configuration
 
     /**
      * @param AdapterInterface $adapter
-     * @return void
+     * @return
      */
     public function setAdapter(AdapterInterface $adapter)
     {
@@ -88,4 +93,13 @@ class Configuration
         return $this->adapterSetupFunction;
     }
 
+    public function setCountTTL($countTTL)
+    {
+        $this->countTTL = $countTTL;
+    }
+
+    public function getCountTTL()
+    {
+        return $this->countTTL;
+    }
 }

@@ -40,29 +40,32 @@ class Hash implements AdapterInterface
     /**
      * @param  string $serviceName
      * @param  int    $count
+     * @param  int    $ttl
      * @return void
      */
-    public function save($serviceName, $count)
+    public function save($serviceName, $count, $ttl)
     {
         $this->failureCount[$serviceName] = $count;
     }
 
     /**
      * @param  string $serviceName
+     * @param  int    $ttl
      * @return void
      */
-    public function increment($serviceName)
+    public function increment($serviceName, $ttl)
     {
-        $this->save($serviceName, $this->load($serviceName) + 1);
+        $this->save($serviceName, $this->load($serviceName) + 1, $ttl);
     }
 
     /**
      * @param  string $serviceName
+     * @param  int    $ttl
      * @return void
      */
-    public function decrement($serviceName)
+    public function decrement($serviceName, $ttl)
     {
-        $this->save($serviceName, $this->load($serviceName) - 1);
+        $this->save($serviceName, $this->load($serviceName) - 1, $ttl);
     }
 
     /**

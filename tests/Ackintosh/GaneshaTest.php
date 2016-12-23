@@ -8,6 +8,14 @@ use Ackintosh\Ganesha\Storage\Adapter\Memcached;
 
 class GaneshaTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+        $m = new \Memcached();
+        $m->addServer('localhost', 11211);
+        $m->delete('test');
+    }
+
     /**
      * @test
      */
@@ -79,6 +87,29 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($ganesha->isAvailable($serviceName));
         $ganesha->recordFailure($serviceName);
         $this->assertFalse($ganesha->isAvailable($serviceName));
+    }
+
+    /**
+     * @test
+     */
+    public function withMemcachedTTL()
+    {
+        $ganesha = Builder::create()
+            ->withFailureThreshold(1)
+            ->withAdapterSetupFunction(function () {
+                $m = new \Memcached();
+                $m->addServer('localhost', 11211);
+
+                return new Memcached($m);
+            })
+            ->withCountTTL(1)
+            ->build();
+
+        $serviceName = 'test';
+        $ganesha->recordFailure($serviceName);
+        $this->assertFalse($ganesha->isAvailable($serviceName));
+        sleep(1);
+        $this->assertTrue($ganesha->isAvailable($serviceName));
     }
 
     /**

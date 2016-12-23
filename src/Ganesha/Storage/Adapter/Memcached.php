@@ -36,31 +36,34 @@ class Memcached implements AdapterInterface
     /**
      * @param string $serviceName
      * @param int $count
+     * @param int    $ttl
      * @return void
      */
-    public function save($serviceName, $count)
+    public function save($serviceName, $count, $ttl)
     {
-        $this->memcached->set($serviceName, $count);
+        $this->memcached->set($serviceName, $count, $ttl);
     }
 
     /**
      * @param string $serviceName
+     * @param int    $ttl
      * @return void
      */
-    public function increment($serviceName)
+    public function increment($serviceName, $ttl)
     {
         // requires \Memcached::OPT_BINARY_PROTOCOL
-        $this->memcached->increment($serviceName, 1, 1);
+        $this->memcached->increment($serviceName, 1, 1, $ttl);
     }
 
     /**
      * @param string $serviceName
+     * @param int    $ttl
      * @return void
      */
-    public function decrement($serviceName)
+    public function decrement($serviceName, $ttl)
     {
         // requires \Memcached::OPT_BINARY_PROTOCOL
-        $this->memcached->decrement($serviceName, 1, 0);
+        $this->memcached->decrement($serviceName, 1, 0, $ttl);
     }
 
     /**

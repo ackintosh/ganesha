@@ -46,6 +46,16 @@ class Builder
     }
 
     /**
+     * @param  callable $function
+     * @return Builder  $this
+     */
+    public function withStorageSetupFunction(callable $function)
+    {
+        $this->configuration->setStorageSetupFunction($function);
+        return $this;
+    }
+
+    /**
      * @return Ganesha
      * @throws \Exception
      */
@@ -58,7 +68,7 @@ class Builder
         }
 
         $ganesha = new Ganesha($this->configuration->getFailureThreshold());
-        $ganesha->setupStorage($this->configuration->getStorageAdapter());
+        $ganesha->setupStorage($this->configuration->getStorageSetupFunction());
 
         return $ganesha;
     }

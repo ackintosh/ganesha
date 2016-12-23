@@ -11,6 +11,11 @@ class Configuration
     private $storageAdaper;
 
     /**
+     * @var callable
+     */
+    private $storageSetupFunction;
+
+    /**
      * @var int
      */
     private $failureThreshold = 10;
@@ -21,7 +26,7 @@ class Configuration
      */
     public function validate()
     {
-        if (!$this->storageAdaper instanceof AdapterInterface) {
+        if (!$this->storageAdaper instanceof AdapterInterface && is_null($this->storageSetupFunction)) {
             throw new \LogicException();
         }
     }
@@ -59,4 +64,28 @@ class Configuration
     {
         return $this->storageAdaper;
     }
+
+    /**
+     * @param  callable $function
+     * @return void
+     */
+    public function setStorageSetupFunction(callable $function)
+    {
+        $this->storageSetupFunction = $function;
+    }
+
+    /**
+     * @return callable|\Closure
+     */
+    public function getStorageSetupFunction()
+    {
+        if ($storageAdapter = $this->storageAdaper) {
+            return function () use ($storageAdapter) {
+                return new Storage($storageAdapter);
+            };
+        }
+
+        return $this->storageSetupFunction;
+    }
+
 }

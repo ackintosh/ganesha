@@ -2,7 +2,9 @@
 namespace Ackintosh;
 
 use Ackintosh\Ganesha\Builder;
+use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\Storage\Adapter\Hash;
+use Ackintosh\Ganesha\Storage\Adapter\Memcached;
 
 class GaneshaTest extends \PHPUnit_Framework_TestCase
 {
@@ -56,6 +58,27 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
         $ganesha->recordFailure($serviceName);
         $ganesha->recordFailure($serviceName);
+    }
+
+    /**
+     * @test
+     */
+    public function withMemcached()
+    {
+        $ganesha = Builder::create()
+            ->withFailureThreshold(1)
+            ->withStorageSetupFunction(function () {
+                $m = new \Memcached();
+                $m->addServer('localhost', 11211);
+
+                return new Storage(new Memcached($m));
+            })
+            ->build();
+
+        $serviceName = 'test';
+        $this->assertTrue($ganesha->isAvailable($serviceName));
+        $ganesha->recordFailure($serviceName);
+        $this->assertFalse($ganesha->isAvailable($serviceName));
     }
 
     /**

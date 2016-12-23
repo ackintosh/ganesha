@@ -42,9 +42,13 @@ class Ganesha
         $this->failureThreshold = $failureThreshold;
     }
 
-    public function setupStorage(AdapterInterface $adapter)
+    /**
+     * @param  callable $setupFunction
+     * @return void
+     */
+    public function setupStorage(callable $setupFunction)
     {
-        $this->storage = new Storage($adapter);
+        $this->storage = call_user_func($setupFunction);
     }
 
     /**

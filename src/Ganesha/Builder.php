@@ -39,9 +39,9 @@ class Builder
      * @param AdapterInterface $adapter
      * @return $this Builder
      */
-    public function withStorageAdapter(AdapterInterface $adapter)
+    public function withAdapter(AdapterInterface $adapter)
     {
-        $this->configuration->setStorageAdapter($adapter);
+        $this->configuration->setAdapter($adapter);
         return $this;
     }
 
@@ -49,9 +49,9 @@ class Builder
      * @param  callable $function
      * @return Builder  $this
      */
-    public function withStorageAdapterSetupFunction(callable $function)
+    public function withAdapterSetupFunction(callable $function)
     {
-        $this->configuration->setStorageAdapterSetupFunction($function);
+        $this->configuration->setAdapterSetupFunction($function);
         return $this;
     }
 
@@ -68,7 +68,7 @@ class Builder
         }
 
         $ganesha = new Ganesha($this->configuration->getFailureThreshold());
-        $ganesha->setupStorage($this->configuration->getStorageSetupFunction());
+        $ganesha->setupStorage($this->configuration->getAdapterSetupFunction());
 
         return $ganesha;
     }

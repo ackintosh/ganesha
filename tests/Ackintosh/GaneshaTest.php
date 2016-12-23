@@ -67,7 +67,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     {
         $ganesha = Builder::create()
             ->withFailureThreshold(1)
-            ->withStorageAdapterSetupFunction(function () {
+            ->withAdapterSetupFunction(function () {
                 $m = new \Memcached();
                 $m->addServer('localhost', 11211);
 
@@ -95,7 +95,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     {
         return Builder::create()
             ->withFailureThreshold($threshold)
-            ->withStorageAdapter(new Hash)
+            ->withAdapter(new Hash)
             ->build();
     }
 }

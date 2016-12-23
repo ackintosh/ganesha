@@ -8,12 +8,12 @@ class Configuration
     /**
      * @var AdapterInterface
      */
-    private $storageAdaper;
+    private $adapter;
 
     /**
      * @var callable
      */
-    private $storageAdapterSetupFunction;
+    private $adapterSetupFunction;
 
     /**
      * @var int
@@ -26,7 +26,7 @@ class Configuration
      */
     public function validate()
     {
-        if (!$this->storageAdaper instanceof AdapterInterface && is_null($this->storageAdapterSetupFunction)) {
+        if (!$this->adapter instanceof AdapterInterface && is_null($this->adapterSetupFunction)) {
             throw new \LogicException();
         }
     }
@@ -49,43 +49,43 @@ class Configuration
     }
 
     /**
-     * @param AdapterInterface $storageAdapter
+     * @param AdapterInterface $adapter
      * @return void
      */
-    public function setStorageAdapter(AdapterInterface $storageAdapter)
+    public function setAdapter(AdapterInterface $adapter)
     {
-        $this->storageAdaper = $storageAdapter;
+        $this->adapter = $adapter;
     }
 
     /**
      * @return AdapterInterface
      */
-    public function getStorageAdapter()
+    public function getAdapter()
     {
-        return $this->storageAdaper;
+        return $this->adapter;
     }
 
     /**
      * @param  callable $function
      * @return void
      */
-    public function setStorageAdapterSetupFunction(callable $function)
+    public function setAdapterSetupFunction(callable $function)
     {
-        $this->storageAdapterSetupFunction = $function;
+        $this->adapterSetupFunction = $function;
     }
 
     /**
      * @return callable|\Closure
      */
-    public function getStorageSetupFunction()
+    public function getAdapterSetupFunction()
     {
-        if ($storageAdapter = $this->storageAdaper) {
-            return function () use ($storageAdapter) {
-                return $storageAdapter;
+        if ($adapter = $this->adapter) {
+            return function () use ($adapter) {
+                return $adapter;
             };
         }
 
-        return $this->storageAdapterSetupFunction;
+        return $this->adapterSetupFunction;
     }
 
 }

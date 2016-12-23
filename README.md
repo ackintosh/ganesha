@@ -46,6 +46,28 @@ try {
 }
 ```
 
+#### Setup storage adapter
+
+Ganesha has two ways to setup storage adapter.
+
+
+```php
+// The passed object must be an instance of 'Ackintosh\Ganesha\Storage\AdapterInterface'.
+$ganesha = Ackintosh\Ganesha\Builder::create()
+               ->withAdapter(new Ackintosh\Ganesha\Storage\Adapter\Hash)
+               ->build();
+
+// Also, we can specify function which returns instance of AdapterInterface.
+$ganesha = Ackintosh\Ganesha\Builder::create()
+               ->withAdapterSetupFunction(function () {
+                   $m = new \Memcached();
+                   $m->addServer('localhost', 11211);
+
+                   return new Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
+               })
+               ->build();
+```
+
 ## Examples of Ganesha behavior
 
 (in japanese)

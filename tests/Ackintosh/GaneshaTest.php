@@ -8,12 +8,17 @@ use Ackintosh\Ganesha\Storage\Adapter\Memcached;
 
 class GaneshaTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var string
+     */
+    private $serviceName = 'GaneshaTestService';
+
     public function setUp()
     {
         parent::setUp();
         $m = new \Memcached();
         $m->addServer('localhost', 11211);
-        $m->delete('test');
+        $m->delete($this->serviceName);
     }
 
     /**
@@ -21,13 +26,12 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function recordsFailureAndTrips()
     {
-        $serviceName = 'test';
         $ganesha = $this->buildGaneshaWithHashAdapter(2);
-        $this->assertTrue($ganesha->isAvailable($serviceName));
+        $this->assertTrue($ganesha->isAvailable($this->serviceName));
 
-        $ganesha->recordFailure($serviceName);
-        $ganesha->recordFailure($serviceName);
-        $this->assertFalse($ganesha->isAvailable($serviceName));
+        $ganesha->recordFailure($this->serviceName);
+        $ganesha->recordFailure($this->serviceName);
+        $this->assertFalse($ganesha->isAvailable($this->serviceName));
     }
 
     /**
@@ -36,13 +40,12 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     public function recordsSuccessAndClose()
     {
         $ganesha = $this->buildGaneshaWithHashAdapter(2);
-        $serviceName = 'test';
-        $ganesha->recordFailure($serviceName);
-        $ganesha->recordFailure($serviceName);
-        $this->assertFalse($ganesha->isAvailable($serviceName));
+        $ganesha->recordFailure($this->serviceName);
+        $ganesha->recordFailure($this->serviceName);
+        $this->assertFalse($ganesha->isAvailable($this->serviceName));
 
-        $ganesha->recordSuccess($serviceName);
-        $this->assertTrue($ganesha->isAvailable($serviceName));
+        $ganesha->recordSuccess($this->serviceName);
+        $this->assertTrue($ganesha->isAvailable($this->serviceName));
     }
 
     /**
@@ -51,21 +54,20 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     public function invokesItsBehaviorWhenGaneshaHasTripped()
     {
         $ganesha = $this->buildGaneshaWithHashAdapter(2);
-        $serviceName = 'test';
 
         $mock = $this->getMockBuilder(\stdClass::class)
             ->setMethods(['foo'])
             ->getMock();
         $mock->expects($this->once())
             ->method('foo')
-            ->with($serviceName);
+            ->with($this->serviceName);
 
         $ganesha->onTrip(function ($serviceName) use ($mock) {
             $mock->foo($serviceName);
         });
 
-        $ganesha->recordFailure($serviceName);
-        $ganesha->recordFailure($serviceName);
+        $ganesha->recordFailure($this->serviceName);
+        $ganesha->recordFailure($this->serviceName);
     }
 
     /**
@@ -83,10 +85,9 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
             })
             ->build();
 
-        $serviceName = 'test';
-        $this->assertTrue($ganesha->isAvailable($serviceName));
-        $ganesha->recordFailure($serviceName);
-        $this->assertFalse($ganesha->isAvailable($serviceName));
+        $this->assertTrue($ganesha->isAvailable($this->serviceName));
+        $ganesha->recordFailure($this->serviceName);
+        $this->assertFalse($ganesha->isAvailable($this->serviceName));
     }
 
     /**
@@ -105,11 +106,10 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
             ->withCountTTL(1)
             ->build();
 
-        $serviceName = 'test';
-        $ganesha->recordFailure($serviceName);
-        $this->assertFalse($ganesha->isAvailable($serviceName));
+        $ganesha->recordFailure($this->serviceName);
+        $this->assertFalse($ganesha->isAvailable($this->serviceName));
         sleep(1);
-        $this->assertTrue($ganesha->isAvailable($serviceName));
+        $this->assertTrue($ganesha->isAvailable($this->serviceName));
     }
 
     /**

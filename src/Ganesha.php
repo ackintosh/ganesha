@@ -48,7 +48,7 @@ class Ganesha
      */
     public function setupStorage(callable $setupFunction)
     {
-        $this->storage = call_user_func($setupFunction);
+        $this->storage = new Storage(call_user_func($setupFunction));
     }
 
     /**

@@ -67,11 +67,11 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     {
         $ganesha = Builder::create()
             ->withFailureThreshold(1)
-            ->withStorageSetupFunction(function () {
+            ->withStorageAdapterSetupFunction(function () {
                 $m = new \Memcached();
                 $m->addServer('localhost', 11211);
 
-                return new Storage(new Memcached($m));
+                return new Memcached($m);
             })
             ->build();
 

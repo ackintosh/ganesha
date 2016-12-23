@@ -49,9 +49,9 @@ class Builder
      * @param  callable $function
      * @return Builder  $this
      */
-    public function withStorageSetupFunction(callable $function)
+    public function withStorageAdapterSetupFunction(callable $function)
     {
-        $this->configuration->setStorageSetupFunction($function);
+        $this->configuration->setStorageAdapterSetupFunction($function);
         return $this;
     }
 

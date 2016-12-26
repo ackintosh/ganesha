@@ -14,7 +14,8 @@
   },
   "require-dev": {
     "phpunit/phpunit": "*",
-    "satooshi/php-coveralls": "*"
+    "satooshi/php-coveralls": "*",
+    "kentaro/soushi": "*"
   },
   "autoload": {
     "psr-4": {

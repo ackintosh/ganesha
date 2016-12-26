@@ -131,6 +131,7 @@ class Ganesha
 
         if ((microtime(true) - $lastFailureTime) > $this->intervalToHalfOpen) {
             $this->storage->setFailureCount($serviceName, $this->failureThreshold);
+            $this->storage->setLastFailureTime($serviceName, microtime(true));
             return true;
         }
 

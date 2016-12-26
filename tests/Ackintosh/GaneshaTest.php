@@ -114,6 +114,33 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function withIntervalToHalfOpen()
+    {
+        $ganesha = Builder::create()
+            ->withAdapter(new Hash())
+            ->withFailureThreshold(1)
+            ->withIntervalToHalfOpen(1)
+            ->withCountTTL(60)
+            ->build();
+
+        $this->assertTrue($ganesha->isAvailable($this->serviceName));
+        // record a failure, ganesha has trip
+        $ganesha->recordFailure($this->serviceName);
+        $this->assertFalse($ganesha->isAvailable($this->serviceName));
+        // wait for the interval to half-open
+        sleep(1);
+        // half-open
+        $this->assertTrue($ganesha->isAvailable($this->serviceName));
+        // after half-open, service is not available until the interval has elapsed
+        $this->assertFalse($ganesha->isAvailable($this->serviceName));
+        // record a success, ganesha has close
+        $ganesha->recordSuccess($this->serviceName);
+        $this->assertTrue($ganesha->isAvailable($this->serviceName));
+    }
+
+    /**
+     * @test
      * @expectedException \InvalidArgumentException
      */
     public function onTripThrowsException()

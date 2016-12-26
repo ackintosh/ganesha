@@ -19,12 +19,12 @@ class Ganesha
     /**
      * @var int
      */
-    private $counterTTL;
+    private $intervalToHalfOpen;
 
     /**
-     * @var float
+     * @var int
      */
-    private $resetTimeout = 100.0;
+    private $counterTTL;
 
     /**
      * @var callable
@@ -55,6 +55,15 @@ class Ganesha
     public function setupStorage(callable $setupFunction, $counterTTL)
     {
         $this->storage = new Storage(call_user_func($setupFunction), $counterTTL);
+    }
+
+    /**
+     * @param int $interval
+     * @return void;
+     */
+    public function setIntervalToHalfOpen($interval)
+    {
+        $this->intervalToHalfOpen = $interval;
     }
 
     /**
@@ -120,7 +129,7 @@ class Ganesha
             return false;
         }
 
-        if ((microtime(true) - $lastFailureTime) > $this->resetTimeout) {
+        if ((microtime(true) - $lastFailureTime) > $this->intervalToHalfOpen) {
             $this->storage->setFailureCount($serviceName, $this->failureThreshold);
             return true;
         }

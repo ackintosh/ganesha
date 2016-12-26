@@ -56,6 +56,16 @@ class Builder
     }
 
     /**
+     * @param int $interval
+     * @return Builder
+     */
+    public function withIntervalToHalfOpen($interval)
+    {
+        $this->configuration->setIntervalToHalfOpen($interval);
+        return $this;
+    }
+
+    /**
      * @param  int $countTTL
      * @return Builder
      */
@@ -82,6 +92,7 @@ class Builder
             $this->configuration->getAdapterSetupFunction(),
             $this->configuration->getCountTTL()
         );
+        $ganesha->setIntervalToHalfOpen($this->configuration->getIntervalToHalfOpen());
 
         return $ganesha;
     }

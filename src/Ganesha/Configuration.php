@@ -23,6 +23,11 @@ class Configuration
     /**
      * @var int
      */
+    private $intervalToHalfOpen = 5;
+
+    /**
+     * @var int
+     */
     private $countTTL = 60;
 
     /**
@@ -91,6 +96,16 @@ class Configuration
         }
 
         return $this->adapterSetupFunction;
+    }
+
+    public function setIntervalToHalfOpen($interval)
+    {
+        $this->intervalToHalfOpen = $interval;
+    }
+
+    public function getIntervalToHalfOpen()
+    {
+        return $this->intervalToHalfOpen;
     }
 
     public function setCountTTL($countTTL)

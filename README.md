@@ -86,7 +86,7 @@ $ganesha = Ackintosh\Ganesha\Builder::create()
 $ganesha = Ackintosh\Ganesha\Builder::create()
                ->withFailureThreshold(10)
                ->withStorageAdapter(new Ackintosh\Ganesha\Storage\Adapter\Hash)
-               ->withRetryTimeout(5) // not implemented yet
+               ->withIntervalToHalfOpen(5) // not implemented yet
                ->withCountTTL(60)
                ->build();
 ```

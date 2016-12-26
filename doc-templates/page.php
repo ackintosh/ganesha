@@ -30,7 +30,7 @@ Released   : 20140107
 	<div id="menu">
 		<ul>
 			<li><a href="/ganesha/" title="">Top</a></li>
-			<li><a href="./usage" title="">Usage</a></li>
+			<li><a href="./usage.html" title="">Usage</a></li>
 		</ul>
 	</div>
 </div>

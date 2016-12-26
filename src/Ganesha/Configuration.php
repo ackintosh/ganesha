@@ -98,21 +98,35 @@ class Configuration
         return $this->adapterSetupFunction;
     }
 
+    /**
+     * @param int $interval
+     * @return void
+     */
     public function setIntervalToHalfOpen($interval)
     {
         $this->intervalToHalfOpen = $interval;
     }
 
+    /**
+     * @return int
+     */
     public function getIntervalToHalfOpen()
     {
         return $this->intervalToHalfOpen;
     }
 
+    /**
+     * @param $countTTL
+     * @return void
+     */
     public function setCountTTL($countTTL)
     {
         $this->countTTL = $countTTL;
     }
 
+    /**
+     * @return int
+     */
     public function getCountTTL()
     {
         return $this->countTTL;

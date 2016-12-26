@@ -128,7 +128,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $ganesha->recordFailure($this->serviceName);
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
         // wait for the interval to half-open
-        sleep(1);
+        sleep(2);
         // half-open
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
         // after half-open, service is not available until the interval has elapsed

@@ -75,7 +75,7 @@ class Storage
      * sets last failure time
      *
      * @param  string $serviceName
-     * @param  float  $lastFailureTime
+     * @param  int    $lastFailureTime
      * @return void
      */
     public function setLastFailureTime($serviceName, $lastFailureTime)
@@ -87,7 +87,7 @@ class Storage
      * returns last failure time
      *
      * @param  string $serviceName
-     * @return float | null
+     * @return int | null
      */
     public function getLastFailureTime($serviceName)
     {

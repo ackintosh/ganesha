@@ -68,7 +68,7 @@ class Memcached implements AdapterInterface
 
     /**
      * @param string $serviceName
-     * @param float  $lastFailureTime
+     * @param int    $lastFailureTime
      */
     public function saveLastFailureTime($serviceName, $lastFailureTime)
     {
@@ -77,7 +77,7 @@ class Memcached implements AdapterInterface
 
     /**
      * @param  string $serviceName
-     * @return float
+     * @return int
      */
     public function loadLastFailureTime($serviceName)
     {

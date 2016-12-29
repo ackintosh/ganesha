@@ -25,6 +25,10 @@ interface AdapterInterface
     public function increment($serviceName, $ttl);
 
     /**
+     * decrement failure count
+     *
+     * If the operation would decrease the value below 0, the new value must be 0.
+     *
      * @param  string $serviceName
      * @param  int    $ttl
      * @return void

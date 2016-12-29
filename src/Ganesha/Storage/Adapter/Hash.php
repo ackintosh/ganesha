@@ -65,7 +65,11 @@ class Hash implements AdapterInterface
      */
     public function decrement($serviceName, $ttl)
     {
-        $this->save($serviceName, $this->load($serviceName) - 1, $ttl);
+        $this->save(
+            $serviceName,
+            ($count = $this->load($serviceName)) > 0 ? $count - 1 : 0,
+            $ttl
+        );
     }
 
     /**

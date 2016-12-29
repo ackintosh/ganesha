@@ -92,9 +92,7 @@ class Ganesha
      */
     public function recordSuccess($serviceName)
     {
-        if ($this->storage->getFailureCount($serviceName) > 0) {
-            $this->storage->decrementFailureCount($serviceName);
-        }
+        $this->storage->decrementFailureCount($serviceName);
 
         if ($this->storage->getFailureCount($serviceName) === 0
             && $this->storage->getStatus($serviceName) !== self::STATUS_OPEN

@@ -114,6 +114,25 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function failureCountMustNotBeNegative()
+    {
+        $ganesha = Builder::create()
+            ->withFailureThreshold(1)
+            ->withAdapter(new Hash())
+            ->build();
+
+        $ganesha->recordSuccess($this->serviceName);
+        $ganesha->recordSuccess($this->serviceName);
+        $ganesha->recordSuccess($this->serviceName);
+        $this->assertTrue($ganesha->isAvailable($this->serviceName));
+
+        $ganesha->recordFailure($this->serviceName);
+        $this->assertFalse($ganesha->isAvailable($this->serviceName));
+    }
+
+    /**
+     * @test
+     */
     public function withIntervalToHalfOpen()
     {
         $ganesha = Builder::create()

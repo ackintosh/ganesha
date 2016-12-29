@@ -95,7 +95,7 @@ class Ganesha
         $this->storage->decrementFailureCount($serviceName);
 
         if ($this->storage->getFailureCount($serviceName) === 0
-            && $this->storage->getStatus($serviceName) !== self::STATUS_OPEN
+            && $this->storage->getStatus($serviceName) === self::STATUS_OPEN
         ) {
             $this->storage->setStatus($serviceName, self::STATUS_CLOSE);
         }

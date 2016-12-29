@@ -1,6 +1,7 @@
 <?php
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
+use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 
 class Memcached implements AdapterInterface
@@ -99,6 +100,12 @@ class Memcached implements AdapterInterface
      */
     public function loadStatus($serviceName)
     {
-        return $this->memcached->get($serviceName . self::KEY_SUFFIX_STATUS);
+        $status = $this->memcached->get($serviceName . self::KEY_SUFFIX_STATUS);
+        if ($status === false && $this->memcached->getResultCode() === \Memcached::RES_NOTFOUND) {
+            $this->saveStatus($serviceName, Ganesha::STATUS_CLOSE);
+            return Ganesha::STATUS_CLOSE;
+        }
+
+        return $status;
     }
 }

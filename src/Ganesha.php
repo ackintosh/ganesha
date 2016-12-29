@@ -2,7 +2,6 @@
 namespace Ackintosh;
 
 use Ackintosh\Ganesha\Storage;
-use Ackintosh\Ganesha\Storage\AdapterInterface;
 
 class Ganesha
 {

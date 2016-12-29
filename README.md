@@ -102,6 +102,15 @@ $ganesha = Ackintosh\Ganesha\Builder::create()
 		- ( = `Ganesha::isAvailable()` が `true` を返す )
 - 60秒間、失敗/成功のどちらもなければカウントがリセットされる
 
+## Build documents
+
+https://ackintosh.github.io/ganesha/
+
+Ganesha using [Soushi](https://github.com/kentaro/soushi) for generating documents.
+
+```
+$ path/to/shoushi build docs
+```
 
 ## Great predecessors
 

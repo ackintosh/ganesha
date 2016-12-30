@@ -21,11 +21,6 @@ class Ganesha
     private $intervalToHalfOpen;
 
     /**
-     * @var int
-     */
-    private $counterTTL;
-
-    /**
      * @var callable
      */
     private $behavior;

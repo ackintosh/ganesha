@@ -65,7 +65,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function saveAndLoadLastFailureTime()
     {
-        $time = microtime(true);
+        $time = time();
         $this->memcachedAdaper->saveLastFailureTime($this->serviceName, $time);
         $this->assertSame($time, $this->memcachedAdaper->loadLastFailureTime($this->serviceName));
     }

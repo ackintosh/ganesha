@@ -31,6 +31,8 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $ganesha->recordFailure($this->serviceName);
         $ganesha->recordFailure($this->serviceName);
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
+        // it does not affect other services.
+        $this->assertTrue($ganesha->isAvailable('other' . $this->serviceName));
     }
 
     /**

@@ -71,6 +71,40 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function onTripBehaviorIsInvokedUnderCertainConditions()
+    {
+        $ganesha = $this->buildGaneshaWithHashAdapter(2);
+        $invoked = 0;
+
+        $ganesha->onTrip(function () use (&$invoked) {
+            $invoked++;
+        });
+
+        // tipped and incremented $invoked.
+        $ganesha->recordFailure($this->serviceName);
+        $ganesha->recordFailure($this->serviceName);
+        $this->assertSame(1, $invoked);
+
+        // closed.
+        $ganesha->recordSuccess($this->serviceName);
+
+        // tripped again, but $invoke is not incremented.
+        $ganesha->recordFailure($this->serviceName);
+        $this->assertSame(1, $invoked);
+
+        // calm down ( failure count = 0 )
+        $ganesha->recordSuccess($this->serviceName);
+        $ganesha->recordSuccess($this->serviceName);
+
+        // tripped and incremented $invoked.
+        $ganesha->recordFailure($this->serviceName);
+        $ganesha->recordFailure($this->serviceName);
+        $this->assertSame(2, $invoked);
+    }
+
+    /**
+     * @test
      * @expectedException \InvalidArgumentException
      */
     public function onTripThrowsException()

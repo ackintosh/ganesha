@@ -50,7 +50,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function invokesItsBehaviorWhenGaneshaHasTripped()
+    public function onTripInvokesItsBehaviorWhenGaneshaHasTripped()
     {
         $ganesha = $this->buildGaneshaWithHashAdapter(2);
 
@@ -67,6 +67,16 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
         $ganesha->recordFailure($this->serviceName);
         $ganesha->recordFailure($this->serviceName);
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    public function onTripThrowsException()
+    {
+        $ganesha = $this->buildGaneshaWithHashAdapter(2);
+        $ganesha->onTrip(1);
     }
 
     /**
@@ -155,16 +165,6 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         // record a success, ganesha has close
         $ganesha->recordSuccess($this->serviceName);
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function onTripThrowsException()
-    {
-        $ganesha = $this->buildGaneshaWithHashAdapter(2);
-        $ganesha->onTrip(1);
     }
 
     /**

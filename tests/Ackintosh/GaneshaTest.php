@@ -184,16 +184,16 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
             ->build();
 
         $ganesha->recordFailure($this->serviceName);
-        $this->assertSame(Ganesha::STATUS_CLOSE, $memcachedAdapter->loadStatus($this->serviceName));
+        $this->assertSame(Ganesha::STATUS_CALMED_DOWN, $memcachedAdapter->loadStatus($this->serviceName));
         // trip
         $ganesha->recordFailure($this->serviceName);
-        $this->assertSame(Ganesha::STATUS_OPEN, $memcachedAdapter->loadStatus($this->serviceName));
+        $this->assertSame(Ganesha::STATUS_TRIPPED, $memcachedAdapter->loadStatus($this->serviceName));
         // service is available, but status is still OPEN
         $ganesha->recordSuccess($this->serviceName);
-        $this->assertSame(Ganesha::STATUS_OPEN, $memcachedAdapter->loadStatus($this->serviceName));
+        $this->assertSame(Ganesha::STATUS_TRIPPED, $memcachedAdapter->loadStatus($this->serviceName));
         // failure count is 0, status changes to CLOSE
         $ganesha->recordSuccess($this->serviceName);
-        $this->assertSame(Ganesha::STATUS_CLOSE, $memcachedAdapter->loadStatus($this->serviceName));
+        $this->assertSame(Ganesha::STATUS_CALMED_DOWN, $memcachedAdapter->loadStatus($this->serviceName));
     }
 
     private function buildGaneshaWithHashAdapter($threshold)

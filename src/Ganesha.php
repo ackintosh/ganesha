@@ -31,10 +31,16 @@ class Ganesha
     private $behavior;
 
     /**
+     * the status between failure count 0 and trip.
      * @var int
      */
-    const STATUS_CLOSE = 1;
-    const STATUS_OPEN  = 2;
+    const STATUS_CALMED_DOWN = 1;
+
+    /**
+     * the status between trip and calm down.
+     * @var int
+     */
+    const STATUS_TRIPPED  = 2;
 
     /**
      * Ganesha constructor.
@@ -76,9 +82,9 @@ class Ganesha
         $this->storage->incrementFailureCount($serviceName);
 
         if ($this->storage->getFailureCount($serviceName) >= $this->failureThreshold
-            && $this->storage->getStatus($serviceName) === self::STATUS_CLOSE
+            && $this->storage->getStatus($serviceName) === self::STATUS_CALMED_DOWN
         ) {
-            $this->storage->setStatus($serviceName, self::STATUS_OPEN);
+            $this->storage->setStatus($serviceName, self::STATUS_TRIPPED);
             if ($this->behavior) {
                 call_user_func($this->behavior, $serviceName);
             }
@@ -95,9 +101,9 @@ class Ganesha
         $this->storage->decrementFailureCount($serviceName);
 
         if ($this->storage->getFailureCount($serviceName) === 0
-            && $this->storage->getStatus($serviceName) === self::STATUS_OPEN
+            && $this->storage->getStatus($serviceName) === self::STATUS_TRIPPED
         ) {
-            $this->storage->setStatus($serviceName, self::STATUS_CLOSE);
+            $this->storage->setStatus($serviceName, self::STATUS_CALMED_DOWN);
         }
     }
 

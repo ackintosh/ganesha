@@ -115,7 +115,7 @@ class Hash implements AdapterInterface
     public function loadStatus($serviceName)
     {
         if (!isset($this->status[$serviceName])) {
-            return Ganesha::STATUS_CLOSE;
+            return Ganesha::STATUS_CALMED_DOWN;
         }
 
         return $this->status[$serviceName];

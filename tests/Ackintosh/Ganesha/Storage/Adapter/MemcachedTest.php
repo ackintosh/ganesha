@@ -75,7 +75,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function saveAndLoadStatus()
     {
-        $status = Ganesha::STATUS_OPEN;
+        $status = Ganesha::STATUS_TRIPPED;
         $this->memcachedAdaper->saveStatus($this->serviceName, $status);
         $this->assertSame($status, $this->memcachedAdaper->loadStatus($this->serviceName));
     }

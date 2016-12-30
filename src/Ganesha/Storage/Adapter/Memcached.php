@@ -102,8 +102,8 @@ class Memcached implements AdapterInterface
     {
         $status = $this->memcached->get($serviceName . self::KEY_SUFFIX_STATUS);
         if ($status === false && $this->memcached->getResultCode() === \Memcached::RES_NOTFOUND) {
-            $this->saveStatus($serviceName, Ganesha::STATUS_CLOSE);
-            return Ganesha::STATUS_CLOSE;
+            $this->saveStatus($serviceName, Ganesha::STATUS_CALMED_DOWN);
+            return Ganesha::STATUS_CALMED_DOWN;
         }
 
         return $status;

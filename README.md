@@ -6,6 +6,8 @@ PHP implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/Ci
 
 ![ganesha](https://dl.dropboxusercontent.com/u/22083548/ganesha.png)
 
+https://ackintosh.github.io/ganesha/
+
 For now, Ganesha is under development heavily. :muscle:
 It's going to be awesome !
 
@@ -77,16 +79,16 @@ $ganesha = Ackintosh\Ganesha\Builder::create()
 
 - 失敗数のしきい値
 	- 10回 ( `withFailureThreshold(10)` )
-- リトライ時間
-	- 5秒 ( `withRetryTimeout(5)` )
-- リセット時間
-	- 60秒 ( `withResetTimeout(60)` )
+- half-open までの時間
+	- 5秒 ( `withIntervalToHalfOpen(5)` )
+- 失敗数をリセットするまでの時間
+	- 60秒 ( `withCountTTL(60)` )
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::create()
                ->withFailureThreshold(10)
                ->withStorageAdapter(new Ackintosh\Ganesha\Storage\Adapter\Hash)
-               ->withIntervalToHalfOpen(5) // not implemented yet
+               ->withIntervalToHalfOpen(5)
                ->withCountTTL(60)
                ->build();
 ```

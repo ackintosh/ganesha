@@ -232,6 +232,18 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(Ganesha::STATUS_CALMED_DOWN, $memcachedAdapter->loadStatus($this->serviceName));
     }
 
+    /**
+     * @test
+     */
+    public function disable()
+    {
+        $ganesha = $this->buildGaneshaWithHashAdapter(1);
+        $ganesha->recordFailure($this->serviceName);
+        $this->assertFalse($ganesha->isAvailable($this->serviceName));
+        Ganesha::disable();
+        $this->assertTrue($ganesha->isAvailable($this->serviceName));
+    }
+
     private function buildGaneshaWithHashAdapter($threshold)
     {
         return Builder::create()

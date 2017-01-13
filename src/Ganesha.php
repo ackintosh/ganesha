@@ -38,6 +38,11 @@ class Ganesha
     const STATUS_TRIPPED  = 2;
 
     /**
+     * @var bool
+     */
+    private static $disabled = false;
+
+    /**
      * Ganesha constructor.
      *
      * @param int $failureThreshold
@@ -107,6 +112,10 @@ class Ganesha
      */
     public function isAvailable($serviceName)
     {
+        if (self::$disabled) {
+            return true;
+        }
+
         return $this->isClosed($serviceName) || $this->isHalfOpen($serviceName);
     }
 
@@ -149,5 +158,15 @@ class Ganesha
         }
 
         $this->behavior = $callback;
+    }
+
+    /**
+     * disable
+     *
+     * @return void
+     */
+    public static function disable()
+    {
+        self::$disabled = true;
     }
 }

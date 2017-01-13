@@ -70,6 +70,24 @@ $ganesha = Ackintosh\Ganesha\Builder::create()
                ->build();
 ```
 
+#### Disable
+
+Ganesha will continue to record success/failure statistics, but it will not trip.
+
+```php
+Ackintosh\Ganesha::disable();
+
+// Ganesha with threshold `3`.
+// Failure count is recorded to storage.
+$ganesha->recordFailure($serviceName);
+$ganesha->recordFailure($serviceName);
+$ganesha->recordFailure($serviceName);
+
+// But Ganesha does not trip.
+var_dump($ganesha->isAvailable($serviceName);
+// bool(true)
+```
+
 ## Examples of Ganesha behavior
 
 (in japanese)

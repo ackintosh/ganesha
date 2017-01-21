@@ -28,11 +28,6 @@ $ganesha = Ackintosh\Ganesha\Builder::create()
 
 $serviceName = 'external_api';
 
-// We can set the behavior that will be invoked when Ganesha has tripped.
-$ganesha->onTrip(function ($unavailableServiceName) {
-    Slack::notify("Ganesha has tripped. Something's wrong in {$unavailableServiceName} !");
-});
-
 if (!$ganesha->isAvailable($serviceName)) {
     die('external api is not available');
 }
@@ -88,6 +83,16 @@ $ganesha = Ackintosh\Ganesha\Builder::create()
                })
                ->build();
 
+```
+
+#### Behavior on trip
+
+```php
+$ganesha = Ackintosh\Ganesha\Builder::create()
+               ->withBehaviorOnTrip(function ($unavailableServiceName) {
+                   \Slack::notify("Ganesha has tripped. Something's wrong in {$unavailableServiceName} !");
+               })
+               ->build();
 ```
 
 #### Disable

@@ -37,11 +37,7 @@ class Storage
      */
     public function getFailureCount($serviceName)
     {
-        try {
-            return $this->adapter->load($serviceName);
-        } catch (StorageException $e) {
-            throw $e;
-        }
+        return $this->adapter->load($serviceName);
     }
 
     /**

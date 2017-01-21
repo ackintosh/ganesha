@@ -54,8 +54,6 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function onTripInvokesItsBehaviorWhenGaneshaHasTripped()
     {
-        $ganesha = $this->buildGaneshaWithHashAdapter(2);
-
         $mock = $this->getMockBuilder(\stdClass::class)
             ->setMethods(['foo'])
             ->getMock();
@@ -63,9 +61,13 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
             ->method('foo')
             ->with($this->serviceName);
 
-        $ganesha->onTrip(function ($serviceName) use ($mock) {
-            $mock->foo($serviceName);
-        });
+        $ganesha = Builder::create()
+            ->withFailureThreshold(2)
+            ->withAdapter(new Hash)
+            ->withBehaviorOnTrip(function ($serviceName) use ($mock) {
+                $mock->foo($serviceName);
+            })
+            ->build();
 
         $ganesha->recordFailure($this->serviceName);
         $ganesha->recordFailure($this->serviceName);
@@ -76,12 +78,14 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function onTripBehaviorIsInvokedUnderCertainConditions()
     {
-        $ganesha = $this->buildGaneshaWithHashAdapter(2);
         $invoked = 0;
-
-        $ganesha->onTrip(function () use (&$invoked) {
-            $invoked++;
-        });
+        $ganesha = Builder::create()
+            ->withFailureThreshold(2)
+            ->withAdapter(new Hash)
+            ->withBehaviorOnTrip(function ($serviceName) use (&$invoked) {
+                $invoked++;
+            })
+            ->build();
 
         // tipped and incremented $invoked.
         $ganesha->recordFailure($this->serviceName);
@@ -103,16 +107,6 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $ganesha->recordFailure($this->serviceName);
         $ganesha->recordFailure($this->serviceName);
         $this->assertSame(2, $invoked);
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function onTripThrowsException()
-    {
-        $ganesha = $this->buildGaneshaWithHashAdapter(2);
-        $ganesha->onTrip(1);
     }
 
     /**

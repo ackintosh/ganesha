@@ -24,7 +24,7 @@ class Ganesha
     /**
      * @var callable
      */
-    private $behavior;
+    private $behaviorOnTrip;
 
     /**
      * @var callable
@@ -86,6 +86,17 @@ class Ganesha
     }
 
     /**
+     * sets behavior which will be invoked when Ganesha trips
+     *
+     * @param  callable $behavior
+     * @return void
+     */
+    public function setBehaviorOnTrip(callable $behavior)
+    {
+        $this->behaviorOnTrip = $behavior;
+    }
+
+    /**
      * records failure
      *
      * @return void
@@ -100,8 +111,8 @@ class Ganesha
                 && $this->storage->getStatus($serviceName) === self::STATUS_CALMED_DOWN
             ) {
                 $this->storage->setStatus($serviceName, self::STATUS_TRIPPED);
-                if ($this->behavior) {
-                    call_user_func($this->behavior, $serviceName);
+                if ($this->behaviorOnTrip) {
+                    call_user_func($this->behaviorOnTrip, $serviceName);
                 }
             }
         } catch (StorageException $e) {
@@ -188,21 +199,6 @@ class Ganesha
         }
 
         call_user_func($this->behaviorOnStorageError, $message);
-    }
-
-    /**
-     * sets behavior which will be invoked when Ganesha trips
-     *
-     * @param callable $callback
-     * @throws \InvalidArgumentException
-     */
-    public function onTrip($callback)
-    {
-        if (!is_callable($callback)) {
-            throw new \InvalidArgumentException(__METHOD__ . ' allows only callable.');
-        }
-
-        $this->behavior = $callback;
     }
 
     /**

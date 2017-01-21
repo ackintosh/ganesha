@@ -36,6 +36,11 @@ class Configuration
     private $behaviorOnStorageError;
 
     /**
+     * @var callable
+     */
+    private $behaviorOnTrip;
+
+    /**
      * @throws \LogicException
      * @return void
      */
@@ -152,5 +157,22 @@ class Configuration
     public function getBehaviorOnStorageError()
     {
         return $this->behaviorOnStorageError;
+    }
+
+    /**
+     * @param  callable $behavior
+     * @return void
+     */
+    public function setBehaviorOnTrip(callable $behavior)
+    {
+        $this->behaviorOnTrip = $behavior;
+    }
+
+    /**
+     * @return callable
+     */
+    public function getBehaviorOnTrip()
+    {
+        return $this->behaviorOnTrip;
     }
 }

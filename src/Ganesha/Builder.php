@@ -86,6 +86,16 @@ class Builder
     }
 
     /**
+     * @param  callable $behavior
+     * @return Builder
+     */
+    public function withBehaviorOnTrip(callable $behavior)
+    {
+        $this->configuration->setBehaviorOnTrip($behavior);
+        return $this;
+    }
+
+    /**
      * @return Ganesha
      * @throws \Exception
      */
@@ -105,6 +115,9 @@ class Builder
         $ganesha->setIntervalToHalfOpen($this->configuration->getIntervalToHalfOpen());
         if ($behaviorOnStorageError = $this->configuration->getBehaviorOnStorageError()) {
             $ganesha->setBehaviorOnStorageError($behaviorOnStorageError);
+        }
+        if ($behaviorOnTrip = $this->configuration->getBehaviorOnTrip()) {
+            $ganesha->setBehaviorOnTrip($behaviorOnTrip);
         }
 
         return $ganesha;

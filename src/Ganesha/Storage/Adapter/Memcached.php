@@ -2,6 +2,7 @@
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha;
+use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 
 class Memcached implements AdapterInterface
@@ -28,10 +29,13 @@ class Memcached implements AdapterInterface
     /**
      * @param string $serviceName
      * @return int
+     * @throws StorageException
      */
     public function load($serviceName)
     {
-        return (int)$this->memcached->get($serviceName);
+        $r = (int)$this->memcached->get($serviceName);
+        $this->throwExceptionIfErrorOccurred();
+        return $r;
     }
 
     /**
@@ -107,5 +111,24 @@ class Memcached implements AdapterInterface
         }
 
         return $status;
+    }
+
+    /**
+     * Throws an exception if some error occurs in memcached.
+     *
+     * @return void
+     * @throws StorageException
+     */
+    private function throwExceptionIfErrorOccurred()
+    {
+        $errorResultCodes = array(
+            \Memcached::RES_FAILURE,
+            \Memcached::RES_SERVER_TEMPORARILY_DISABLED,
+            \Memcached::RES_SERVER_MEMORY_ALLOCATION_FAILURE,
+        );
+
+        if (in_array($this->memcached->getResultCode(), $errorResultCodes, true)) {
+            throw new StorageException($this->memcached->getResultMessage());
+        }
     }
 }

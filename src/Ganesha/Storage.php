@@ -1,6 +1,7 @@
 <?php
 namespace Ackintosh\Ganesha;
 
+use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 
 class Storage
@@ -32,10 +33,15 @@ class Storage
      *
      * @param  string $serviceName
      * @return int
+     * @throws StorageException
      */
     public function getFailureCount($serviceName)
     {
-        return $this->adapter->load($serviceName);
+        try {
+            return $this->adapter->load($serviceName);
+        } catch (StorageException $e) {
+            throw $e;
+        }
     }
 
     /**

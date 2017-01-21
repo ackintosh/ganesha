@@ -1,6 +1,7 @@
 <?php
 namespace Ackintosh;
 
+use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage;
 
 class Ganesha
@@ -81,13 +82,17 @@ class Ganesha
         $this->storage->setLastFailureTime($serviceName, time());
         $this->storage->incrementFailureCount($serviceName);
 
-        if ($this->storage->getFailureCount($serviceName) >= $this->failureThreshold
-            && $this->storage->getStatus($serviceName) === self::STATUS_CALMED_DOWN
-        ) {
-            $this->storage->setStatus($serviceName, self::STATUS_TRIPPED);
-            if ($this->behavior) {
-                call_user_func($this->behavior, $serviceName);
+        try {
+            if ($this->storage->getFailureCount($serviceName) >= $this->failureThreshold
+                && $this->storage->getStatus($serviceName) === self::STATUS_CALMED_DOWN
+            ) {
+                $this->storage->setStatus($serviceName, self::STATUS_TRIPPED);
+                if ($this->behavior) {
+                    call_user_func($this->behavior, $serviceName);
+                }
             }
+        } catch (StorageException $e) {
+            // Ganesha is quiet.
         }
     }
 
@@ -100,10 +105,14 @@ class Ganesha
     {
         $this->storage->decrementFailureCount($serviceName);
 
-        if ($this->storage->getFailureCount($serviceName) === 0
-            && $this->storage->getStatus($serviceName) === self::STATUS_TRIPPED
-        ) {
-            $this->storage->setStatus($serviceName, self::STATUS_CALMED_DOWN);
+        try {
+            if ($this->storage->getFailureCount($serviceName) === 0
+                && $this->storage->getStatus($serviceName) === self::STATUS_TRIPPED
+            ) {
+                $this->storage->setStatus($serviceName, self::STATUS_CALMED_DOWN);
+            }
+        } catch (StorageException $e) {
+            // Ganesha is quiet.
         }
     }
 
@@ -116,15 +125,24 @@ class Ganesha
             return true;
         }
 
-        return $this->isClosed($serviceName) || $this->isHalfOpen($serviceName);
+        try {
+            return $this->isClosed($serviceName) || $this->isHalfOpen($serviceName);
+        } catch (StorageException $e) {
+            // Ganesha is quiet.
+        }
     }
 
     /**
      * @return bool
+     * @throws StorageException
      */
     private function isClosed($serviceName)
     {
-        return $this->storage->getFailureCount($serviceName) < $this->failureThreshold;
+        try {
+            return $this->storage->getFailureCount($serviceName) < $this->failureThreshold;
+        } catch (StorageException $e) {
+            throw $e;
+        }
     }
 
     /**

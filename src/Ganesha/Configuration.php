@@ -31,6 +31,11 @@ class Configuration
     private $countTTL = 60;
 
     /**
+     * @var callable
+     */
+    private $behaviorOnStorageError;
+
+    /**
      * @throws \LogicException
      * @return void
      */
@@ -130,5 +135,22 @@ class Configuration
     public function getCountTTL()
     {
         return $this->countTTL;
+    }
+
+    /**
+     * @param  callable $loggingBehavior
+     * @return void
+     */
+    public function setBehaviorOnStorageError(callable $behavior)
+    {
+        $this->behaviorOnStorageError = $behavior;
+    }
+
+    /**
+     * @return callable
+     */
+    public function getBehaviorOnStorageError()
+    {
+        return $this->behaviorOnStorageError;
     }
 }

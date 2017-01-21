@@ -27,6 +27,11 @@ class Ganesha
     private $behavior;
 
     /**
+     * @var callable
+     */
+    private $behaviorOnStorageError;
+
+    /**
      * the status between failure count 0 and trip.
      * @var int
      */
@@ -73,6 +78,14 @@ class Ganesha
     }
 
     /**
+     * @param callable $loggingBehavior
+     */
+    public function setBehaviorOnStorageError(callable $behavior)
+    {
+        $this->behaviorOnStorageError = $behavior;
+    }
+
+    /**
      * records failure
      *
      * @return void
@@ -92,7 +105,7 @@ class Ganesha
                 }
             }
         } catch (StorageException $e) {
-            // Ganesha is quiet.
+            $this->triggerBehaviorOnStorageError('failed to record failure : ' . $e->getMessage());
         }
     }
 
@@ -112,7 +125,7 @@ class Ganesha
                 $this->storage->setStatus($serviceName, self::STATUS_CALMED_DOWN);
             }
         } catch (StorageException $e) {
-            // Ganesha is quiet.
+            $this->triggerBehaviorOnStorageError('failed to record success : ' . $e->getMessage());
         }
     }
 
@@ -128,7 +141,7 @@ class Ganesha
         try {
             return $this->isClosed($serviceName) || $this->isHalfOpen($serviceName);
         } catch (StorageException $e) {
-            // Ganesha is quiet.
+            $this->triggerBehaviorOnStorageError('failed to execute isAvailable : ' . $e->getMessage());
         }
     }
 
@@ -162,6 +175,19 @@ class Ganesha
         }
 
         return false;
+    }
+
+    /**
+     * @param  string  $message
+     * @return void
+     */
+    private function triggerBehaviorOnStorageError($message)
+    {
+        if (is_null($this->behaviorOnStorageError)) {
+            return;
+        }
+
+        call_user_func($this->behaviorOnStorageError, $message);
     }
 
     /**

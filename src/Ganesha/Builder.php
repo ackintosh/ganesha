@@ -76,6 +76,16 @@ class Builder
     }
 
     /**
+     * @param $callable
+     * @return Builder
+     */
+    public function withBehaviorOnStorageError(callable $behavior)
+    {
+        $this->configuration->setBehaviorOnStorageError($behavior);
+        return $this;
+    }
+
+    /**
      * @return Ganesha
      * @throws \Exception
      */
@@ -93,6 +103,9 @@ class Builder
             $this->configuration->getCountTTL()
         );
         $ganesha->setIntervalToHalfOpen($this->configuration->getIntervalToHalfOpen());
+        if ($behaviorOnStorageError = $this->configuration->getBehaviorOnStorageError()) {
+            $ganesha->setBehaviorOnStorageError($behaviorOnStorageError);
+        }
 
         return $ganesha;
     }

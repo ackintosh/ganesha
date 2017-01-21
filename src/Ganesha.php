@@ -79,10 +79,10 @@ class Ganesha
      */
     public function recordFailure($serviceName)
     {
-        $this->storage->setLastFailureTime($serviceName, time());
-        $this->storage->incrementFailureCount($serviceName);
-
         try {
+            $this->storage->setLastFailureTime($serviceName, time());
+            $this->storage->incrementFailureCount($serviceName);
+
             if ($this->storage->getFailureCount($serviceName) >= $this->failureThreshold
                 && $this->storage->getStatus($serviceName) === self::STATUS_CALMED_DOWN
             ) {
@@ -103,9 +103,9 @@ class Ganesha
      */
     public function recordSuccess($serviceName)
     {
-        $this->storage->decrementFailureCount($serviceName);
-
         try {
+            $this->storage->decrementFailureCount($serviceName);
+
             if ($this->storage->getFailureCount($serviceName) === 0
                 && $this->storage->getStatus($serviceName) === self::STATUS_TRIPPED
             ) {
@@ -147,6 +147,7 @@ class Ganesha
 
     /**
      * @return bool
+     * @throws StorageException
      */
     private function isHalfOpen($serviceName)
     {

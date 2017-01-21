@@ -49,6 +49,7 @@ class Storage
      *
      * @param  string $serviceName
      * @return void
+     * @throws StorageException
      */
     public function incrementFailureCount($serviceName)
     {
@@ -60,6 +61,7 @@ class Storage
      *
      * @param  string $serviceName
      * @return void
+     * @throws StorageException
      */
     public function decrementFailureCount($serviceName)
     {
@@ -71,6 +73,7 @@ class Storage
      *
      * @param $serviceName
      * @param $failureCount
+     * @throws StorageException
      */
     public function setFailureCount($serviceName, $failureCount)
     {
@@ -83,6 +86,7 @@ class Storage
      * @param  string $serviceName
      * @param  int    $lastFailureTime
      * @return void
+     * @throws StorageException
      */
     public function setLastFailureTime($serviceName, $lastFailureTime)
     {
@@ -94,6 +98,7 @@ class Storage
      *
      * @param  string $serviceName
      * @return int | null
+     * @throws StorageException
      */
     public function getLastFailureTime($serviceName)
     {
@@ -106,6 +111,7 @@ class Storage
      * @param  string $serviceName
      * @param  int    $status
      * @return void
+     * @throws StorageException
      */
     public function setStatus($serviceName, $status)
     {
@@ -117,6 +123,7 @@ class Storage
      *
      * @param  string $serviceName
      * @return int
+     * @throws StorageException
      */
     public function getStatus($serviceName)
     {

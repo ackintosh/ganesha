@@ -43,68 +43,88 @@ class Memcached implements AdapterInterface
      * @param int $count
      * @param int    $ttl
      * @return void
+     * @throws StorageException
      */
     public function save($serviceName, $count, $ttl)
     {
-        $this->memcached->set($serviceName, $count, $ttl);
+        if (!$this->memcached->set($serviceName, $count, $ttl)) {
+            throw new StorageException('failed to set the value : ' . $this->memcached->getResultMessage());
+        }
     }
 
     /**
      * @param string $serviceName
      * @param int    $ttl
      * @return void
+     * @throws StorageException
      */
     public function increment($serviceName, $ttl)
     {
         // requires \Memcached::OPT_BINARY_PROTOCOL
-        $this->memcached->increment($serviceName, 1, 1, $ttl);
+        if ($this->memcached->increment($serviceName, 1, 1, $ttl) === false) {
+            throw new StorageException('failed to increment failure count : ' . $this->memcached->getResultMessage());
+        }
     }
 
     /**
      * @param string $serviceName
      * @param int    $ttl
      * @return void
+     * @throws StorageException
      */
     public function decrement($serviceName, $ttl)
     {
         // requires \Memcached::OPT_BINARY_PROTOCOL
-        $this->memcached->decrement($serviceName, 1, 0, $ttl);
+        if ($this->memcached->decrement($serviceName, 1, 0, $ttl) === false) {
+            throw new StorageException('failed to decrement failure count : ' . $this->memcached->getResultMessage());
+        }
     }
 
     /**
      * @param string $serviceName
      * @param int    $lastFailureTime
+     * @throws StorageException
      */
     public function saveLastFailureTime($serviceName, $lastFailureTime)
     {
-        $this->memcached->set($serviceName . self::KEY_SUFFIX_LAST_FAILURE_TIME, $lastFailureTime);
+        if (!$this->memcached->set($serviceName . self::KEY_SUFFIX_LAST_FAILURE_TIME, $lastFailureTime)) {
+            throw new StorageException('failed to set the last failure time : ' . $this->memcached->getResultMessage());
+        }
     }
 
     /**
      * @param  string $serviceName
      * @return int
+     * @throws StorageException
      */
     public function loadLastFailureTime($serviceName)
     {
-        return $this->memcached->get($serviceName . self::KEY_SUFFIX_LAST_FAILURE_TIME);
+        $r = $this->memcached->get($serviceName . self::KEY_SUFFIX_LAST_FAILURE_TIME);
+        $this->throwExceptionIfErrorOccurred();
+        return $r;
     }
 
     /**
      * @param string $serviceName
      * @param int    $status
+     * @throws StorageException
      */
     public function saveStatus($serviceName, $status)
     {
-        $this->memcached->set($serviceName . self::KEY_SUFFIX_STATUS, $status);
+        if (!$this->memcached->set($serviceName . self::KEY_SUFFIX_STATUS, $status)) {
+            throw new StorageException('failed to set the status : ' . $this->memcached->getResultMessage());
+        }
     }
 
     /**
      * @param  string $serviceName
      * @return int
+     * @throws StorageException
      */
     public function loadStatus($serviceName)
     {
         $status = $this->memcached->get($serviceName . self::KEY_SUFFIX_STATUS);
+        $this->throwExceptionIfErrorOccurred();
         if ($status === false && $this->memcached->getResultCode() === \Memcached::RES_NOTFOUND) {
             $this->saveStatus($serviceName, Ganesha::STATUS_CALMED_DOWN);
             return Ganesha::STATUS_CALMED_DOWN;

@@ -70,6 +70,26 @@ $ganesha = Ackintosh\Ganesha\Builder::create()
                ->build();
 ```
 
+#### Behavior on storage error
+
+```php
+$ganesha = Ackintosh\Ganesha\Builder::create()
+               // with memcached.
+               ->withAdapterSetupFunction(function () {
+                   $m = new \Memcached();
+                   $m->addServer('localhost', 11211);
+
+                   return new Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
+               })
+               // we can define the behavior on memcached error.
+               ->withBehaviorOnStorageError(function ($errorMessage) {
+                   \YourLogger::error('Some errors have occurred on memcached : ' . $errorMessage);
+                   \YourMonitoringSystem::reportError();
+               })
+               ->build();
+
+```
+
 #### Disable
 
 Ganesha will continue to record success/failure statistics, but it will not trip.

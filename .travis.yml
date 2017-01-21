@@ -13,7 +13,7 @@ services:
   - memcached
 
 before_install:
-  - phpenv config-add .travis.ini
+  - phpenv config-add .travis.php.ini
 
 before_script:
   - composer install --dev

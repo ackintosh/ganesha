@@ -111,9 +111,7 @@ class Ganesha
                 && $this->storage->getStatus($serviceName) === self::STATUS_CALMED_DOWN
             ) {
                 $this->storage->setStatus($serviceName, self::STATUS_TRIPPED);
-                if ($this->behaviorOnTrip) {
-                    call_user_func($this->behaviorOnTrip, $serviceName);
-                }
+                $this->triggerBehaviorOnTrip($serviceName);
             }
         } catch (StorageException $e) {
             $this->triggerBehaviorOnStorageError('failed to record failure : ' . $e->getMessage());
@@ -199,6 +197,19 @@ class Ganesha
         }
 
         call_user_func($this->behaviorOnStorageError, $message);
+    }
+
+    /**
+     * @param  string $serviceName
+     * @return void
+     */
+    private function triggerBehaviorOnTrip($serviceName)
+    {
+        if (is_null($this->behaviorOnTrip)) {
+            return;
+        }
+
+        call_user_func($this->behaviorOnTrip, $serviceName);
     }
 
     /**

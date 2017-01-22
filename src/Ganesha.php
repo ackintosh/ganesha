@@ -63,8 +63,11 @@ class Ganesha
      * @param  int      $counterTTL
      * @return void
      */
-    public function setupStorage(callable $setupFunction, $counterTTL)
+    public function setupStorage($setupFunction, $counterTTL)
     {
+        if (!is_callable($setupFunction)) {
+            throw new \InvalidArgumentException();
+        }
         $this->storage = new Storage(call_user_func($setupFunction), $counterTTL);
     }
 

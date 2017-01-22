@@ -166,4 +166,4 @@ Ganesha respects the following libraries.
 
 ## Requirements
 
-Ganesha supports PHP 5.6 or higher.
+Ganesha supports PHP 5.3 or higher.

@@ -54,7 +54,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function onTripInvokesItsBehaviorWhenGaneshaHasTripped()
     {
-        $mock = $this->getMockBuilder(\stdClass::class)
+        $mock = $this->getMockBuilder('\stdClass')
             ->setMethods(['foo'])
             ->getMock();
         $mock->expects($this->once())

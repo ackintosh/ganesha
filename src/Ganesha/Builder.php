@@ -76,7 +76,7 @@ class Builder
     }
 
     /**
-     * @param $callable
+     * @param  callable $behavior
      * @return Builder
      */
     public function withBehaviorOnStorageError(callable $behavior)

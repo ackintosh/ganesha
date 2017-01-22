@@ -69,8 +69,8 @@ class Ganesha
     }
 
     /**
-     * @param int $interval
-     * @return void;
+     * @param  int $interval
+     * @return void
      */
     public function setIntervalToHalfOpen($interval)
     {
@@ -78,7 +78,8 @@ class Ganesha
     }
 
     /**
-     * @param callable $loggingBehavior
+     * @param  callable $loggingBehavior
+     * @return void
      */
     public function setBehaviorOnStorageError(callable $behavior)
     {

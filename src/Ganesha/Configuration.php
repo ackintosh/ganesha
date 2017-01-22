@@ -89,7 +89,7 @@ class Configuration
      * @param  callable $function
      * @return void
      */
-    public function setAdapterSetupFunction(callable $function)
+    public function setAdapterSetupFunction($function)
     {
         $this->adapterSetupFunction = $function;
     }
@@ -146,7 +146,7 @@ class Configuration
      * @param  callable $loggingBehavior
      * @return void
      */
-    public function setBehaviorOnStorageError(callable $behavior)
+    public function setBehaviorOnStorageError($behavior)
     {
         $this->behaviorOnStorageError = $behavior;
     }
@@ -163,7 +163,7 @@ class Configuration
      * @param  callable $behavior
      * @return void
      */
-    public function setBehaviorOnTrip(callable $behavior)
+    public function setBehaviorOnTrip($behavior)
     {
         $this->behaviorOnTrip = $behavior;
     }

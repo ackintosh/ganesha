@@ -65,9 +65,6 @@ class Ganesha
      */
     public function setupStorage($setupFunction, $counterTTL)
     {
-        if (!is_callable($setupFunction)) {
-            throw new \InvalidArgumentException();
-        }
         $this->storage = new Storage(call_user_func($setupFunction), $counterTTL);
     }
 
@@ -84,7 +81,7 @@ class Ganesha
      * @param  callable $loggingBehavior
      * @return void
      */
-    public function setBehaviorOnStorageError(callable $behavior)
+    public function setBehaviorOnStorageError($behavior)
     {
         $this->behaviorOnStorageError = $behavior;
     }
@@ -95,7 +92,7 @@ class Ganesha
      * @param  callable $behavior
      * @return void
      */
-    public function setBehaviorOnTrip(callable $behavior)
+    public function setBehaviorOnTrip($behavior)
     {
         $this->behaviorOnTrip = $behavior;
     }

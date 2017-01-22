@@ -49,8 +49,12 @@ class Builder
      * @param  callable $function
      * @return Builder  $this
      */
-    public function withAdapterSetupFunction(callable $function)
+    public function withAdapterSetupFunction($function)
     {
+        if (!is_callable($function)) {
+            throw new \InvalidArgumentException();
+        }
+
         $this->configuration->setAdapterSetupFunction($function);
         return $this;
     }
@@ -79,8 +83,12 @@ class Builder
      * @param  callable $behavior
      * @return Builder
      */
-    public function withBehaviorOnStorageError(callable $behavior)
+    public function withBehaviorOnStorageError($behavior)
     {
+        if (!is_callable($behavior)) {
+            throw new \InvalidArgumentException();
+        }
+
         $this->configuration->setBehaviorOnStorageError($behavior);
         return $this;
     }
@@ -89,8 +97,12 @@ class Builder
      * @param  callable $behavior
      * @return Builder
      */
-    public function withBehaviorOnTrip(callable $behavior)
+    public function withBehaviorOnTrip($behavior)
     {
+        if (!is_callable($behavior)) {
+            throw new \InvalidArgumentException();
+        }
+
         $this->configuration->setBehaviorOnTrip($behavior);
         return $this;
     }

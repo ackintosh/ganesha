@@ -12,17 +12,17 @@ class Hash implements AdapterInterface
     /**
      * @var int[]
      */
-    private $failureCount = [];
+    private $failureCount = array();
 
     /**
      * @var int[]
      */
-    private $lastFailureTime = [];
+    private $lastFailureTime = array();
 
     /**
      * @var int[]
      */
-    private $status = [];
+    private $status = array();
 
     /**
      * @param  string $serviceName

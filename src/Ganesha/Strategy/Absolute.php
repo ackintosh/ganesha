@@ -2,6 +2,8 @@
 namespace Ackintosh\Ganesha\Strategy;
 
 use Ackintosh\Ganesha;
+use Ackintosh\Ganesha\Configuration;
+use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\StrategyInterface;
 use Ackintosh\Ganesha\Exception\StorageException;
 
@@ -21,6 +23,25 @@ class Absolute implements StrategyInterface
      * @var \Ackintosh\Ganesha\Storage
      */
     private $storage;
+
+    /**
+     * @param Configuration $configuration
+     * @return Absolute
+     */
+    public static function create(Configuration $configuration)
+    {
+        $strategy = new self();
+        $strategy->setFailureThreshold($configuration->getFailureThreshold());
+        $strategy->setStorage(
+            new Storage(
+                call_user_func($configuration->getAdapterSetupFunction()),
+                $configuration->getCountTTL()
+            )
+        );
+        $strategy->setIntervalToHalfOpen($configuration->getIntervalToHalfOpen());
+
+        return $strategy;
+    }
 
     public function setFailureThreshold($threshold)
     {

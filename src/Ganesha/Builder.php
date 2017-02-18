@@ -120,16 +120,7 @@ class Builder
             throw $e;
         }
 
-        $strategy = new Absolute();
-        $strategy->setFailureThreshold($this->configuration->getFailureThreshold());
-        $strategy->setStorage(
-            new Storage(
-                call_user_func($this->configuration->getAdapterSetupFunction()),
-                $this->configuration->getCountTTL()
-            )
-        );
-        $strategy->setIntervalToHalfOpen($this->configuration->getIntervalToHalfOpen());
-        $ganesha = new Ganesha($strategy);
+        $ganesha = new Ganesha(Absolute::create($this->configuration));
         if ($behaviorOnStorageError = $this->configuration->getBehaviorOnStorageError()) {
             $ganesha->setBehaviorOnStorageError($behaviorOnStorageError);
         }

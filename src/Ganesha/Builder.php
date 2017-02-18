@@ -122,11 +122,13 @@ class Builder
 
         $strategy = new Absolute();
         $strategy->setFailureThreshold($this->configuration->getFailureThreshold());
-        $ganesha = new Ganesha($strategy);
-        $ganesha->setupStorage(
-            $this->configuration->getAdapterSetupFunction(),
-            $this->configuration->getCountTTL()
+        $strategy->setStorage(
+            new Storage(
+                call_user_func($this->configuration->getAdapterSetupFunction()),
+                $this->configuration->getCountTTL()
+            )
         );
+        $ganesha = new Ganesha($strategy);
         $ganesha->setIntervalToHalfOpen($this->configuration->getIntervalToHalfOpen());
         if ($behaviorOnStorageError = $this->configuration->getBehaviorOnStorageError()) {
             $ganesha->setBehaviorOnStorageError($behaviorOnStorageError);

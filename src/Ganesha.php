@@ -2,7 +2,6 @@
 namespace Ackintosh;
 
 use Ackintosh\Ganesha\Exception\StorageException;
-use Ackintosh\Ganesha\Storage;
 
 class Ganesha
 {
@@ -51,16 +50,6 @@ class Ganesha
     public function __construct($strategy)
     {
         $this->strategy = $strategy;
-    }
-
-    /**
-     * @param  callable $setupFunction
-     * @param  int      $counterTTL
-     * @return void
-     */
-    public function setupStorage($setupFunction, $counterTTL)
-    {
-        $this->strategy->setStorage(new Storage(call_user_func($setupFunction), $counterTTL));
     }
 
     /**

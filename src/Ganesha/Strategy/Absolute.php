@@ -27,6 +27,10 @@ class Absolute implements StrategyInterface
         $this->failureThreshold = $threshold;
     }
 
+    /**
+     * @param  int $interval
+     * @return void
+     */
     public function setIntervalToHalfOpen($interval)
     {
         $this->intervalToHalfOpen = $interval;

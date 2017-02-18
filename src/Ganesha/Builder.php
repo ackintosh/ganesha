@@ -128,8 +128,8 @@ class Builder
                 $this->configuration->getCountTTL()
             )
         );
+        $strategy->setIntervalToHalfOpen($this->configuration->getIntervalToHalfOpen());
         $ganesha = new Ganesha($strategy);
-        $ganesha->setIntervalToHalfOpen($this->configuration->getIntervalToHalfOpen());
         if ($behaviorOnStorageError = $this->configuration->getBehaviorOnStorageError()) {
             $ganesha->setBehaviorOnStorageError($behaviorOnStorageError);
         }

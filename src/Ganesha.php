@@ -53,15 +53,6 @@ class Ganesha
     }
 
     /**
-     * @param  int $interval
-     * @return void
-     */
-    public function setIntervalToHalfOpen($interval)
-    {
-        $this->intervalToHalfOpen = $interval;
-    }
-
-    /**
      * @param  callable $loggingBehavior
      * @return void
      */

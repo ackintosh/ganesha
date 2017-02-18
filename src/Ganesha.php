@@ -11,11 +11,6 @@ class Ganesha
     private $strategy;
 
     /**
-     * @var int
-     */
-    private $intervalToHalfOpen;
-
-    /**
      * @var callable
      */
     private $behaviorOnTrip;

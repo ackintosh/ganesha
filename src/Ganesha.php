@@ -6,7 +6,7 @@ use Ackintosh\Ganesha\Exception\StorageException;
 class Ganesha
 {
     /**
-     * @var \Ackintosh\Ganesha\Strategy\Absolute
+     * @var \Ackintosh\Ganesha\StrategyInterface
      */
     private $strategy;
 
@@ -45,7 +45,7 @@ class Ganesha
     /**
      * Ganesha constructor.
      *
-     * @param \Ackintosh\Ganesha\Strategy\Absolute $strategy
+     * @param \Ackintosh\Ganesha\StrategyInterface $strategy
      */
     public function __construct($strategy)
     {

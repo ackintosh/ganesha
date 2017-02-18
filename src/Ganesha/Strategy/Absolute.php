@@ -2,9 +2,10 @@
 namespace Ackintosh\Ganesha\Strategy;
 
 use Ackintosh\Ganesha;
+use Ackintosh\Ganesha\StrategyInterface;
 use Ackintosh\Ganesha\Exception\StorageException;
 
-class Absolute
+class Absolute implements StrategyInterface
 {
     /**
      * @var int

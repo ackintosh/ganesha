@@ -3,6 +3,7 @@ namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
+use Ackintosh\Ganesha\Strategy\Absolute;
 
 class Builder
 {
@@ -119,7 +120,10 @@ class Builder
             throw $e;
         }
 
-        $ganesha = new Ganesha($this->configuration->getFailureThreshold());
+        $ganesha = new Ganesha(
+            $this->configuration->getFailureThreshold(),
+            new Absolute()
+        );
         $ganesha->setupStorage(
             $this->configuration->getAdapterSetupFunction(),
             $this->configuration->getCountTTL()

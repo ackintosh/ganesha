@@ -7,9 +7,9 @@ use Ackintosh\Ganesha\Storage;
 class Ganesha
 {
     /**
-     * @var Storage
+     * @var \Ackintosh\Ganesha\Strategy\Absolute
      */
-    private $storage;
+    private $strategy;
 
     /**
      * @var int
@@ -53,9 +53,10 @@ class Ganesha
      *
      * @param int $failureThreshold
      */
-    public function __construct($failureThreshold)
+    public function __construct($failureThreshold, $strategy)
     {
-        $this->failureThreshold = $failureThreshold;
+        $this->strategy = $strategy;
+        $this->strategy->setFailureThreshold($failureThreshold);
     }
 
     /**
@@ -65,7 +66,7 @@ class Ganesha
      */
     public function setupStorage($setupFunction, $counterTTL)
     {
-        $this->storage = new Storage(call_user_func($setupFunction), $counterTTL);
+        $this->strategy->setStorage(new Storage(call_user_func($setupFunction), $counterTTL));
     }
 
     /**
@@ -105,13 +106,7 @@ class Ganesha
     public function recordFailure($serviceName)
     {
         try {
-            $this->storage->setLastFailureTime($serviceName, time());
-            $this->storage->incrementFailureCount($serviceName);
-
-            if ($this->storage->getFailureCount($serviceName) >= $this->failureThreshold
-                && $this->storage->getStatus($serviceName) === self::STATUS_CALMED_DOWN
-            ) {
-                $this->storage->setStatus($serviceName, self::STATUS_TRIPPED);
+            if ($this->strategy->recordFailure($serviceName) === self::STATUS_TRIPPED) {
                 $this->triggerBehaviorOnTrip($serviceName);
             }
         } catch (StorageException $e) {
@@ -127,13 +122,7 @@ class Ganesha
     public function recordSuccess($serviceName)
     {
         try {
-            $this->storage->decrementFailureCount($serviceName);
-
-            if ($this->storage->getFailureCount($serviceName) === 0
-                && $this->storage->getStatus($serviceName) === self::STATUS_TRIPPED
-            ) {
-                $this->storage->setStatus($serviceName, self::STATUS_CALMED_DOWN);
-            }
+            $this->strategy->recordSuccess($serviceName);
         } catch (StorageException $e) {
             $this->triggerBehaviorOnStorageError('failed to record success : ' . $e->getMessage());
         }
@@ -149,42 +138,10 @@ class Ganesha
         }
 
         try {
-            return $this->isClosed($serviceName) || $this->isHalfOpen($serviceName);
+            return $this->strategy->isAvailable($serviceName);
         } catch (StorageException $e) {
             $this->triggerBehaviorOnStorageError('failed to execute isAvailable : ' . $e->getMessage());
         }
-    }
-
-    /**
-     * @return bool
-     * @throws StorageException
-     */
-    private function isClosed($serviceName)
-    {
-        try {
-            return $this->storage->getFailureCount($serviceName) < $this->failureThreshold;
-        } catch (StorageException $e) {
-            throw $e;
-        }
-    }
-
-    /**
-     * @return bool
-     * @throws StorageException
-     */
-    private function isHalfOpen($serviceName)
-    {
-        if (is_null($lastFailureTime = $this->storage->getLastFailureTime($serviceName))) {
-            return false;
-        }
-
-        if ((time() - $lastFailureTime) > $this->intervalToHalfOpen) {
-            $this->storage->setFailureCount($serviceName, $this->failureThreshold);
-            $this->storage->setLastFailureTime($serviceName, time());
-            return true;
-        }
-
-        return false;
     }
 
     /**

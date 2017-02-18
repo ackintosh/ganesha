@@ -14,11 +14,6 @@ class Ganesha
     /**
      * @var int
      */
-    private $failureThreshold;
-
-    /**
-     * @var int
-     */
     private $intervalToHalfOpen;
 
     /**
@@ -51,12 +46,11 @@ class Ganesha
     /**
      * Ganesha constructor.
      *
-     * @param int $failureThreshold
+     * @param \Ackintosh\Ganesha\Strategy\Absolute $strategy
      */
-    public function __construct($failureThreshold, $strategy)
+    public function __construct($strategy)
     {
         $this->strategy = $strategy;
-        $this->strategy->setFailureThreshold($failureThreshold);
     }
 
     /**

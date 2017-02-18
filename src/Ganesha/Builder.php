@@ -120,10 +120,9 @@ class Builder
             throw $e;
         }
 
-        $ganesha = new Ganesha(
-            $this->configuration->getFailureThreshold(),
-            new Absolute()
-        );
+        $strategy = new Absolute();
+        $strategy->setFailureThreshold($this->configuration->getFailureThreshold());
+        $ganesha = new Ganesha($strategy);
         $ganesha->setupStorage(
             $this->configuration->getAdapterSetupFunction(),
             $this->configuration->getCountTTL()

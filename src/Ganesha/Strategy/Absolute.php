@@ -35,7 +35,8 @@ class Absolute implements StrategyInterface
         $strategy->setStorage(
             new Storage(
                 call_user_func($configuration->getAdapterSetupFunction()),
-                $configuration->getCountTTL()
+                $configuration->getCountTTL(),
+                null
             )
         );
         $strategy->setIntervalToHalfOpen($configuration->getIntervalToHalfOpen());

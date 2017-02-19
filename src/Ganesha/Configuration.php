@@ -6,6 +6,11 @@ use Ackintosh\Ganesha\Storage\AdapterInterface;
 class Configuration
 {
     /**
+     * @var string
+     */
+    private $strategyClass = '\Ackintosh\Ganesha\Strategy\Absolute';
+
+    /**
      * @var AdapterInterface
      */
     private $adapter;
@@ -49,6 +54,16 @@ class Configuration
         if (!$this->adapter instanceof AdapterInterface && is_null($this->adapterSetupFunction)) {
             throw new \LogicException();
         }
+    }
+
+    public function setStrategyClass($strategyClass)
+    {
+        $this->strategyClass = $strategyClass;
+    }
+
+    public function getStrategyClass()
+    {
+        return $this->strategyClass;
     }
 
     /**

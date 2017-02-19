@@ -3,7 +3,6 @@ namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
-use Ackintosh\Ganesha\Strategy\Absolute;
 
 class Builder
 {
@@ -28,6 +27,13 @@ class Builder
     public static function create()
     {
         return new self(new Configuration());
+    }
+
+    public static function createWithRelativeStrategy()
+    {
+        $configuration = new Configuration();
+        $configuration->setStrategyClass('\Ackintosh\Ganesha\Strategy\Relative');
+        return new self($configuration);
     }
 
     public function withFailureThreshold($threshold)
@@ -120,7 +126,12 @@ class Builder
             throw $e;
         }
 
-        $ganesha = new Ganesha(Absolute::create($this->configuration));
+        $ganesha = new Ganesha(
+            call_user_func(
+                array($this->configuration->getStrategyClass(), 'create'),
+                $this->configuration
+            )
+        );
         if ($behaviorOnStorageError = $this->configuration->getBehaviorOnStorageError()) {
             $ganesha->setBehaviorOnStorageError($behaviorOnStorageError);
         }

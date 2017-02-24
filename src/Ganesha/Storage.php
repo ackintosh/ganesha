@@ -22,16 +22,6 @@ class Storage
     private $serviceNameDecorator;
 
     /**
-     * @var string
-     */
-    const KEY_SUFFIX_SUCCESS = '.success';
-
-    /**
-     * @var string
-     */
-    const KEY_SUFFIX_FAILURE = '.failure';
-
-    /**
      * Storage constructor.
      *
      * @param AdapterInterface $adapter
@@ -65,7 +55,7 @@ class Storage
      */
     public function getFailureCount($serviceName)
     {
-        return $this->getCount($this->key($serviceName) . self::KEY_SUFFIX_FAILURE);
+        return $this->getCount($this->failureKey($serviceName));
     }
 
     /**
@@ -77,7 +67,7 @@ class Storage
      */
     public function getSuccessCount($serviceName)
     {
-        return $this->getCount($this->key($serviceName) . self::KEY_SUFFIX_SUCCESS);
+        return $this->getCount($this->successKey($serviceName));
     }
 
     /**
@@ -89,7 +79,7 @@ class Storage
      */
     public function incrementFailureCount($serviceName)
     {
-        $this->adapter->increment($this->key($serviceName) . self::KEY_SUFFIX_FAILURE, $this->countTTL);
+        $this->adapter->increment($this->failureKey($serviceName), $this->countTTL);
     }
 
     /**
@@ -101,7 +91,7 @@ class Storage
      */
     public function decrementFailureCount($serviceName)
     {
-        $this->adapter->decrement($this->key($serviceName) . self::KEY_SUFFIX_FAILURE, $this->countTTL);
+        $this->adapter->decrement($this->failureKey($serviceName), $this->countTTL);
     }
 
     /**
@@ -113,7 +103,7 @@ class Storage
      */
     public function incrementSuccessCount($serviceName)
     {
-        $this->adapter->increment($this->key($serviceName) . self::KEY_SUFFIX_SUCCESS, $this->countTTL);
+        $this->adapter->increment($this->successKey($serviceName), $this->countTTL);
     }
 
     /**
@@ -125,7 +115,7 @@ class Storage
      */
     public function setFailureCount($serviceName, $failureCount)
     {
-        $this->adapter->save($this->key($serviceName) . self::KEY_SUFFIX_FAILURE, $failureCount, $this->countTTL);
+        $this->adapter->save($this->failureKey($serviceName), $failureCount, $this->countTTL);
     }
 
     /**
@@ -189,5 +179,23 @@ class Storage
         }
 
         return $serviceName;
+    }
+
+    /**
+     * @param  string $serviceName
+     * @return string
+     */
+    private function successKey($serviceName)
+    {
+        return $this->key($serviceName) . '.success';
+    }
+
+    /**
+     * @param  string $serviceName
+     * @return string
+     */
+    private function failureKey($serviceName)
+    {
+        return $this->key($serviceName) . '.failure';
     }
 }

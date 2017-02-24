@@ -67,7 +67,7 @@ class Absolute implements StrategyInterface
     }
 
     /**
-     * @return void
+     * @return int
      */
     public function recordFailure($serviceName)
     {
@@ -80,6 +80,8 @@ class Absolute implements StrategyInterface
             $this->storage->setStatus($serviceName, Ganesha::STATUS_TRIPPED);
             return Ganesha::STATUS_TRIPPED;
         }
+
+        return Ganesha::STATUS_CALMED_DOWN;
     }
 
     /**

@@ -107,6 +107,30 @@ class Storage
     }
 
     /**
+     * returns rejection count
+     *
+     * @param  string $serviceName
+     * @return int
+     * @throws StorageException
+     */
+    public function getRejectionCount($serviceName)
+    {
+        return $this->getCount($this->rejectionKey($serviceName));
+    }
+
+    /**
+     * increments rejection count
+     *
+     * @param  string $serviceName
+     * @return void
+     * @throws StorageException
+     */
+    public function incrementRejectionCount($serviceName)
+    {
+        $this->adapter->increment($this->rejectionKey($serviceName), $this->countTTL);
+    }
+
+    /**
      * sets failure count
      *
      * @param $serviceName
@@ -197,5 +221,14 @@ class Storage
     private function failureKey($serviceName)
     {
         return $this->key($serviceName) . '.failure';
+    }
+
+    /**
+     * @param  string $serviceName
+     * @return string
+     */
+    private function rejectionKey($serviceName)
+    {
+        return $this->key($serviceName) . '.rejection';
     }
 }

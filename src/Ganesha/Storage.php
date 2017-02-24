@@ -22,6 +22,21 @@ class Storage
     private $serviceNameDecorator;
 
     /**
+     * @var string
+     */
+    const KEY_SUFFIX_SUCCESS = '.success';
+
+    /**
+     * @var string
+     */
+    const KEY_SUFFIX_FAILURE = '.failure';
+
+    /**
+     * @var string
+     */
+    const KEY_SUFFIX_REJECTION = '.rejection';
+
+    /**
      * Storage constructor.
      *
      * @param AdapterInterface $adapter
@@ -44,6 +59,42 @@ class Storage
     private function getCount($key)
     {
         return $this->adapter->load($key);
+    }
+
+    /**
+     * returns success count
+     *
+     * @param  string $serviceName
+     * @return int
+     * @throws StorageException
+     */
+    public function getSuccessCountByCustomKey($key)
+    {
+        return $this->getCount($key . self::KEY_SUFFIX_SUCCESS);
+    }
+
+    /**
+     * returns failure count
+     *
+     * @param  string $serviceName
+     * @return int
+     * @throws StorageException
+     */
+    public function getFailureCountByCustomKey($key)
+    {
+        return $this->getCount($key . self::KEY_SUFFIX_FAILURE);
+    }
+
+    /**
+     * returns rejection count
+     *
+     * @param  string $serviceName
+     * @return int
+     * @throws StorageException
+     */
+    public function getRejectionCountByCustomKey($key)
+    {
+        return $this->getCount($key . self::KEY_SUFFIX_REJECTION);
     }
 
     /**
@@ -211,7 +262,7 @@ class Storage
      */
     private function successKey($serviceName)
     {
-        return $this->key($serviceName) . '.success';
+        return $this->key($serviceName) . self::KEY_SUFFIX_SUCCESS;
     }
 
     /**
@@ -220,7 +271,7 @@ class Storage
      */
     private function failureKey($serviceName)
     {
-        return $this->key($serviceName) . '.failure';
+        return $this->key($serviceName) . self::KEY_SUFFIX_FAILURE;
     }
 
     /**
@@ -229,6 +280,6 @@ class Storage
      */
     private function rejectionKey($serviceName)
     {
-        return $this->key($serviceName) . '.rejection';
+        return $this->key($serviceName) . self::KEY_SUFFIX_REJECTION;
     }
 }

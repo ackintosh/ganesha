@@ -203,7 +203,7 @@ class Storage
      */
     public function setLastFailureTime($serviceName, $lastFailureTime)
     {
-        $this->adapter->saveLastFailureTime($this->key($serviceName), $lastFailureTime);
+        $this->adapter->saveLastFailureTime($serviceName, $lastFailureTime);
     }
 
     /**
@@ -215,7 +215,7 @@ class Storage
      */
     public function getLastFailureTime($serviceName)
     {
-        return $this->adapter->loadLastFailureTime($this->key($serviceName));
+        return $this->adapter->loadLastFailureTime($serviceName);
     }
 
     /**

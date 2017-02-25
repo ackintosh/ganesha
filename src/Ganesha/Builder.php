@@ -32,13 +32,13 @@ class Builder
     public static function createWithRelativeStrategy()
     {
         $configuration = new Configuration();
-        $configuration->setStrategyClass('\Ackintosh\Ganesha\Strategy\Relative');
+        $configuration['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Relative';
         return new self($configuration);
     }
 
     public function withFailureThreshold($threshold)
     {
-        $this->configuration->setFailureThreshold($threshold);
+        $this->configuration['failureThreshold'] = $threshold;
         return $this;
     }
 
@@ -48,7 +48,7 @@ class Builder
      */
     public function withAdapter(AdapterInterface $adapter)
     {
-        $this->configuration->setAdapter($adapter);
+        $this->configuration['adapter'] = $adapter;
         return $this;
     }
 
@@ -62,7 +62,7 @@ class Builder
             throw new \InvalidArgumentException();
         }
 
-        $this->configuration->setAdapterSetupFunction($function);
+        $this->configuration['adapterSetupFunction'] = $function;
         return $this;
     }
 
@@ -72,17 +72,17 @@ class Builder
      */
     public function withIntervalToHalfOpen($interval)
     {
-        $this->configuration->setIntervalToHalfOpen($interval);
+        $this->configuration['intervalToHalfOpen'] = $interval;
         return $this;
     }
 
     /**
-     * @param  int $countTTL
+     * @param  int $ttl
      * @return Builder
      */
-    public function withCountTTL($countTTL)
+    public function withCountTTL($ttl)
     {
-        $this->configuration->setCountTTL($countTTL);
+        $this->configuration['countTTL'] = $ttl;
         return $this;
     }
 
@@ -96,7 +96,7 @@ class Builder
             throw new \InvalidArgumentException();
         }
 
-        $this->configuration->setBehaviorOnStorageError($behavior);
+        $this->configuration['behaviorOnStorageError'] = $behavior;
         return $this;
     }
 
@@ -110,7 +110,7 @@ class Builder
             throw new \InvalidArgumentException();
         }
 
-        $this->configuration->setBehaviorOnTrip($behavior);
+        $this->configuration['behaviorOnTrip'] = $behavior;
         return $this;
     }
 
@@ -128,14 +128,14 @@ class Builder
 
         $ganesha = new Ganesha(
             call_user_func(
-                array($this->configuration->getStrategyClass(), 'create'),
+                array($this->configuration['strategyClass'], 'create'),
                 $this->configuration
             )
         );
-        if ($behaviorOnStorageError = $this->configuration->getBehaviorOnStorageError()) {
+        if ($behaviorOnStorageError = $this->configuration['behaviorOnStorageError']) {
             $ganesha->setBehaviorOnStorageError($behaviorOnStorageError);
         }
-        if ($behaviorOnTrip = $this->configuration->getBehaviorOnTrip()) {
+        if ($behaviorOnTrip = $this->configuration['behaviorOnTrip']) {
             $ganesha->setBehaviorOnTrip($behaviorOnTrip);
         }
 

@@ -31,15 +31,15 @@ class Absolute implements StrategyInterface
     public static function create(Configuration $configuration)
     {
         $strategy = new self();
-        $strategy->setFailureThreshold($configuration->getFailureThreshold());
+        $strategy->setFailureThreshold($configuration['failureThreshold']);
         $strategy->setStorage(
             new Storage(
                 call_user_func($configuration->getAdapterSetupFunction()),
-                $configuration->getCountTTL(),
+                $configuration['countTTL'],
                 null
             )
         );
-        $strategy->setIntervalToHalfOpen($configuration->getIntervalToHalfOpen());
+        $strategy->setIntervalToHalfOpen($configuration['intervalToHalfOpen']);
 
         return $strategy;
     }

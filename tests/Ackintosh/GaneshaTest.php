@@ -250,4 +250,33 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
             'adapter'           => new Hash,
         ));
     }
+
+    /**
+     * @test
+     */
+    public function withRateStrategy()
+    {
+        $ganesha = Builder::buildWithRateStrategy(array(
+            'adapterSetupFunction' => function () {
+                $m = new \Memcached();
+                $m->addServer('localhost', 11211);
+
+                return new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
+            },
+            'timeWindow' => 3,
+            'failureRate' => 50,
+            'minimumRequests' => 1,
+            'intervalToHalfOpen' => 10,
+        ));
+
+        $this->assertTrue($ganesha->isAvailable('test'));
+
+        $ganesha->recordFailure('test');
+        $ganesha->recordFailure('test');
+        $ganesha->recordFailure('test');
+        $ganesha->recordSuccess('test');
+        $ganesha->recordSuccess('test');
+
+        $this->assertFalse($ganesha->isAvailable('test'));
+    }
 }

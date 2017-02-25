@@ -19,7 +19,7 @@ class Builder
      * @param  array $params
      * @return Ganesha
      */
-    public static function buildWithRelativeStrategy(array $params)
+    public static function buildWithRateStrategy(array $params)
     {
         $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Rate';
         return self::perform($params);

@@ -21,7 +21,7 @@ class Builder
      */
     public static function buildWithRelativeStrategy(array $params)
     {
-        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Relative';
+        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Rate';
         return self::perform($params);
     }
 

@@ -6,18 +6,20 @@ use Ackintosh\Ganesha;
 class Builder
 {
     /**
+     * @param  array $params
      * @return Ganesha
      */
-    public static function build($params)
+    public static function build(array $params)
     {
         $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Absolute';
         return self::perform($params);
     }
 
     /**
+     * @param  array $params
      * @return Ganesha
      */
-    public static function buildWithRelativeStrategy($params)
+    public static function buildWithRelativeStrategy(array $params)
     {
         $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Relative';
         return self::perform($params);

@@ -2,7 +2,6 @@
 namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha;
-use Ackintosh\Ganesha\Storage\AdapterInterface;
 
 class Builder
 {
@@ -34,84 +33,6 @@ class Builder
     {
         $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Relative';
         return new self(new Configuration($params));
-    }
-
-    public function withFailureThreshold($threshold)
-    {
-        $this->configuration['failureThreshold'] = $threshold;
-        return $this;
-    }
-
-    /**
-     * @param AdapterInterface $adapter
-     * @return $this Builder
-     */
-    public function withAdapter(AdapterInterface $adapter)
-    {
-        $this->configuration['adapter'] = $adapter;
-        return $this;
-    }
-
-    /**
-     * @param  callable $function
-     * @return Builder  $this
-     */
-    public function withAdapterSetupFunction($function)
-    {
-        if (!is_callable($function)) {
-            throw new \InvalidArgumentException();
-        }
-
-        $this->configuration['adapterSetupFunction'] = $function;
-        return $this;
-    }
-
-    /**
-     * @param int $interval
-     * @return Builder
-     */
-    public function withIntervalToHalfOpen($interval)
-    {
-        $this->configuration['intervalToHalfOpen'] = $interval;
-        return $this;
-    }
-
-    /**
-     * @param  int $ttl
-     * @return Builder
-     */
-    public function withCountTTL($ttl)
-    {
-        $this->configuration['countTTL'] = $ttl;
-        return $this;
-    }
-
-    /**
-     * @param  callable $behavior
-     * @return Builder
-     */
-    public function withBehaviorOnStorageError($behavior)
-    {
-        if (!is_callable($behavior)) {
-            throw new \InvalidArgumentException();
-        }
-
-        $this->configuration['behaviorOnStorageError'] = $behavior;
-        return $this;
-    }
-
-    /**
-     * @param  callable $behavior
-     * @return Builder
-     */
-    public function withBehaviorOnTrip($behavior)
-    {
-        if (!is_callable($behavior)) {
-            throw new \InvalidArgumentException();
-        }
-
-        $this->configuration['behaviorOnTrip'] = $behavior;
-        return $this;
     }
 
     /**

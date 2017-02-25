@@ -148,4 +148,14 @@ class Ganesha
     {
         self::$disabled = true;
     }
+
+    /**
+     * enable
+     *
+     * @return void
+     */
+    public static function enable()
+    {
+        self::$disabled = false;
+    }
 }

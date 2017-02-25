@@ -232,10 +232,15 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     public function disable()
     {
         $ganesha = $this->buildGaneshaWithHashAdapter(1);
+
         $ganesha->recordFailure($this->serviceName);
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
+
         Ganesha::disable();
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
+
+        Ganesha::enable();
+        $this->assertFalse($ganesha->isAvailable($this->serviceName));
     }
 
     private function buildGaneshaWithHashAdapter($threshold)

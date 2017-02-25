@@ -6,57 +6,49 @@ use Ackintosh\Ganesha;
 class Builder
 {
     /**
-     * @var Configuration
+     * @return Ganesha
      */
-    private $configuration;
-
-    /**
-     * Builder constructor.
-     *
-     * @param Configuration $configuration
-     */
-    private function __construct(Configuration $configuration)
-    {
-        $this->configuration = $configuration;
-    }
-
-    /**
-     * @return Builder
-     */
-    public static function create($params)
+    public static function build($params)
     {
         $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Absolute';
-        return new self(new Configuration($params));
+        return self::perform($params);
     }
 
-    public static function createWithRelativeStrategy($params)
+    /**
+     * @return Ganesha
+     */
+    public static function buildWithRelativeStrategy($params)
     {
         $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Relative';
-        return new self(new Configuration($params));
+        return self::perform($params);
     }
 
     /**
      * @return Ganesha
      * @throws \Exception
      */
-    public function build()
+    private static function perform($params)
     {
+        $configuration = new Configuration($params);
+
         try {
-            $this->configuration->validate();
+            $configuration->validate();
         } catch (\Exception $e) {
             throw $e;
         }
 
         $ganesha = new Ganesha(
             call_user_func(
-                array($this->configuration['strategyClass'], 'create'),
-                $this->configuration
+                array($configuration['strategyClass'], 'create'),
+                $configuration
             )
         );
-        if ($behaviorOnStorageError = $this->configuration['behaviorOnStorageError']) {
+
+        if ($behaviorOnStorageError = $configuration['behaviorOnStorageError']) {
             $ganesha->setBehaviorOnStorageError($behaviorOnStorageError);
         }
-        if ($behaviorOnTrip = $this->configuration['behaviorOnTrip']) {
+
+        if ($behaviorOnTrip = $configuration['behaviorOnTrip']) {
             $ganesha->setBehaviorOnTrip($behaviorOnTrip);
         }
 

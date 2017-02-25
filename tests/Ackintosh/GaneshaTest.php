@@ -61,13 +61,13 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
             ->method('foo')
             ->with($this->serviceName);
 
-        $ganesha = Builder::create(array(
+        $ganesha = Builder::build(array(
             'failureThreshold'  => 2,
             'adapter'           => new Hash,
             'behaviorOnTrip'    => function ($serviceName) use ($mock) {
                 $mock->foo($serviceName);
             },
-        ))->build();
+        ));
 
         $ganesha->recordFailure($this->serviceName);
         $ganesha->recordFailure($this->serviceName);
@@ -79,13 +79,13 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     public function onTripBehaviorIsInvokedUnderCertainConditions()
     {
         $invoked = 0;
-        $ganesha = Builder::create(array(
+        $ganesha = Builder::build(array(
             'failureThreshold'  => 2,
             'adapter'           => new Hash,
             'behaviorOnTrip'    => function ($serviceName) use (&$invoked) {
                 $invoked++;
             },
-        ))->build();
+        ));
 
         // tipped and incremented $invoked.
         $ganesha->recordFailure($this->serviceName);
@@ -114,7 +114,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function withMemcached()
     {
-        $ganesha = Builder::create(array(
+        $ganesha = Builder::build(array(
             'failureThreshold'      => 1,
             'adapterSetupFunction'  => function () {
                 $m = new \Memcached();
@@ -122,7 +122,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
                 return new Memcached($m);
             },
-        ))->build();
+        ));
 
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
         $ganesha->recordFailure($this->serviceName);
@@ -134,7 +134,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function withMemcachedTTL()
     {
-        $ganesha = Builder::create(array(
+        $ganesha = Builder::build(array(
             'failureThreshold'      => 1,
             'countTTL'              => 1,
             'adapterSetupFunction'  => function () {
@@ -143,7 +143,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
                 return new Memcached($m);
             },
-        ))->build();
+        ));
 
         $ganesha->recordFailure($this->serviceName);
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
@@ -156,10 +156,10 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function failureCountMustNotBeNegative()
     {
-        $ganesha = Builder::create(array(
+        $ganesha = Builder::build(array(
             'failureThreshold'  => 1,
             'adapter'           => new Hash,
-        ))->build();
+        ));
 
         $ganesha->recordSuccess($this->serviceName);
         $ganesha->recordSuccess($this->serviceName);
@@ -175,12 +175,12 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function withIntervalToHalfOpen()
     {
-        $ganesha = Builder::create(array(
+        $ganesha = Builder::build(array(
             'failureThreshold'      => 1,
             'adapter'               => new Hash,
             'countTTL'              => 60,
             'intervalToHalfOpen'    => 1,
-        ))->build();
+        ));
 
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
         // record a failure, ganesha has trip
@@ -206,12 +206,12 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $m->addServer('localhost', 11211);
         $memcachedAdapter = new Memcached($m);
 
-        $ganesha = Builder::create(array(
+        $ganesha = Builder::build(array(
             'failureThreshold'      => 2,
             'adapterSetupFunction'  => function () use ($memcachedAdapter) {
                 return $memcachedAdapter;
             },
-        ))->build();
+        ));
 
         $ganesha->recordFailure($this->serviceName);
         $this->assertSame(Ganesha::STATUS_CALMED_DOWN, $memcachedAdapter->loadStatus($this->serviceName));
@@ -240,9 +240,9 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
     private function buildGaneshaWithHashAdapter($threshold)
     {
-        return Builder::create(array(
+        return Builder::build(array(
             'failureThreshold'  => $threshold,
             'adapter'           => new Hash,
-        ))->build();
+        ));
     }
 }

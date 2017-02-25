@@ -24,16 +24,16 @@ class Builder
     /**
      * @return Builder
      */
-    public static function create()
+    public static function create($params)
     {
-        return new self(new Configuration());
+        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Absolute';
+        return new self(new Configuration($params));
     }
 
-    public static function createWithRelativeStrategy()
+    public static function createWithRelativeStrategy($params)
     {
-        $configuration = new Configuration();
-        $configuration['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Relative';
-        return new self($configuration);
+        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Relative';
+        return new self(new Configuration($params));
     }
 
     public function withFailureThreshold($threshold)

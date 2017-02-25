@@ -10,11 +10,9 @@ class Configuration implements \ArrayAccess
      */
     private $container = array();
 
-    public function __construct()
+    public function __construct($params)
     {
-        $this->container = array(
-            'strategyClass' => '\Ackintosh\Ganesha\Strategy\Absolute',
-        );
+        $this->container = $params;
     }
 
     public function offsetSet($offset, $value)

@@ -11,7 +11,7 @@ class Builder
      */
     public static function build(array $params)
     {
-        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Absolute';
+        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Count';
         return self::perform($params);
     }
 

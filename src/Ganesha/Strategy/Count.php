@@ -7,7 +7,7 @@ use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\StrategyInterface;
 use Ackintosh\Ganesha\Exception\StorageException;
 
-class Absolute implements StrategyInterface
+class Count implements StrategyInterface
 {
     /**
      * @var int
@@ -26,7 +26,7 @@ class Absolute implements StrategyInterface
 
     /**
      * @param Configuration $configuration
-     * @return Absolute
+     * @return Count
      */
     public static function create(Configuration $configuration)
     {

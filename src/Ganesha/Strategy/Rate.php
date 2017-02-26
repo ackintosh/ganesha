@@ -31,7 +31,7 @@ class Rate implements StrategyInterface
             new Storage(
                 call_user_func($configuration->getAdapterSetupFunction()),
                 $configuration['countTTL'],
-                self::serviceNameDecorator(time(), $configuration['timeWindow'])
+                self::serviceNameDecorator($configuration['timeWindow'])
             )
         );
 
@@ -174,20 +174,20 @@ class Rate implements StrategyInterface
         return false;
     }
 
-    private static function serviceNameDecorator($now, $timeWindow)
+    private static function serviceNameDecorator($timeWindow, $current = true)
     {
-        return function ($serviceName) use ($now, $timeWindow) {
+        return function ($serviceName) use ($timeWindow, $current) {
             return sprintf(
                 '%s.%d',
                 $serviceName,
-                (int)floor($now / $timeWindow)
+                $current ? (int)floor(time() / $timeWindow) : (int)floor(time() - $timeWindow / $timeWindow)
             );
         };
     }
 
     private static function keyForPreviousTimeWindow($serviceName, $timeWindow)
     {
-        $f = self::serviceNameDecorator(time() - $timeWindow, $timeWindow);
+        $f = self::serviceNameDecorator($timeWindow, false);
         return $f($serviceName);
     }
 }

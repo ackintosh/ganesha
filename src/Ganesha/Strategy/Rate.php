@@ -120,6 +120,13 @@ class Rate implements StrategyInterface
     private function isClosedInCurrentTimeWindow($serviceName)
     {
         $failure = $this->storage->getFailureCount($serviceName);
+        if (
+            $failure === 0
+            || ($failure / $this->configuration['minimumRequests']) * 100 < $this->configuration['failureRate']
+        ) {
+            return true;
+        }
+
         $success = $this->storage->getSuccessCount($serviceName);
         $rejection = $this->storage->getRejectionCount($serviceName);
 
@@ -133,6 +140,13 @@ class Rate implements StrategyInterface
     private function isClosedInPreviousTimeWindow($serviceName)
     {
         $failure = $this->storage->getFailureCountByCustomKey(self::keyForPreviousTimeWindow($serviceName, $this->configuration['timeWindow']));
+        if (
+            $failure === 0
+            || ($failure / $this->configuration['minimumRequests']) * 100 < $this->configuration['failureRate']
+        ) {
+            return true;
+        }
+
         $success = $this->storage->getSuccessCountByCustomKey(self::keyForPreviousTimeWindow($serviceName, $this->configuration['timeWindow']));
         $rejection = $this->storage->getRejectionCountByCustomKey(self::keyForPreviousTimeWindow($serviceName, $this->configuration['timeWindow']));
 

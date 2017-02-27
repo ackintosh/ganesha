@@ -28,8 +28,8 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $ganesha = $this->buildGaneshaWithMemcachedAdapter(2);
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
 
-        $ganesha->recordFailure($this->serviceName);
-        $ganesha->recordFailure($this->serviceName);
+        $ganesha->failure($this->serviceName);
+        $ganesha->failure($this->serviceName);
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
         // it does not affect other services.
         $this->assertTrue($ganesha->isAvailable('other' . $this->serviceName));
@@ -41,11 +41,11 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     public function recordsSuccessAndClose()
     {
         $ganesha = $this->buildGaneshaWithMemcachedAdapter(2);
-        $ganesha->recordFailure($this->serviceName);
-        $ganesha->recordFailure($this->serviceName);
+        $ganesha->failure($this->serviceName);
+        $ganesha->failure($this->serviceName);
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
 
-        $ganesha->recordSuccess($this->serviceName);
+        $ganesha->success($this->serviceName);
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
     }
 
@@ -69,8 +69,8 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
             },
         ));
 
-        $ganesha->recordFailure($this->serviceName);
-        $ganesha->recordFailure($this->serviceName);
+        $ganesha->failure($this->serviceName);
+        $ganesha->failure($this->serviceName);
     }
 
     /**
@@ -88,24 +88,24 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         ));
 
         // tipped and incremented $invoked.
-        $ganesha->recordFailure($this->serviceName);
-        $ganesha->recordFailure($this->serviceName);
+        $ganesha->failure($this->serviceName);
+        $ganesha->failure($this->serviceName);
         $this->assertSame(1, $invoked);
 
         // closed.
-        $ganesha->recordSuccess($this->serviceName);
+        $ganesha->success($this->serviceName);
 
         // tripped again, but $invoke is not incremented.
-        $ganesha->recordFailure($this->serviceName);
+        $ganesha->failure($this->serviceName);
         $this->assertSame(1, $invoked);
 
         // calm down ( failure count = 0 )
-        $ganesha->recordSuccess($this->serviceName);
-        $ganesha->recordSuccess($this->serviceName);
+        $ganesha->success($this->serviceName);
+        $ganesha->success($this->serviceName);
 
         // tripped and incremented $invoked.
-        $ganesha->recordFailure($this->serviceName);
-        $ganesha->recordFailure($this->serviceName);
+        $ganesha->failure($this->serviceName);
+        $ganesha->failure($this->serviceName);
         $this->assertSame(2, $invoked);
     }
 
@@ -125,7 +125,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         ));
 
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
-        $ganesha->recordFailure($this->serviceName);
+        $ganesha->failure($this->serviceName);
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
     }
 
@@ -145,7 +145,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
             },
         ));
 
-        $ganesha->recordFailure($this->serviceName);
+        $ganesha->failure($this->serviceName);
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
         sleep(1);
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
@@ -161,12 +161,12 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
             'adapter'           => new Hash,
         ));
 
-        $ganesha->recordSuccess($this->serviceName);
-        $ganesha->recordSuccess($this->serviceName);
-        $ganesha->recordSuccess($this->serviceName);
+        $ganesha->success($this->serviceName);
+        $ganesha->success($this->serviceName);
+        $ganesha->success($this->serviceName);
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
 
-        $ganesha->recordFailure($this->serviceName);
+        $ganesha->failure($this->serviceName);
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
     }
 
@@ -184,7 +184,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
         // record a failure, ganesha has trip
-        $ganesha->recordFailure($this->serviceName);
+        $ganesha->failure($this->serviceName);
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
         // wait for the interval to half-open
         sleep(2);
@@ -193,7 +193,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         // after half-open, service is not available until the interval has elapsed
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
         // record a success, ganesha has close
-        $ganesha->recordSuccess($this->serviceName);
+        $ganesha->success($this->serviceName);
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
     }
 
@@ -213,16 +213,16 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
             },
         ));
 
-        $ganesha->recordFailure($this->serviceName);
+        $ganesha->failure($this->serviceName);
         $this->assertSame(Ganesha::STATUS_CALMED_DOWN, $memcachedAdapter->loadStatus($this->serviceName));
         // trip
-        $ganesha->recordFailure($this->serviceName);
+        $ganesha->failure($this->serviceName);
         $this->assertSame(Ganesha::STATUS_TRIPPED, $memcachedAdapter->loadStatus($this->serviceName));
         // service is available, but status is still OPEN
-        $ganesha->recordSuccess($this->serviceName);
+        $ganesha->success($this->serviceName);
         $this->assertSame(Ganesha::STATUS_TRIPPED, $memcachedAdapter->loadStatus($this->serviceName));
         // failure count is 0, status changes to CLOSE
-        $ganesha->recordSuccess($this->serviceName);
+        $ganesha->success($this->serviceName);
         $this->assertSame(Ganesha::STATUS_CALMED_DOWN, $memcachedAdapter->loadStatus($this->serviceName));
     }
 
@@ -233,7 +233,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     {
         $ganesha = $this->buildGaneshaWithMemcachedAdapter(1);
 
-        $ganesha->recordFailure($this->serviceName);
+        $ganesha->failure($this->serviceName);
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
 
         Ganesha::disable();
@@ -276,11 +276,11 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($ganesha->isAvailable('test'));
 
-        $ganesha->recordFailure('test');
-        $ganesha->recordFailure('test');
-        $ganesha->recordFailure('test');
-        $ganesha->recordSuccess('test');
-        $ganesha->recordSuccess('test');
+        $ganesha->failure('test');
+        $ganesha->failure('test');
+        $ganesha->failure('test');
+        $ganesha->success('test');
+        $ganesha->success('test');
 
         $this->assertFalse($ganesha->isAvailable('test'));
     }

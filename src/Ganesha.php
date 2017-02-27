@@ -72,7 +72,7 @@ class Ganesha
      *
      * @return void
      */
-    public function recordFailure($serviceName)
+    public function failure($serviceName)
     {
         try {
             if ($this->strategy->recordFailure($serviceName) === self::STATUS_TRIPPED) {
@@ -88,7 +88,7 @@ class Ganesha
      *
      * @return void
      */
-    public function recordSuccess($serviceName)
+    public function success($serviceName)
     {
         try {
             $this->strategy->recordSuccess($serviceName);

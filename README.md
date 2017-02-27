@@ -20,11 +20,12 @@ composer require ackintosh/ganesha:dev-master
 ## Usage
 
 ```php
-$ganesha = Ackintosh\Ganesha\Builder::create()
-               ->withFailureThreshold(10)
-               // Hash adapter can only be used for tests.
-               ->withAdapter(new Ackintosh\Ganesha\Storage\Adapter\Hash)
-               ->build();
+$ganesha = Ackintosh\Ganesha\Builder:: build([
+    'failureRate' => 50,
+    // Hash adapter can only be used for tests.
+    'adapter'     => new Ackintosh\Ganesha\Storage\Adapter\Hash,
+]);
+
 
 $serviceName = 'external_api';
 
@@ -34,11 +35,11 @@ if (!$ganesha->isAvailable($serviceName)) {
 
 try {
     $response = ExternalApi::send($request);
-    $ganesha->recordSuccess($serviceName);
+    $ganesha->success($serviceName);
     echo $response->getBody();
 } catch (ExternalApi\NetworkErrorException $e) {
     // If a network error occurred, it must be recorded as failure.
-    $ganesha->recordFailure($serviceName);
+    $ganesha->failure($serviceName);
     die($e->getMessage());
 }
 ```
@@ -50,49 +51,49 @@ Ganesha has two ways to setup storage adapter.
 
 ```php
 // The passed object must be an instance of 'Ackintosh\Ganesha\Storage\AdapterInterface'.
-$ganesha = Ackintosh\Ganesha\Builder::create()
-               ->withAdapter(new Ackintosh\Ganesha\Storage\Adapter\Hash)
-               ->build();
+$ganesha = Ackintosh\Ganesha\Builder::build([
+    'adapter' => new Ackintosh\Ganesha\Storage\Adapter\Hash,
+]);
 
 // Also, we can specify function which returns instance of AdapterInterface.
-$ganesha = Ackintosh\Ganesha\Builder::create()
-               ->withAdapterSetupFunction(function () {
-                   $m = new \Memcached();
-                   $m->addServer('localhost', 11211);
+$ganesha = Ackintosh\Ganesha\Builder::build([
+    'adapterSetupFunction' => function () {
+        $m = new \Memcached();
+        $m->addServer('localhost', 11211);
 
-                   return new Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
-               })
-               ->build();
+        return new Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
+    },
+]);
+
 ```
 
 #### Behavior on storage error
 
 ```php
-$ganesha = Ackintosh\Ganesha\Builder::create()
-               // with memcached.
-               ->withAdapterSetupFunction(function () {
-                   $m = new \Memcached();
-                   $m->addServer('localhost', 11211);
+$ganesha = Ackintosh\Ganesha\Builder::build([
+    // with memcached.
+    'adapterSetupFunction' => function () {
+        $m = new \Memcached();
+        $m->addServer('localhost', 11211);
 
-                   return new Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
-               })
-               // we can define the behavior on memcached error.
-               ->withBehaviorOnStorageError(function ($errorMessage) {
-                   \YourLogger::error('Some errors have occurred on memcached : ' . $errorMessage);
-                   \YourMonitoringSystem::reportError();
-               })
-               ->build();
-
+        return new Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
+    },
+    // we can define the behavior on memcached error.
+    'behaviorOnStorageError' => function ($errorMessage) {
+        \YourLogger::error('Some errors have occurred on memcached : ' . $errorMessage);
+        \YourMonitoringSystem::reportError();
+    },
+]);
 ```
 
 #### Behavior on trip
 
 ```php
-$ganesha = Ackintosh\Ganesha\Builder::create()
-               ->withBehaviorOnTrip(function ($unavailableServiceName) {
-                   \Slack::notify("Ganesha has tripped. Something's wrong in {$unavailableServiceName} !");
-               })
-               ->build();
+$ganesha = Ackintosh\Ganesha\Builder:: build([
+    'behaviorOnTrip' => function ($unavailableServiceName) {
+        \Slack::notify("Ganesha has tripped. Something's wrong in {$unavailableServiceName} !");
+    },
+]);
 ```
 
 #### Disable
@@ -104,9 +105,9 @@ Ackintosh\Ganesha::disable();
 
 // Ganesha with threshold `3`.
 // Failure count is recorded to storage.
-$ganesha->recordFailure($serviceName);
-$ganesha->recordFailure($serviceName);
-$ganesha->recordFailure($serviceName);
+$ganesha->failure($serviceName);
+$ganesha->failure($serviceName);
+$ganesha->failure($serviceName);
 
 // But Ganesha does not trip.
 var_dump($ganesha->isAvailable($serviceName);
@@ -128,12 +129,12 @@ var_dump($ganesha->isAvailable($serviceName);
 	- 60秒 ( `withCountTTL(60)` )
 
 ```php
-$ganesha = Ackintosh\Ganesha\Builder::create()
-               ->withFailureThreshold(10)
-               ->withStorageAdapter(new Ackintosh\Ganesha\Storage\Adapter\Hash)
-               ->withIntervalToHalfOpen(5)
-               ->withCountTTL(60)
-               ->build();
+$ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
+    'failureThreshold'   => 10,
+    'storageAdapter'     => new Ackintosh\Ganesha\Storage\Adapter\Hash,
+    'intervalToHalfOpen' => 5,
+    'countTTL'           => 60,
+]);
 ```
 
 ###### 挙動

@@ -25,7 +25,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function recordsFailureAndTrips()
     {
-        $ganesha = $this->buildGaneshaWithHashAdapter(2);
+        $ganesha = $this->buildGaneshaWithMemcachedAdapter(2);
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
 
         $ganesha->recordFailure($this->serviceName);
@@ -40,7 +40,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function recordsSuccessAndClose()
     {
-        $ganesha = $this->buildGaneshaWithHashAdapter(2);
+        $ganesha = $this->buildGaneshaWithMemcachedAdapter(2);
         $ganesha->recordFailure($this->serviceName);
         $ganesha->recordFailure($this->serviceName);
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
@@ -231,7 +231,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function disable()
     {
-        $ganesha = $this->buildGaneshaWithHashAdapter(1);
+        $ganesha = $this->buildGaneshaWithMemcachedAdapter(1);
 
         $ganesha->recordFailure($this->serviceName);
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
@@ -243,11 +243,16 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
     }
 
-    private function buildGaneshaWithHashAdapter($threshold)
+    private function buildGaneshaWithMemcachedAdapter($threshold)
     {
         return Builder::buildWithCountStrategy(array(
             'failureThreshold'  => $threshold,
-            'adapter'           => new Hash,
+            'adapterSetupFunction' => function () {
+                $m = new \Memcached();
+                $m->addServer('localhost', 11211);
+
+                return new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
+            },
         ));
     }
 

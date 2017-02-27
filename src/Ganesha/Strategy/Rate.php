@@ -126,16 +126,7 @@ class Rate implements StrategyInterface
         $success = $this->storage->getSuccessCountByCustomKey(self::keyForPreviousTimeWindow($serviceName, $this->configuration['timeWindow']));
         $rejection = $this->storage->getRejectionCountByCustomKey(self::keyForPreviousTimeWindow($serviceName, $this->configuration['timeWindow']));
 
-        $total = $failure + $success + $rejection;
-        if ($total < $this->configuration['minimumRequests']) {
-            return true;
-        }
-
-        if (($failure / $total) * 100 < $this->configuration['failureRate']) {
-            return true;
-        }
-
-        return false;
+        return $this->isClosedInTimeWindow($failure, $success, $rejection);
     }
 
     private function isClosedInCurrentTimeWindow($serviceName)
@@ -144,6 +135,11 @@ class Rate implements StrategyInterface
         $success = $this->storage->getSuccessCount($serviceName);
         $rejection = $this->storage->getRejectionCount($serviceName);
 
+        return $this->isClosedInTimeWindow($failure, $success, $rejection);
+    }
+
+    private function isClosedInTimeWindow($failure, $success, $rejection)
+    {
         $total = $failure + $success + $rejection;
         if ($total < $this->configuration['minimumRequests']) {
             return true;

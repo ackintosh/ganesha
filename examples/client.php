@@ -13,8 +13,27 @@ $m->addServer('localhost', 11211);
 $m->flush();
 file_put_contents(PATH_TO_LOG, '');
 
-$snidel = new Snidel(3);
-
+if (
+    ($awsKey = getenv('SNIDEL_AWS_KEY'))
+    && ($awsSecret = getenv('SNIDEL_AWS_SECRET'))
+    && ($awsRegion = getenv('SNIDEL_AWS_REGION'))
+) {
+    $config = array(
+        'aws-key' => $awsKey,
+        'aws-secret' => $awsSecret,
+        'aws-region' => $awsRegion,
+        'concurrency' => 3,
+        'taskQueue'     => array(
+            'className'         => '\Ackintosh\Snidel\Queue\Sqs\Task',
+        ),
+        'resultQueue'   => array(
+            'className'         => '\Ackintosh\Snidel\Queue\Sqs\Result',
+        ),
+    );
+} else {
+    $config = 3;
+}
+$snidel = new Snidel($config);
 $snidel->fork(function () {
     request();
 });

@@ -2,6 +2,7 @@
   "require": {
     "guzzlehttp/guzzle": "*",
     "ackintosh/snidel": "dev-develop",
-    "mpyw/php-hyper-builtin-server": "dev-master"
+    "mpyw/php-hyper-builtin-server": "dev-master",
+    "ackintosh/snidel-queue-sqs": "*"
   }
 }

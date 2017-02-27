@@ -11,7 +11,7 @@ class Builder
      */
     public static function build(array $params)
     {
-        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Count';
+        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Rate';
         return self::perform($params);
     }
 
@@ -19,9 +19,9 @@ class Builder
      * @param  array $params
      * @return Ganesha
      */
-    public static function buildWithRateStrategy(array $params)
+    public static function buildWithCountStrategy(array $params)
     {
-        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Rate';
+        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Count';
         return self::perform($params);
     }
 

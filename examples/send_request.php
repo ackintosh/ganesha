@@ -11,7 +11,7 @@ sendRequest();
 
 function buildGanesha()
 {
-    return Builder::buildWithRateStrategy(array(
+    return Builder::build(array(
         'adapterSetupFunction'  => function () {
             $m = new \Memcached();
             $m->addServer('localhost', 11211);
@@ -37,11 +37,11 @@ function sendRequest()
             $client->request('GET', 'http://localhost:8080/server.php');
         } catch (\Exception $e) {
             file_put_contents(PATH_TO_LOG, "<failure>\n", FILE_APPEND);
-            $ganesha->recordFailure(SERVICE_NAME);
+            $ganesha->failure(SERVICE_NAME);
             return;
         }
 
-        $ganesha->recordSuccess(SERVICE_NAME);
+        $ganesha->success(SERVICE_NAME);
         file_put_contents(PATH_TO_LOG, "(success)\n", FILE_APPEND);
     } else {
         file_put_contents(PATH_TO_LOG, "[[[ rejected ]]]\n", FILE_APPEND);

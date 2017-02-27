@@ -20,7 +20,13 @@ composer require ackintosh/ganesha:dev-master
 ## Usage
 
 ```php
-$ganesha = Ackintosh\Ganesha\Builder:: build([
+$ganesha->isAvailable();
+$ganesha->success();
+$ganesha->failure();
+```
+
+```php
+$ganesha = Ackintosh\Ganesha\Builder::build([
     'failureRate' => 50,
     // Hash adapter can only be used for tests.
     'adapter'     => new Ackintosh\Ganesha\Storage\Adapter\Hash,
@@ -89,7 +95,7 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 #### Behavior on trip
 
 ```php
-$ganesha = Ackintosh\Ganesha\Builder:: build([
+$ganesha = Ackintosh\Ganesha\Builder::build([
     'behaviorOnTrip' => function ($unavailableServiceName) {
         \Slack::notify("Ganesha has tripped. Something's wrong in {$unavailableServiceName} !");
     },
@@ -114,19 +120,28 @@ var_dump($ganesha->isAvailable($serviceName);
 // bool(true)
 ```
 
-## Examples of Ganesha behavior
+## Examples
 
-(in japanese)
+Ganesha has two strategies to detect system failure.
+
+### Rate
+
+```php
+$ganesha = Ackintosh\Ganesha\Builder::build([
+    'timeWindow'            => 30,
+    'failureRate'           => 10,
+    'minimumRequests'       => 10,
+    'intervalToHalfOpen'    => 5,
+    'storageAdapter'     => new Ackintosh\Ganesha\Storage\Adapter\Hash,
+]);
+```
+
+### Count
+
+(ja)
 
 
 ###### 設定
-
-- 失敗数のしきい値
-	- 10回 ( `withFailureThreshold(10)` )
-- half-open までの時間
-	- 5秒 ( `withIntervalToHalfOpen(5)` )
-- 失敗数をリセットするまでの時間
-	- 60秒 ( `withCountTTL(60)` )
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
@@ -155,7 +170,7 @@ https://ackintosh.github.io/ganesha/
 Ganesha using [Soushi](https://github.com/kentaro/soushi) for generating documents.
 
 ```
-$ path/to/shoushi build docs
+$ path/to/soushi build docs
 ```
 
 ## Great predecessors

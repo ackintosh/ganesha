@@ -180,7 +180,7 @@ class Rate implements StrategyInterface
             return sprintf(
                 '%s.%d',
                 $serviceName,
-                $current ? (int)floor(time() / $timeWindow) : (int)floor(time() - $timeWindow / $timeWindow)
+                $current ? (int)floor(time() / $timeWindow) : (int)floor((time() - $timeWindow) / $timeWindow)
             );
         };
     }

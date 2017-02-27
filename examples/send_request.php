@@ -1,4 +1,6 @@
 <?php
+declare(ticks = 1);
+
 require_once __DIR__ . '/vendor/autoload.php';
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -44,6 +46,6 @@ function sendRequest()
         $ganesha->success(SERVICE_NAME);
         file_put_contents(PATH_TO_LOG, "(success)\n", FILE_APPEND);
     } else {
-        file_put_contents(PATH_TO_LOG, "[[[ rejected ]]]\n", FILE_APPEND);
+        file_put_contents(PATH_TO_LOG, "[[[ reject ]]]\n", FILE_APPEND);
     }
 }

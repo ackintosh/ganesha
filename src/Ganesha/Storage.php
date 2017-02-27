@@ -228,7 +228,7 @@ class Storage
      */
     public function setStatus($serviceName, $status)
     {
-        $this->adapter->saveStatus($this->key($serviceName), $status);
+        $this->adapter->saveStatus($serviceName, $status);
     }
 
     /**
@@ -240,7 +240,7 @@ class Storage
      */
     public function getStatus($serviceName)
     {
-        return $this->adapter->loadStatus($this->key($serviceName));
+        return $this->adapter->loadStatus($serviceName);
     }
 
     /**

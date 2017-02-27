@@ -110,25 +110,13 @@ class Rate implements StrategyInterface
      */
     private function isClosed($serviceName)
     {
-        if (
-            $this->isClosedInPreviousTimeWindow($serviceName)
-            && $this->isClosedInCurrentTimeWindow($serviceName)
-        ) {
-            return true;
-        }
-
-        return false;
+        return $this->isClosedInCurrentTimeWindow($serviceName) && $this->isClosedInPreviousTimeWindow($serviceName);
     }
 
-    private function isClosedInPreviousTimeWindow($serviceName)
-    {
-        $failure = $this->storage->getFailureCountByCustomKey(self::keyForPreviousTimeWindow($serviceName, $this->configuration['timeWindow']));
-        $success = $this->storage->getSuccessCountByCustomKey(self::keyForPreviousTimeWindow($serviceName, $this->configuration['timeWindow']));
-        $rejection = $this->storage->getRejectionCountByCustomKey(self::keyForPreviousTimeWindow($serviceName, $this->configuration['timeWindow']));
-
-        return $this->isClosedInTimeWindow($failure, $success, $rejection);
-    }
-
+    /**
+     * @param  string $serviceName
+     * @return bool
+     */
     private function isClosedInCurrentTimeWindow($serviceName)
     {
         $failure = $this->storage->getFailureCount($serviceName);
@@ -138,6 +126,25 @@ class Rate implements StrategyInterface
         return $this->isClosedInTimeWindow($failure, $success, $rejection);
     }
 
+    /**
+     * @param  string $serviceName
+     * @return bool
+     */
+    private function isClosedInPreviousTimeWindow($serviceName)
+    {
+        $failure = $this->storage->getFailureCountByCustomKey(self::keyForPreviousTimeWindow($serviceName, $this->configuration['timeWindow']));
+        $success = $this->storage->getSuccessCountByCustomKey(self::keyForPreviousTimeWindow($serviceName, $this->configuration['timeWindow']));
+        $rejection = $this->storage->getRejectionCountByCustomKey(self::keyForPreviousTimeWindow($serviceName, $this->configuration['timeWindow']));
+
+        return $this->isClosedInTimeWindow($failure, $success, $rejection);
+    }
+
+    /**
+     * @param  int $failure
+     * @param  int $success
+     * @param  int $rejection
+     * @return bool
+     */
     private function isClosedInTimeWindow($failure, $success, $rejection)
     {
         $total = $failure + $success + $rejection;

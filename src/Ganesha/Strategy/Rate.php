@@ -83,8 +83,8 @@ class Rate implements StrategyInterface
     {
         $this->storage->incrementSuccessCount($serviceName);
         if (
-            $this->storage->getFailureCount($serviceName) === 0
-            && $this->storage->getStatus($serviceName) === Ganesha::STATUS_TRIPPED
+            $this->storage->getStatus($serviceName) === Ganesha::STATUS_TRIPPED
+            && $this->isClosedInPreviousTimeWindow($serviceName)
         ) {
             $this->storage->setStatus($serviceName, Ganesha::STATUS_CALMED_DOWN);
             return Ganesha::STATUS_CALMED_DOWN;

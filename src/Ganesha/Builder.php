@@ -54,6 +54,10 @@ class Builder
             $ganesha->setBehaviorOnTrip($behaviorOnTrip);
         }
 
+        if ($behaviorOnCalmedDown = $configuration['behaviorOnCalmedDown']) {
+            $ganesha->setBehaviorOnCalmedDown($behaviorOnCalmedDown);
+        }
+
         return $ganesha;
     }
 }

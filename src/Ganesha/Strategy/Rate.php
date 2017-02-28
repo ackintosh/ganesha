@@ -77,7 +77,7 @@ class Rate implements StrategyInterface
 
     /**
      * @param  string $serviceName
-     * @return void
+     * @return null | int
      */
     public function recordSuccess($serviceName)
     {
@@ -87,6 +87,7 @@ class Rate implements StrategyInterface
             && $this->storage->getStatus($serviceName) === Ganesha::STATUS_TRIPPED
         ) {
             $this->storage->setStatus($serviceName, Ganesha::STATUS_CALMED_DOWN);
+            return Ganesha::STATUS_CALMED_DOWN;
         }
     }
 

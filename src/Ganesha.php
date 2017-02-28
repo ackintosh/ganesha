@@ -18,6 +18,11 @@ class Ganesha
     /**
      * @var callable
      */
+    private $behaviorOnCalmedDown;
+
+    /**
+     * @var callable
+     */
     private $behaviorOnStorageError;
 
     /**
@@ -68,6 +73,17 @@ class Ganesha
     }
 
     /**
+     * sets behavior which will be invoked when Ganesha calmed down
+     *
+     * @param  callable $behavior
+     * @return void
+     */
+    public function setBehaviorOnCalmedDown($behavior)
+    {
+        $this->behaviorOnCalmedDown = $behavior;
+    }
+
+    /**
      * records failure
      *
      * @return void
@@ -91,7 +107,9 @@ class Ganesha
     public function success($serviceName)
     {
         try {
-            $this->strategy->recordSuccess($serviceName);
+            if ($this->strategy->recordSuccess($serviceName) === self::STATUS_CALMED_DOWN) {
+                $this->triggerBehaviorOnCalmedDown($serviceName);
+            }
         } catch (StorageException $e) {
             $this->triggerBehaviorOnStorageError('failed to record success : ' . $e->getMessage());
         }
@@ -137,6 +155,19 @@ class Ganesha
         }
 
         call_user_func($this->behaviorOnTrip, $serviceName);
+    }
+
+    /**
+     * @param  string $serviceName
+     * @return void
+     */
+    private function triggerBehaviorOnCalmedDown($serviceName)
+    {
+        if (is_null($this->behaviorOnCalmedDown)) {
+            return;
+        }
+
+        call_user_func($this->behaviorOnCalmedDown, $serviceName);
     }
 
     /**

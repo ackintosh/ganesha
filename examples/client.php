@@ -49,7 +49,7 @@ $snidel->wait();
 function request()
 {
     while (1) {
-        usleep(500000);
+        usleep(300000);
         exec('php ' . __DIR__ . '/send_request.php >> '. __DIR__ .'/client.log &');
     }
 }

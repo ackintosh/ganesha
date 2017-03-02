@@ -7,9 +7,15 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 use \Ackintosh\Ganesha\Builder;
 
 define('SERVICE_NAME', 'example');
+define('TIME_WINDOW', 20);
+define('FAILURE_RATE', 10);
+define('MINIMUM_REQUESTS', 10);
+define('INTERVAL_TO_HALF_OPEN', 5);
 define('PATH_TO_LOG', __DIR__ . '/send_request.log');
 
-sendRequest();
+if (strpos($argv[0], basename(__FILE__))) {
+    sendRequest();
+}
 
 function buildGanesha()
 {
@@ -39,10 +45,10 @@ __EOS__;
         'behaviorOnCalmedDown' => function ($serviceName) use ($messageOnCalmedDown) {
             file_put_contents(PATH_TO_LOG, $messageOnCalmedDown, FILE_APPEND);
         },
-        'timeWindow'            => 20,
-        'failureRate'           => 10,
-        'minimumRequests'       => 10,
-        'intervalToHalfOpen'    => 5,
+        'timeWindow'            => TIME_WINDOW,
+        'failureRate'           => FAILURE_RATE,
+        'minimumRequests'       => MINIMUM_REQUESTS,
+        'intervalToHalfOpen'    => INTERVAL_TO_HALF_OPEN,
     ));
 }
 

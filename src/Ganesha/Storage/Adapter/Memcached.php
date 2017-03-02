@@ -12,8 +12,8 @@ class Memcached implements AdapterInterface
      */
     private $memcached;
 
-    const KEY_SUFFIX_LAST_FAILURE_TIME = 'LastFailureTime';
-    const KEY_SUFFIX_STATUS = 'Status';
+    const KEY_SUFFIX_LAST_FAILURE_TIME = '.last_failure_time';
+    const KEY_SUFFIX_STATUS = '.status';
 
     /**
      * Memcached constructor.

@@ -18,6 +18,11 @@ class Ganesha
     /**
      * @var callable
      */
+    private $behaviorOnCalmedDown;
+
+    /**
+     * @var callable
+     */
     private $behaviorOnStorageError;
 
     /**
@@ -68,11 +73,22 @@ class Ganesha
     }
 
     /**
+     * sets behavior which will be invoked when Ganesha calmed down
+     *
+     * @param  callable $behavior
+     * @return void
+     */
+    public function setBehaviorOnCalmedDown($behavior)
+    {
+        $this->behaviorOnCalmedDown = $behavior;
+    }
+
+    /**
      * records failure
      *
      * @return void
      */
-    public function recordFailure($serviceName)
+    public function failure($serviceName)
     {
         try {
             if ($this->strategy->recordFailure($serviceName) === self::STATUS_TRIPPED) {
@@ -88,10 +104,12 @@ class Ganesha
      *
      * @return void
      */
-    public function recordSuccess($serviceName)
+    public function success($serviceName)
     {
         try {
-            $this->strategy->recordSuccess($serviceName);
+            if ($this->strategy->recordSuccess($serviceName) === self::STATUS_CALMED_DOWN) {
+                $this->triggerBehaviorOnCalmedDown($serviceName);
+            }
         } catch (StorageException $e) {
             $this->triggerBehaviorOnStorageError('failed to record success : ' . $e->getMessage());
         }
@@ -140,6 +158,19 @@ class Ganesha
     }
 
     /**
+     * @param  string $serviceName
+     * @return void
+     */
+    private function triggerBehaviorOnCalmedDown($serviceName)
+    {
+        if (is_null($this->behaviorOnCalmedDown)) {
+            return;
+        }
+
+        call_user_func($this->behaviorOnCalmedDown, $serviceName);
+    }
+
+    /**
      * disable
      *
      * @return void
@@ -147,5 +178,15 @@ class Ganesha
     public static function disable()
     {
         self::$disabled = true;
+    }
+
+    /**
+     * enable
+     *
+     * @return void
+     */
+    public static function enable()
+    {
+        self::$disabled = false;
     }
 }

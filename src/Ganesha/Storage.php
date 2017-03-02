@@ -22,6 +22,21 @@ class Storage
     private $serviceNameDecorator;
 
     /**
+     * @var string
+     */
+    const KEY_SUFFIX_SUCCESS = '.success';
+
+    /**
+     * @var string
+     */
+    const KEY_SUFFIX_FAILURE = '.failure';
+
+    /**
+     * @var string
+     */
+    const KEY_SUFFIX_REJECTION = '.rejection';
+
+    /**
      * Storage constructor.
      *
      * @param AdapterInterface $adapter
@@ -35,6 +50,54 @@ class Storage
     }
 
     /**
+     * returns count
+     *
+     * @param  string $key
+     * @return int
+     * @throws StorageException
+     */
+    private function getCount($key)
+    {
+        return $this->adapter->load($key);
+    }
+
+    /**
+     * returns success count
+     *
+     * @param  string $serviceName
+     * @return int
+     * @throws StorageException
+     */
+    public function getSuccessCountByCustomKey($key)
+    {
+        return $this->getCount($key . self::KEY_SUFFIX_SUCCESS);
+    }
+
+    /**
+     * returns failure count
+     *
+     * @param  string $serviceName
+     * @return int
+     * @throws StorageException
+     */
+    public function getFailureCountByCustomKey($key)
+    {
+        return $this->getCount($key . self::KEY_SUFFIX_FAILURE);
+    }
+
+    /**
+     * returns rejection count
+     *
+     * @param  string $serviceName
+     * @return int
+     * @throws StorageException
+     */
+    public function getRejectionCountByCustomKey($key)
+    {
+        return $this->getCount($key . self::KEY_SUFFIX_REJECTION);
+    }
+
+    /**
      * returns failure count
      *
      * @param  string $serviceName
@@ -43,7 +106,19 @@ class Storage
      */
     public function getFailureCount($serviceName)
     {
-        return $this->adapter->load($this->key($serviceName));
+        return $this->getCount($this->failureKey($serviceName));
+    }
+
+    /**
+     * returns success count
+     *
+     * @param  string $serviceName
+     * @return int
+     * @throws StorageException
+     */
+    public function getSuccessCount($serviceName)
+    {
+        return $this->getCount($this->successKey($serviceName));
     }
 
     /**
@@ -55,7 +130,7 @@ class Storage
      */
     public function incrementFailureCount($serviceName)
     {
-        $this->adapter->increment($this->key($serviceName), $this->countTTL);
+        $this->adapter->increment($this->failureKey($serviceName), $this->countTTL);
     }
 
     /**
@@ -67,7 +142,43 @@ class Storage
      */
     public function decrementFailureCount($serviceName)
     {
-        $this->adapter->decrement($this->key($serviceName), $this->countTTL);
+        $this->adapter->decrement($this->failureKey($serviceName), $this->countTTL);
+    }
+
+    /**
+     * increments success count
+     *
+     * @param  string $serviceName
+     * @return void
+     * @throws StorageException
+     */
+    public function incrementSuccessCount($serviceName)
+    {
+        $this->adapter->increment($this->successKey($serviceName), $this->countTTL);
+    }
+
+    /**
+     * returns rejection count
+     *
+     * @param  string $serviceName
+     * @return int
+     * @throws StorageException
+     */
+    public function getRejectionCount($serviceName)
+    {
+        return $this->getCount($this->rejectionKey($serviceName));
+    }
+
+    /**
+     * increments rejection count
+     *
+     * @param  string $serviceName
+     * @return void
+     * @throws StorageException
+     */
+    public function incrementRejectionCount($serviceName)
+    {
+        $this->adapter->increment($this->rejectionKey($serviceName), $this->countTTL);
     }
 
     /**
@@ -79,7 +190,7 @@ class Storage
      */
     public function setFailureCount($serviceName, $failureCount)
     {
-        $this->adapter->save($this->key($serviceName), $failureCount, $this->countTTL);
+        $this->adapter->save($this->failureKey($serviceName), $failureCount, $this->countTTL);
     }
 
     /**
@@ -92,7 +203,7 @@ class Storage
      */
     public function setLastFailureTime($serviceName, $lastFailureTime)
     {
-        $this->adapter->saveLastFailureTime($this->key($serviceName), $lastFailureTime);
+        $this->adapter->saveLastFailureTime($serviceName, $lastFailureTime);
     }
 
     /**
@@ -104,7 +215,7 @@ class Storage
      */
     public function getLastFailureTime($serviceName)
     {
-        return $this->adapter->loadLastFailureTime($this->key($serviceName));
+        return $this->adapter->loadLastFailureTime($serviceName);
     }
 
     /**
@@ -117,7 +228,7 @@ class Storage
      */
     public function setStatus($serviceName, $status)
     {
-        $this->adapter->saveStatus($this->key($serviceName), $status);
+        $this->adapter->saveStatus($serviceName, $status);
     }
 
     /**
@@ -129,7 +240,7 @@ class Storage
      */
     public function getStatus($serviceName)
     {
-        return $this->adapter->loadStatus($this->key($serviceName));
+        return $this->adapter->loadStatus($serviceName);
     }
 
     /**
@@ -143,5 +254,32 @@ class Storage
         }
 
         return $serviceName;
+    }
+
+    /**
+     * @param  string $serviceName
+     * @return string
+     */
+    private function successKey($serviceName)
+    {
+        return $this->key($serviceName) . self::KEY_SUFFIX_SUCCESS;
+    }
+
+    /**
+     * @param  string $serviceName
+     * @return string
+     */
+    private function failureKey($serviceName)
+    {
+        return $this->key($serviceName) . self::KEY_SUFFIX_FAILURE;
+    }
+
+    /**
+     * @param  string $serviceName
+     * @return string
+     */
+    private function rejectionKey($serviceName)
+    {
+        return $this->key($serviceName) . self::KEY_SUFFIX_REJECTION;
     }
 }

@@ -7,7 +7,7 @@ use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\StrategyInterface;
 use Ackintosh\Ganesha\Exception\StorageException;
 
-class Absolute implements StrategyInterface
+class Count implements StrategyInterface
 {
     /**
      * @var int
@@ -26,20 +26,20 @@ class Absolute implements StrategyInterface
 
     /**
      * @param Configuration $configuration
-     * @return Absolute
+     * @return Count
      */
     public static function create(Configuration $configuration)
     {
         $strategy = new self();
-        $strategy->setFailureThreshold($configuration->getFailureThreshold());
+        $strategy->setFailureThreshold($configuration['failureThreshold']);
         $strategy->setStorage(
             new Storage(
                 call_user_func($configuration->getAdapterSetupFunction()),
-                $configuration->getCountTTL(),
+                $configuration['countTTL'],
                 null
             )
         );
-        $strategy->setIntervalToHalfOpen($configuration->getIntervalToHalfOpen());
+        $strategy->setIntervalToHalfOpen($configuration['intervalToHalfOpen']);
 
         return $strategy;
     }
@@ -67,7 +67,7 @@ class Absolute implements StrategyInterface
     }
 
     /**
-     * @return void
+     * @return int
      */
     public function recordFailure($serviceName)
     {
@@ -80,6 +80,8 @@ class Absolute implements StrategyInterface
             $this->storage->setStatus($serviceName, Ganesha::STATUS_TRIPPED);
             return Ganesha::STATUS_TRIPPED;
         }
+
+        return Ganesha::STATUS_CALMED_DOWN;
     }
 
     /**

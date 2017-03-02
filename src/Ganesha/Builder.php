@@ -2,141 +2,60 @@
 namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha;
-use Ackintosh\Ganesha\Storage\AdapterInterface;
 
 class Builder
 {
     /**
-     * @var Configuration
+     * @param  array $params
+     * @return Ganesha
      */
-    private $configuration;
-
-    /**
-     * Builder constructor.
-     *
-     * @param Configuration $configuration
-     */
-    private function __construct(Configuration $configuration)
+    public static function build(array $params)
     {
-        $this->configuration = $configuration;
+        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Rate';
+        return self::perform($params);
     }
 
     /**
-     * @return Builder
+     * @param  array $params
+     * @return Ganesha
      */
-    public static function create()
+    public static function buildWithCountStrategy(array $params)
     {
-        return new self(new Configuration());
-    }
-
-    public static function createWithRelativeStrategy()
-    {
-        $configuration = new Configuration();
-        $configuration->setStrategyClass('\Ackintosh\Ganesha\Strategy\Relative');
-        return new self($configuration);
-    }
-
-    public function withFailureThreshold($threshold)
-    {
-        $this->configuration->setFailureThreshold($threshold);
-        return $this;
-    }
-
-    /**
-     * @param AdapterInterface $adapter
-     * @return $this Builder
-     */
-    public function withAdapter(AdapterInterface $adapter)
-    {
-        $this->configuration->setAdapter($adapter);
-        return $this;
-    }
-
-    /**
-     * @param  callable $function
-     * @return Builder  $this
-     */
-    public function withAdapterSetupFunction($function)
-    {
-        if (!is_callable($function)) {
-            throw new \InvalidArgumentException();
-        }
-
-        $this->configuration->setAdapterSetupFunction($function);
-        return $this;
-    }
-
-    /**
-     * @param int $interval
-     * @return Builder
-     */
-    public function withIntervalToHalfOpen($interval)
-    {
-        $this->configuration->setIntervalToHalfOpen($interval);
-        return $this;
-    }
-
-    /**
-     * @param  int $countTTL
-     * @return Builder
-     */
-    public function withCountTTL($countTTL)
-    {
-        $this->configuration->setCountTTL($countTTL);
-        return $this;
-    }
-
-    /**
-     * @param  callable $behavior
-     * @return Builder
-     */
-    public function withBehaviorOnStorageError($behavior)
-    {
-        if (!is_callable($behavior)) {
-            throw new \InvalidArgumentException();
-        }
-
-        $this->configuration->setBehaviorOnStorageError($behavior);
-        return $this;
-    }
-
-    /**
-     * @param  callable $behavior
-     * @return Builder
-     */
-    public function withBehaviorOnTrip($behavior)
-    {
-        if (!is_callable($behavior)) {
-            throw new \InvalidArgumentException();
-        }
-
-        $this->configuration->setBehaviorOnTrip($behavior);
-        return $this;
+        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Count';
+        return self::perform($params);
     }
 
     /**
      * @return Ganesha
      * @throws \Exception
      */
-    public function build()
+    private static function perform($params)
     {
+        $configuration = new Configuration($params);
+
         try {
-            $this->configuration->validate();
+            $configuration->validate();
         } catch (\Exception $e) {
             throw $e;
         }
 
         $ganesha = new Ganesha(
             call_user_func(
-                array($this->configuration->getStrategyClass(), 'create'),
-                $this->configuration
+                array($configuration['strategyClass'], 'create'),
+                $configuration
             )
         );
-        if ($behaviorOnStorageError = $this->configuration->getBehaviorOnStorageError()) {
+
+        if ($behaviorOnStorageError = $configuration['behaviorOnStorageError']) {
             $ganesha->setBehaviorOnStorageError($behaviorOnStorageError);
         }
-        if ($behaviorOnTrip = $this->configuration->getBehaviorOnTrip()) {
+
+        if ($behaviorOnTrip = $configuration['behaviorOnTrip']) {
             $ganesha->setBehaviorOnTrip($behaviorOnTrip);
+        }
+
+        if ($behaviorOnCalmedDown = $configuration['behaviorOnCalmedDown']) {
+            $ganesha->setBehaviorOnCalmedDown($behaviorOnCalmedDown);
         }
 
         return $ganesha;

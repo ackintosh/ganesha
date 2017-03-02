@@ -1,6 +1,9 @@
 /composer.lock
 /composer.phar
 /vendor/*
+examples/vendor/*
+examples/composer.lock
+examples/*.log
 /build/
 !/vendor/splclassloader
 GPATH

@@ -4,7 +4,7 @@
 
 ```
 $ cd example
-$ composer insetall
+$ composer install
 ```
 
 ## Server

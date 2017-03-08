@@ -128,6 +128,8 @@ class Ganesha
             return $this->strategy->isAvailable($serviceName);
         } catch (StorageException $e) {
             $this->triggerBehaviorOnStorageError('failed to execute isAvailable : ' . $e->getMessage());
+            // fail-silent
+            return true;
         }
     }
 

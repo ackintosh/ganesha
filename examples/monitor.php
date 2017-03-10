@@ -2,8 +2,8 @@
 require_once __DIR__ . '/send_request.php';
 echo "[ settings ]\n";
 echo "time window : " . TIME_WINDOW . "s\n";
-echo "failure rate : " . FAILURE_RATE . "s\n";
-echo "minumum requests : " . MINIMUM_REQUESTS . "s\n";
+echo "failure rate : " . FAILURE_RATE . "%\n";
+echo "minumum requests : " . MINIMUM_REQUESTS . "\n";
 echo "interval to half open : " . INTERVAL_TO_HALF_OPEN . "s\n";
 echo "\n";
 

@@ -4,7 +4,7 @@ PHP implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/Ci
 
 [![Build Status](https://travis-ci.org/ackintosh/ganesha.svg?branch=master)](https://travis-ci.org/ackintosh/ganesha) [![Coverage Status](https://coveralls.io/repos/github/ackintosh/ganesha/badge.svg?branch=master)](https://coveralls.io/github/ackintosh/ganesha?branch=master)
 
-![ganesha](https://dl.dropboxusercontent.com/u/22083548/ganesha.png)
+![ganesha](https://ackintosh.github.io/assets/images/ganesha.png)
 
 https://ackintosh.github.io/ganesha/
 

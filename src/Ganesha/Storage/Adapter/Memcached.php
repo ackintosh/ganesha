@@ -12,7 +12,6 @@ class Memcached implements AdapterInterface
      */
     private $memcached;
 
-    const KEY_SUFFIX_LAST_FAILURE_TIME = '.last_failure_time';
     const KEY_SUFFIX_STATUS = '.status';
 
     /**
@@ -87,7 +86,7 @@ class Memcached implements AdapterInterface
      */
     public function saveLastFailureTime($serviceName, $lastFailureTime)
     {
-        if (!$this->memcached->set($serviceName . self::KEY_SUFFIX_LAST_FAILURE_TIME, $lastFailureTime)) {
+        if (!$this->memcached->set($serviceName, $lastFailureTime)) {
             throw new StorageException('failed to set the last failure time : ' . $this->memcached->getResultMessage());
         }
     }
@@ -99,7 +98,7 @@ class Memcached implements AdapterInterface
      */
     public function loadLastFailureTime($serviceName)
     {
-        $r = $this->memcached->get($serviceName . self::KEY_SUFFIX_LAST_FAILURE_TIME);
+        $r = $this->memcached->get($serviceName);
         $this->throwExceptionIfErrorOccurred();
         return $r;
     }

@@ -42,6 +42,11 @@ class Storage
     const KEY_SUFFIX_REJECTION = '.rejection';
 
     /**
+     * @var string
+     */
+    const KEY_SUFFIX_LAST_FAILURE_TIME = '.last_failure_time';
+
+    /**
      * Storage constructor.
      *
      * @param AdapterInterface $adapter
@@ -208,7 +213,7 @@ class Storage
      */
     public function setLastFailureTime($serviceName, $lastFailureTime)
     {
-        $this->adapter->saveLastFailureTime($serviceName, $lastFailureTime);
+        $this->adapter->saveLastFailureTime($this->lastFailureKey($serviceName), $lastFailureTime);
     }
 
     /**
@@ -220,7 +225,7 @@ class Storage
      */
     public function getLastFailureTime($serviceName)
     {
-        return $this->adapter->loadLastFailureTime($serviceName);
+        return $this->adapter->loadLastFailureTime($this->lastFailureKey($serviceName));
     }
 
     /**
@@ -295,5 +300,14 @@ class Storage
     private function rejectionKey($serviceName)
     {
         return $this->key($serviceName) . self::KEY_SUFFIX_REJECTION;
+    }
+
+    /**
+     * @param  string $serviceName
+     * @return string
+     */
+    private function lastFailureKey($serviceName)
+    {
+        return $this->key($serviceName) . self::KEY_SUFFIX_LAST_FAILURE_TIME;
     }
 }

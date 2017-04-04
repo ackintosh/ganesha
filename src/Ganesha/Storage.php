@@ -24,6 +24,11 @@ class Storage
     /**
      * @var string
      */
+    const KEY_PREFIX = 'ganesha.';
+
+    /**
+     * @var string
+     */
     const KEY_SUFFIX_SUCCESS = '.success';
 
     /**
@@ -70,7 +75,7 @@ class Storage
      */
     public function getSuccessCountByCustomKey($key)
     {
-        return $this->getCount($key . self::KEY_SUFFIX_SUCCESS);
+        return $this->getCount($this->prefix($key) . self::KEY_SUFFIX_SUCCESS);
     }
 
     /**
@@ -82,7 +87,7 @@ class Storage
      */
     public function getFailureCountByCustomKey($key)
     {
-        return $this->getCount($key . self::KEY_SUFFIX_FAILURE);
+        return $this->getCount($this->prefix($key) . self::KEY_SUFFIX_FAILURE);
     }
 
     /**
@@ -94,7 +99,7 @@ class Storage
      */
     public function getRejectionCountByCustomKey($key)
     {
-        return $this->getCount($key . self::KEY_SUFFIX_REJECTION);
+        return $this->getCount($this->prefix($key) . self::KEY_SUFFIX_REJECTION);
     }
 
     /**
@@ -250,10 +255,19 @@ class Storage
     private function key($serviceName)
     {
         if ($this->serviceNameDecorator) {
-            return call_user_func($this->serviceNameDecorator, $serviceName);
+            $serviceName = call_user_func($this->serviceNameDecorator, $serviceName);
         }
 
-        return $serviceName;
+        return $this->prefix($serviceName);
+    }
+
+    /**
+     * @param  string $key
+     * @return string
+     */
+    private function prefix($key)
+    {
+        return self::KEY_PREFIX . $key;
     }
 
     /**

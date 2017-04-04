@@ -92,6 +92,14 @@ class Rate implements StrategyInterface
     }
 
     /**
+     * @return void
+     */
+    public function reset()
+    {
+        $this->storage->reset();
+    }
+
+    /**
      * @param  string $serviceName
      * @return bool
      */

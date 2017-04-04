@@ -19,4 +19,9 @@ interface StrategyInterface
      * @return bool
      */
     public function isAvailable($serviceName);
+
+    /**
+     * @return void
+     */
+    public function reset();
 }

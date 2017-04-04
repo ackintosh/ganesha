@@ -67,4 +67,11 @@ interface AdapterInterface
      * @return int
      */
     public function loadStatus($serviceName);
+
+    /**
+     * resets all counts
+     *
+     * @return void
+     */
+    public function reset();
 }

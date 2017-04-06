@@ -230,6 +230,19 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function reset()
+    {
+        $ganesha = $this->buildGaneshaWithMemcachedAdapter(1);
+
+        $ganesha->failure($this->serviceName);
+        $this->assertFalse($ganesha->isAvailable($this->serviceName));
+        $ganesha->reset();
+        $this->assertTrue($ganesha->isAvailable($this->serviceName));
+    }
+
+    /**
+     * @test
+     */
     public function withRateStrategy()
     {
         $ganesha = Builder::build(array(

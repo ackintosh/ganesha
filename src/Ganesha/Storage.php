@@ -259,6 +259,14 @@ class Storage
     }
 
     /**
+     * @return void
+     */
+    public function reset()
+    {
+        $this->adapter->reset();
+    }
+
+    /**
      * @param  string $serviceName
      * @return string
      */

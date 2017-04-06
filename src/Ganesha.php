@@ -191,4 +191,14 @@ class Ganesha
     {
         self::$disabled = false;
     }
+
+    /**
+     * resets all counts
+     *
+     * @return void
+     */
+    public function reset()
+    {
+        $this->strategy->reset();
+    }
 }

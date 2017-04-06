@@ -131,6 +131,40 @@ class Memcached implements AdapterInterface
         return $status;
     }
 
+    public function reset()
+    {
+        $keys = $this->memcached->getAllKeys();
+        if (!$keys) {
+            $message = sprintf(
+                'failed to get memcached keys. resultCode: %d, resultMessage: %s',
+                $this->memcached->getResultCode(),
+                $this->memcached->getResultMessage()
+            );
+            throw new \RuntimeException($message);
+        }
+
+        foreach ($keys as $k) {
+            if ($this->isGaneshaData($k)) {
+                $this->memcached->delete($k);
+            }
+        }
+    }
+
+    public function isGaneshaData($key)
+    {
+        $regex = sprintf(
+            '#\A%s.+(%s|%s|%s|%s|%s)\z#',
+            Storage::KEY_PREFIX,
+            Storage::KEY_SUFFIX_SUCCESS,
+            Storage::KEY_SUFFIX_FAILURE,
+            Storage::KEY_SUFFIX_REJECTION,
+            Storage::KEY_SUFFIX_LAST_FAILURE_TIME,
+            Storage::KEY_SUFFIX_STATUS
+        );
+
+        return preg_match($regex, $key) === 1;
+    }
+
     /**
      * Throws an exception if some error occurs in memcached.
      *

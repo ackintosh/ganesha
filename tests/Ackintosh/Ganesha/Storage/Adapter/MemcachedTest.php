@@ -79,4 +79,33 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
         $this->memcachedAdaper->saveStatus($this->serviceName, $status);
         $this->assertSame($status, $this->memcachedAdaper->loadStatus($this->serviceName));
     }
+
+    /**
+     * @test
+     * @dataProvider isGaneshaDataProvider
+     */
+    public function isGaneshaData($key, $expected)
+    {
+        $this->assertSame($expected, $this->memcachedAdaper->isGaneshaData($key));
+    }
+
+    public function isGaneshaDataProvider()
+    {
+        return array(
+            array('ganesha_test_success', true),
+            array('ganesha_test_failure', true),
+            array('ganesha_test_rejection', true),
+            array('ganesha_test_last_failure_time', true),
+            array('ganesha_test_status', true),
+            array('ganesha_ganesha_success', true),
+            array('ganesha_success_success', true),
+            array('ganesha_http://example.com_success', true),
+            array('ganeshaa_test_success', false),
+            array('ganesha_test_successs', false),
+            array('ganesha_test_failuree', false),
+            array('ganesha_test_rejectionn', false),
+            array('ganesha_test_last_failure_timee', false),
+            array('ganesha_test_statuss', false),
+        );
+    }
 }

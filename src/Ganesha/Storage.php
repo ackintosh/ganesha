@@ -47,6 +47,11 @@ class Storage
     const KEY_SUFFIX_LAST_FAILURE_TIME = '.last_failure_time';
 
     /**
+     * @var string
+     */
+    const KEY_SUFFIX_STATUS = '.status';
+
+    /**
      * Storage constructor.
      *
      * @param AdapterInterface $adapter
@@ -238,7 +243,7 @@ class Storage
      */
     public function setStatus($serviceName, $status)
     {
-        $this->adapter->saveStatus($serviceName, $status);
+        $this->adapter->saveStatus($this->statusKey($serviceName), $status);
     }
 
     /**
@@ -250,7 +255,7 @@ class Storage
      */
     public function getStatus($serviceName)
     {
-        return $this->adapter->loadStatus($serviceName);
+        return $this->adapter->loadStatus($this->statusKey($serviceName));
     }
 
     /**
@@ -309,5 +314,14 @@ class Storage
     private function lastFailureKey($serviceName)
     {
         return $this->key($serviceName) . self::KEY_SUFFIX_LAST_FAILURE_TIME;
+    }
+
+    /**
+     * @param  string $serviceName
+     * @return string
+     */
+    private function statusKey($serviceName)
+    {
+        return $this->key($serviceName) . self::KEY_SUFFIX_STATUS;
     }
 }

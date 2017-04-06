@@ -3,6 +3,7 @@ namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Exception\StorageException;
+use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 
 class Memcached implements AdapterInterface
@@ -11,8 +12,6 @@ class Memcached implements AdapterInterface
      * @var \Memcached
      */
     private $memcached;
-
-    const KEY_SUFFIX_STATUS = '.status';
 
     /**
      * Memcached constructor.
@@ -110,7 +109,7 @@ class Memcached implements AdapterInterface
      */
     public function saveStatus($serviceName, $status)
     {
-        if (!$this->memcached->set($serviceName . self::KEY_SUFFIX_STATUS, $status)) {
+        if (!$this->memcached->set($serviceName, $status)) {
             throw new StorageException('failed to set the status : ' . $this->memcached->getResultMessage());
         }
     }
@@ -122,7 +121,7 @@ class Memcached implements AdapterInterface
      */
     public function loadStatus($serviceName)
     {
-        $status = $this->memcached->get($serviceName . self::KEY_SUFFIX_STATUS);
+        $status = $this->memcached->get($serviceName);
         $this->throwExceptionIfErrorOccurred();
         if ($status === false && $this->memcached->getResultCode() === \Memcached::RES_NOTFOUND) {
             $this->saveStatus($serviceName, Ganesha::STATUS_CALMED_DOWN);

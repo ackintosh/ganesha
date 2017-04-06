@@ -24,32 +24,32 @@ class Storage
     /**
      * @var string
      */
-    const KEY_PREFIX = 'ganesha.';
+    const KEY_PREFIX = 'ganesha_';
 
     /**
      * @var string
      */
-    const KEY_SUFFIX_SUCCESS = '.success';
+    const KEY_SUFFIX_SUCCESS = '_success';
 
     /**
      * @var string
      */
-    const KEY_SUFFIX_FAILURE = '.failure';
+    const KEY_SUFFIX_FAILURE = '_failure';
 
     /**
      * @var string
      */
-    const KEY_SUFFIX_REJECTION = '.rejection';
+    const KEY_SUFFIX_REJECTION = '_rejection';
 
     /**
      * @var string
      */
-    const KEY_SUFFIX_LAST_FAILURE_TIME = '.last_failure_time';
+    const KEY_SUFFIX_LAST_FAILURE_TIME = '_last_failure_time';
 
     /**
      * @var string
      */
-    const KEY_SUFFIX_STATUS = '.status';
+    const KEY_SUFFIX_STATUS = '_status';
 
     /**
      * Storage constructor.

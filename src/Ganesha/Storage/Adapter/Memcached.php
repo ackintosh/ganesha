@@ -133,7 +133,11 @@ class Memcached implements AdapterInterface
 
     public function reset()
     {
+        // getAllKeys() with OPT_BINARY_PROTOCOL is not suppoted.
+        // So temporarily disable it.
+        $this->memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, false);
         $keys = $this->memcached->getAllKeys();
+        $this->memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
         if (!$keys) {
             $message = sprintf(
                 'failed to get memcached keys. resultCode: %d, resultMessage: %s',

@@ -1,0 +1,24 @@
+#!/usr/bin/env php
+<?php
+require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
+
+use \Ackintosh\Ganesha\Builder;
+use \Ackintosh\Ganesha\Storage\Adapter\Memcached;
+
+define('TIME_WINDOW', 20);
+define('FAILURE_RATE', 10);
+define('MINIMUM_REQUESTS', 10);
+define('INTERVAL_TO_HALF_OPEN', 5);
+
+$m = new \Memcached();
+$m->addServer('localhost', 11211);
+
+$ganesha = Builder::build([
+    'adapter'               => new Memcached($m),
+    'timeWindow'            => TIME_WINDOW,
+    'failureRate'           => FAILURE_RATE,
+    'minimumRequests'       => MINIMUM_REQUESTS,
+    'intervalToHalfOpen'    => INTERVAL_TO_HALF_OPEN,
+]);
+
+$ganesha->reset();

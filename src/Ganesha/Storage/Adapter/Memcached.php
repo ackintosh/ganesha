@@ -139,9 +139,14 @@ class Memcached implements AdapterInterface
         $keys = $this->memcached->getAllKeys();
         $this->memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
         if (!$keys) {
+            $resultCode = $this->memcached->getResultCode();
+            if ($resultCode === 0) {
+                // no keys
+                return;
+            }
             $message = sprintf(
                 'failed to get memcached keys. resultCode: %d, resultMessage: %s',
-                $this->memcached->getResultCode(),
+                $resultCode,
                 $this->memcached->getResultMessage()
             );
             throw new \RuntimeException($message);

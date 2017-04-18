@@ -133,6 +133,10 @@ class Memcached implements AdapterInterface
 
     public function reset()
     {
+        if (!$this->memcached->getStats()) {
+            throw new \RuntimeException('Couldn\'t connect to memcached.');
+        }
+
         // getAllKeys() with OPT_BINARY_PROTOCOL is not suppoted.
         // So temporarily disable it.
         $this->memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, false);

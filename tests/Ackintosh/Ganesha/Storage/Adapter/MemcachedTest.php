@@ -108,4 +108,18 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
             array('ganesha_test_statuss', false),
         );
     }
+
+    /**
+     * @test
+     * @expectedException \RuntimeException
+     */
+    public function resetThrowsExceptionWhenFailedToConnectToMemcached()
+    {
+        $mock = $this->createMock('\Memcached');
+        $mock->method('getStats')
+            ->willReturn(false);
+
+        $memcachedAdapter = new Memcached($mock);
+        $memcachedAdapter->reset();
+    }
 }

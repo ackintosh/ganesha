@@ -133,7 +133,7 @@ class Memcached implements AdapterInterface
 
     public function reset()
     {
-        if (!$this->memcached->getStats()) {
+        if (!$this->memcached->getStats(null)) {
             throw new \RuntimeException('Couldn\'t connect to memcached.');
         }
 

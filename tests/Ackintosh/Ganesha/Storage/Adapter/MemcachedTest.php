@@ -115,9 +115,11 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function resetThrowsExceptionWhenFailedToConnectToMemcached()
     {
-        $mock = $this->createMock('\Memcached');
+        $mock = $this->getMockBuilder('\Memcached')
+            ->setMethods(array('getStats'))
+            ->getMock();
         $mock->method('getStats')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
 
         $memcachedAdapter = new Memcached($mock);
         $memcachedAdapter->reset();

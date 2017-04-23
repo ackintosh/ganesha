@@ -78,13 +78,12 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     public function onTripBehaviorIsInvokedUnderCertainConditions()
     {
         $invoked = 0;
-        $ganesha = Builder::buildWithCountStrategy(array(
-            'failureThreshold'  => 2,
-            'adapter'           => new Hash,
-            'behaviorOnTrip'    => function ($serviceName) use (&$invoked) {
+        $ganesha = $this->buildGaneshaWithMemcachedAdapter(
+            2,
+            function ($serviceName) use (&$invoked) {
                 $invoked++;
-            },
-        ));
+            }
+        );
 
         // tipped and incremented $invoked.
         $ganesha->failure($this->serviceName);

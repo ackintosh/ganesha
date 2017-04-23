@@ -2,7 +2,6 @@
 namespace Ackintosh;
 
 use Ackintosh\Ganesha\Builder;
-use Ackintosh\Ganesha\Storage\Adapter\Hash;
 use Ackintosh\Ganesha\Storage\Adapter\Memcached;
 
 class GaneshaTest extends \PHPUnit_Framework_TestCase

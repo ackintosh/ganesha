@@ -99,6 +99,14 @@ class Count implements StrategyInterface
     }
 
     /**
+     * @return void
+     */
+    public function reset()
+    {
+        $this->storage->reset();
+    }
+
+    /**
      * @return bool
      */
     public function isAvailable($serviceName)

@@ -200,35 +200,6 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function status()
-    {
-        $m = new \Memcached();
-        $m->addServer('localhost', 11211);
-        $memcachedAdapter = new Memcached($m);
-
-        $ganesha = Builder::buildWithCountStrategy(array(
-            'failureThreshold'      => 2,
-            'adapterSetupFunction'  => function () use ($memcachedAdapter) {
-                return $memcachedAdapter;
-            },
-        ));
-
-        $ganesha->failure($this->serviceName);
-        $this->assertSame(Ganesha::STATUS_CALMED_DOWN, $memcachedAdapter->loadStatus($this->serviceName));
-        // trip
-        $ganesha->failure($this->serviceName);
-        $this->assertSame(Ganesha::STATUS_TRIPPED, $memcachedAdapter->loadStatus($this->serviceName));
-        // service is available, but status is still OPEN
-        $ganesha->success($this->serviceName);
-        $this->assertSame(Ganesha::STATUS_TRIPPED, $memcachedAdapter->loadStatus($this->serviceName));
-        // failure count is 0, status changes to CLOSE
-        $ganesha->success($this->serviceName);
-        $this->assertSame(Ganesha::STATUS_CALMED_DOWN, $memcachedAdapter->loadStatus($this->serviceName));
-    }
-
-    /**
-     * @test
-     */
     public function disable()
     {
         $ganesha = $this->buildGaneshaWithMemcachedAdapter(1);
@@ -254,6 +225,19 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
                 return new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
             },
         ));
+    }
+
+    /**
+     * @test
+     */
+    public function reset()
+    {
+        $ganesha = $this->buildGaneshaWithMemcachedAdapter(1);
+
+        $ganesha->failure($this->serviceName);
+        $this->assertFalse($ganesha->isAvailable($this->serviceName));
+        $ganesha->reset();
+        $this->assertTrue($ganesha->isAvailable($this->serviceName));
     }
 
     /**

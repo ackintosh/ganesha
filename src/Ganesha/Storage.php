@@ -24,17 +24,32 @@ class Storage
     /**
      * @var string
      */
-    const KEY_SUFFIX_SUCCESS = '.success';
+    const KEY_PREFIX = 'ganesha_';
 
     /**
      * @var string
      */
-    const KEY_SUFFIX_FAILURE = '.failure';
+    const KEY_SUFFIX_SUCCESS = '_success';
 
     /**
      * @var string
      */
-    const KEY_SUFFIX_REJECTION = '.rejection';
+    const KEY_SUFFIX_FAILURE = '_failure';
+
+    /**
+     * @var string
+     */
+    const KEY_SUFFIX_REJECTION = '_rejection';
+
+    /**
+     * @var string
+     */
+    const KEY_SUFFIX_LAST_FAILURE_TIME = '_last_failure_time';
+
+    /**
+     * @var string
+     */
+    const KEY_SUFFIX_STATUS = '_status';
 
     /**
      * Storage constructor.
@@ -70,7 +85,7 @@ class Storage
      */
     public function getSuccessCountByCustomKey($key)
     {
-        return $this->getCount($key . self::KEY_SUFFIX_SUCCESS);
+        return $this->getCount($this->prefix($key) . self::KEY_SUFFIX_SUCCESS);
     }
 
     /**
@@ -82,7 +97,7 @@ class Storage
      */
     public function getFailureCountByCustomKey($key)
     {
-        return $this->getCount($key . self::KEY_SUFFIX_FAILURE);
+        return $this->getCount($this->prefix($key) . self::KEY_SUFFIX_FAILURE);
     }
 
     /**
@@ -94,7 +109,7 @@ class Storage
      */
     public function getRejectionCountByCustomKey($key)
     {
-        return $this->getCount($key . self::KEY_SUFFIX_REJECTION);
+        return $this->getCount($this->prefix($key) . self::KEY_SUFFIX_REJECTION);
     }
 
     /**
@@ -203,7 +218,7 @@ class Storage
      */
     public function setLastFailureTime($serviceName, $lastFailureTime)
     {
-        $this->adapter->saveLastFailureTime($serviceName, $lastFailureTime);
+        $this->adapter->saveLastFailureTime($this->lastFailureKey($serviceName), $lastFailureTime);
     }
 
     /**
@@ -215,7 +230,7 @@ class Storage
      */
     public function getLastFailureTime($serviceName)
     {
-        return $this->adapter->loadLastFailureTime($serviceName);
+        return $this->adapter->loadLastFailureTime($this->lastFailureKey($serviceName));
     }
 
     /**
@@ -228,7 +243,7 @@ class Storage
      */
     public function setStatus($serviceName, $status)
     {
-        $this->adapter->saveStatus($serviceName, $status);
+        $this->adapter->saveStatus($this->statusKey($serviceName), $status);
     }
 
     /**
@@ -240,7 +255,15 @@ class Storage
      */
     public function getStatus($serviceName)
     {
-        return $this->adapter->loadStatus($serviceName);
+        return $this->adapter->loadStatus($this->statusKey($serviceName));
+    }
+
+    /**
+     * @return void
+     */
+    public function reset()
+    {
+        $this->adapter->reset();
     }
 
     /**
@@ -250,10 +273,19 @@ class Storage
     private function key($serviceName)
     {
         if ($this->serviceNameDecorator) {
-            return call_user_func($this->serviceNameDecorator, $serviceName);
+            $serviceName = call_user_func($this->serviceNameDecorator, $serviceName);
         }
 
-        return $serviceName;
+        return $this->prefix($serviceName);
+    }
+
+    /**
+     * @param  string $key
+     * @return string
+     */
+    private function prefix($key)
+    {
+        return self::KEY_PREFIX . $key;
     }
 
     /**
@@ -281,5 +313,23 @@ class Storage
     private function rejectionKey($serviceName)
     {
         return $this->key($serviceName) . self::KEY_SUFFIX_REJECTION;
+    }
+
+    /**
+     * @param  string $serviceName
+     * @return string
+     */
+    private function lastFailureKey($serviceName)
+    {
+        return $this->key($serviceName) . self::KEY_SUFFIX_LAST_FAILURE_TIME;
+    }
+
+    /**
+     * @param  string $serviceName
+     * @return string
+     */
+    private function statusKey($serviceName)
+    {
+        return $this->key($serviceName) . self::KEY_SUFFIX_STATUS;
     }
 }

@@ -3,6 +3,7 @@ namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Exception\StorageException;
+use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 
 class Memcached implements AdapterInterface
@@ -11,9 +12,6 @@ class Memcached implements AdapterInterface
      * @var \Memcached
      */
     private $memcached;
-
-    const KEY_SUFFIX_LAST_FAILURE_TIME = '.last_failure_time';
-    const KEY_SUFFIX_STATUS = '.status';
 
     /**
      * Memcached constructor.
@@ -87,7 +85,7 @@ class Memcached implements AdapterInterface
      */
     public function saveLastFailureTime($serviceName, $lastFailureTime)
     {
-        if (!$this->memcached->set($serviceName . self::KEY_SUFFIX_LAST_FAILURE_TIME, $lastFailureTime)) {
+        if (!$this->memcached->set($serviceName, $lastFailureTime)) {
             throw new StorageException('failed to set the last failure time : ' . $this->memcached->getResultMessage());
         }
     }
@@ -99,7 +97,7 @@ class Memcached implements AdapterInterface
      */
     public function loadLastFailureTime($serviceName)
     {
-        $r = $this->memcached->get($serviceName . self::KEY_SUFFIX_LAST_FAILURE_TIME);
+        $r = $this->memcached->get($serviceName);
         $this->throwExceptionIfErrorOccurred();
         return $r;
     }
@@ -111,7 +109,7 @@ class Memcached implements AdapterInterface
      */
     public function saveStatus($serviceName, $status)
     {
-        if (!$this->memcached->set($serviceName . self::KEY_SUFFIX_STATUS, $status)) {
+        if (!$this->memcached->set($serviceName, $status)) {
             throw new StorageException('failed to set the status : ' . $this->memcached->getResultMessage());
         }
     }
@@ -123,7 +121,7 @@ class Memcached implements AdapterInterface
      */
     public function loadStatus($serviceName)
     {
-        $status = $this->memcached->get($serviceName . self::KEY_SUFFIX_STATUS);
+        $status = $this->memcached->get($serviceName);
         $this->throwExceptionIfErrorOccurred();
         if ($status === false && $this->memcached->getResultCode() === \Memcached::RES_NOTFOUND) {
             $this->saveStatus($serviceName, Ganesha::STATUS_CALMED_DOWN);
@@ -131,6 +129,53 @@ class Memcached implements AdapterInterface
         }
 
         return $status;
+    }
+
+    public function reset()
+    {
+        if (!$this->memcached->getStats()) {
+            throw new \RuntimeException('Couldn\'t connect to memcached.');
+        }
+
+        // getAllKeys() with OPT_BINARY_PROTOCOL is not suppoted.
+        // So temporarily disable it.
+        $this->memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, false);
+        $keys = $this->memcached->getAllKeys();
+        $this->memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
+        if (!$keys) {
+            $resultCode = $this->memcached->getResultCode();
+            if ($resultCode === 0) {
+                // no keys
+                return;
+            }
+            $message = sprintf(
+                'failed to get memcached keys. resultCode: %d, resultMessage: %s',
+                $resultCode,
+                $this->memcached->getResultMessage()
+            );
+            throw new \RuntimeException($message);
+        }
+
+        foreach ($keys as $k) {
+            if ($this->isGaneshaData($k)) {
+                $this->memcached->delete($k);
+            }
+        }
+    }
+
+    public function isGaneshaData($key)
+    {
+        $regex = sprintf(
+            '#\A%s.+(%s|%s|%s|%s|%s)\z#',
+            Storage::KEY_PREFIX,
+            Storage::KEY_SUFFIX_SUCCESS,
+            Storage::KEY_SUFFIX_FAILURE,
+            Storage::KEY_SUFFIX_REJECTION,
+            Storage::KEY_SUFFIX_LAST_FAILURE_TIME,
+            Storage::KEY_SUFFIX_STATUS
+        );
+
+        return preg_match($regex, $key) === 1;
     }
 
     /**

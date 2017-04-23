@@ -120,4 +120,14 @@ class Hash implements AdapterInterface
 
         return $this->status[$serviceName];
     }
+
+    /**
+     * @return void
+     */
+    public function reset()
+    {
+        $this->failureCount = array();
+        $this->lastFailureTime = array();
+        $this->status = array();
+    }
 }

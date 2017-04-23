@@ -208,27 +208,6 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
     }
 
-    private function buildGanesha(
-        $threshold,
-        $behaviorOnTrip = null,
-        $countTTL = null,
-        $intervalToHalfOpen = null
-    )
-    {
-        return Builder::buildWithCountStrategy(array(
-            'failureThreshold'  => $threshold,
-            'adapterSetupFunction' => function () {
-                $m = new \Memcached();
-                $m->addServer('localhost', 11211);
-
-                return new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
-            },
-            'behaviorOnTrip' => $behaviorOnTrip,
-            'countTTL'              => $countTTL,
-            'intervalToHalfOpen'    => $intervalToHalfOpen,
-        ));
-    }
-
     /**
      * @test
      */
@@ -269,5 +248,26 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $ganesha->success('test');
 
         $this->assertFalse($ganesha->isAvailable('test'));
+    }
+
+    private function buildGanesha(
+        $threshold,
+        $behaviorOnTrip = null,
+        $countTTL = null,
+        $intervalToHalfOpen = null
+    )
+    {
+        return Builder::buildWithCountStrategy(array(
+            'failureThreshold'      => $threshold,
+            'adapterSetupFunction'  => function () {
+                $m = new \Memcached();
+                $m->addServer('localhost', 11211);
+
+                return new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
+            },
+            'behaviorOnTrip'        => $behaviorOnTrip,
+            'countTTL'              => $countTTL,
+            'intervalToHalfOpen'    => $intervalToHalfOpen,
+        ));
     }
 }

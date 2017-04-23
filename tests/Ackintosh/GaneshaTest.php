@@ -61,13 +61,12 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
             ->method('foo')
             ->with($this->serviceName);
 
-        $ganesha = Builder::buildWithCountStrategy(array(
-            'failureThreshold'  => 2,
-            'adapter'           => new Hash,
-            'behaviorOnTrip'    => function ($serviceName) use ($mock) {
+        $ganesha = $this->buildGaneshaWithMemcachedAdapter(
+            2,
+            function ($serviceName) use ($mock) {
                 $mock->foo($serviceName);
-            },
-        ));
+            }
+        );
 
         $ganesha->failure($this->serviceName);
         $ganesha->failure($this->serviceName);
@@ -214,7 +213,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
     }
 
-    private function buildGaneshaWithMemcachedAdapter($threshold)
+    private function buildGaneshaWithMemcachedAdapter($threshold, $behaviorOnTrip = null)
     {
         return Builder::buildWithCountStrategy(array(
             'failureThreshold'  => $threshold,
@@ -224,6 +223,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
                 return new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
             },
+            'behaviorOnTrip' => $behaviorOnTrip,
         ));
     }
 

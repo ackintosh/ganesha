@@ -154,10 +154,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function failureCountMustNotBeNegative()
     {
-        $ganesha = Builder::buildWithCountStrategy(array(
-            'failureThreshold'  => 1,
-            'adapter'           => new Hash,
-        ));
+        $ganesha = $this->buildGaneshaWithMemcachedAdapter(1);
 
         $ganesha->success($this->serviceName);
         $ganesha->success($this->serviceName);

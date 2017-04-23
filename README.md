@@ -28,8 +28,7 @@ $ganesha->failure();
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::build([
     'failureRate' => 50,
-    // Hash adapter can only be used for tests.
-    'adapter'     => new Ackintosh\Ganesha\Storage\Adapter\Hash,
+    'adapter'     => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
 ]);
 
 
@@ -58,7 +57,7 @@ Ganesha has two ways to setup storage adapter.
 ```php
 // The passed object must be an instance of 'Ackintosh\Ganesha\Storage\AdapterInterface'.
 $ganesha = Ackintosh\Ganesha\Builder::build([
-    'adapter' => new Ackintosh\Ganesha\Storage\Adapter\Hash,
+    'adapter' => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
 ]);
 
 // Also, we can specify function which returns instance of AdapterInterface.
@@ -132,7 +131,7 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
     'failureRate'           => 10,
     'minimumRequests'       => 10,
     'intervalToHalfOpen'    => 5,
-    'storageAdapter'     => new Ackintosh\Ganesha\Storage\Adapter\Hash,
+    'storageAdapter'        => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
 ]);
 ```
 
@@ -146,7 +145,7 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
     'failureThreshold'   => 10,
-    'storageAdapter'     => new Ackintosh\Ganesha\Storage\Adapter\Hash,
+    'storageAdapter'     => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
     'intervalToHalfOpen' => 5,
     'countTTL'           => 60,
 ]);

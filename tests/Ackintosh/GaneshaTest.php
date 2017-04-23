@@ -170,12 +170,12 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function withIntervalToHalfOpen()
     {
-        $ganesha = Builder::buildWithCountStrategy(array(
-            'failureThreshold'      => 1,
-            'adapter'               => new Hash,
-            'countTTL'              => 60,
-            'intervalToHalfOpen'    => 1,
-        ));
+        $ganesha = $this->buildGaneshaWithMemcachedAdapter(
+            1,
+            null,
+            60,
+            1
+        );
 
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
         // record a failure, ganesha has trip
@@ -209,7 +209,12 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($ganesha->isAvailable($this->serviceName));
     }
 
-    private function buildGaneshaWithMemcachedAdapter($threshold, $behaviorOnTrip = null)
+    private function buildGaneshaWithMemcachedAdapter(
+        $threshold,
+        $behaviorOnTrip = null,
+        $countTTL = null,
+        $intervalToHalfOpen = null
+    )
     {
         return Builder::buildWithCountStrategy(array(
             'failureThreshold'  => $threshold,
@@ -220,6 +225,8 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
                 return new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
             },
             'behaviorOnTrip' => $behaviorOnTrip,
+            'countTTL'              => $countTTL,
+            'intervalToHalfOpen'    => $intervalToHalfOpen,
         ));
     }
 

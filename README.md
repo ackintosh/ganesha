@@ -131,7 +131,7 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
     'failureRate'           => 10,
     'minimumRequests'       => 10,
     'intervalToHalfOpen'    => 5,
-    'storageAdapter'        => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
+    'adapter'               => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
 ]);
 ```
 
@@ -145,7 +145,7 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
     'failureThreshold'   => 10,
-    'storageAdapter'     => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
+    'adapter'            => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
     'intervalToHalfOpen' => 5,
     'countTTL'           => 60,
 ]);

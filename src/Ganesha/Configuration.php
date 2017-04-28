@@ -12,7 +12,14 @@ class Configuration implements \ArrayAccess
 
     public function __construct($params)
     {
-        $this->params = $params;
+        $default = array(
+            'adapterSetupFunction' => null,
+            'behaviorOnCalmedDown' => null,
+            'behaviorOnStorageError' => null,
+            'behaviorOnTrip' => null,
+            'countTTL' => 0,
+        );
+        $this->params = array_merge($default, $params);
     }
 
     public function offsetSet($offset, $value)

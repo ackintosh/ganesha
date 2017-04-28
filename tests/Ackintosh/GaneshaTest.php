@@ -253,7 +253,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     private function buildGanesha(
         $threshold,
         $behaviorOnTrip = null,
-        $countTTL = null,
+        $countTTL = 0,
         $intervalToHalfOpen = null
     )
     {

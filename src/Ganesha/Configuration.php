@@ -42,19 +42,6 @@ class Configuration implements \ArrayAccess
     }
 
     /**
-     * @throws \LogicException
-     * @return void
-     */
-    public function validate()
-    {
-        if (
-            (isset($this->params['adapter']) && !$this->params['adapter'] instanceof AdapterInterface)
-            && !isset($this->params['adapterSetupFunction'])) {
-            throw new \LogicException();
-        }
-    }
-
-    /**
      * @return callable|\Closure
      */
     public function getAdapterSetupFunction()

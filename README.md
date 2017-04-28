@@ -49,39 +49,12 @@ try {
 }
 ```
 
-#### Setup storage adapter
-
-Ganesha has two ways to setup storage adapter.
-
-
-```php
-// The passed object must be an instance of 'Ackintosh\Ganesha\Storage\AdapterInterface'.
-$ganesha = Ackintosh\Ganesha\Builder::build([
-    'adapter' => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
-]);
-
-// Also, we can specify function which returns instance of AdapterInterface.
-$ganesha = Ackintosh\Ganesha\Builder::build([
-    'adapterSetupFunction' => function () {
-        $m = new \Memcached();
-        $m->addServer('localhost', 11211);
-
-        return new Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
-    },
-]);
-
-```
-
 #### Behavior on storage error
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::build([
     // with memcached.
-    'adapterSetupFunction' => function () {
-        $m = new \Memcached();
-        $m->addServer('localhost', 11211);
-
-        return new Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
+    'adapter' =>  new Ackintosh\Ganesha\Storage\Adapter\Memcached($m),
     },
     // we can define the behavior on memcached error.
     'behaviorOnStorageError' => function ($errorMessage) {

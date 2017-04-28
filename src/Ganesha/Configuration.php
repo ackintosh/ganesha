@@ -1,21 +1,19 @@
 <?php
 namespace Ackintosh\Ganesha;
 
-use Ackintosh\Ganesha\Storage\AdapterInterface;
-
 class Configuration implements \ArrayAccess
 {
     /**
      * @var array
      */
-    private $params = array();
+    private $params;
 
     public function __construct($params)
     {
         $default = array(
-            'behaviorOnCalmedDown' => null,
-            'behaviorOnStorageError' => null,
-            'behaviorOnTrip' => null,
+            'behaviorOnCalmedDown'      => null,
+            'behaviorOnStorageError'    => null,
+            'behaviorOnTrip'            => null,
         );
         $this->params = array_merge($default, $params);
     }

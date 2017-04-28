@@ -56,7 +56,7 @@ class Count implements StrategyInterface
         $strategy->setFailureThreshold($configuration['failureThreshold']);
         $strategy->setStorage(
             new Storage(
-                call_user_func($configuration->getAdapterSetupFunction()),
+                $configuration['adapter'],
                 null
             )
         );

@@ -11,12 +11,17 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     private $serviceName = 'GaneshaTestService';
 
+    /**
+     * @var \Memcached
+     */
+    private $m;
+
     public function setUp()
     {
         parent::setUp();
-        $m = new \Memcached();
-        $m->addServer('localhost', 11211);
-        $m->flush();
+        $this->m = new \Memcached();
+        $this->m->addServer('localhost', 11211);
+        $this->m->flush();
     }
 
     /**
@@ -62,6 +67,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
         $ganesha = $this->buildGanesha(
             2,
+            10,
             function ($serviceName) use ($mock) {
                 $mock->foo($serviceName);
             }
@@ -79,6 +85,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $invoked = 0;
         $ganesha = $this->buildGanesha(
             2,
+            10,
             function ($serviceName) use (&$invoked) {
                 $invoked++;
             }
@@ -112,13 +119,9 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     public function withMemcached()
     {
         $ganesha = Builder::buildWithCountStrategy(array(
-            'failureThreshold'      => 1,
-            'adapterSetupFunction'  => function () {
-                $m = new \Memcached();
-                $m->addServer('localhost', 11211);
-
-                return new Memcached($m);
-            },
+            'failureThreshold'  => 1,
+            'adapter'           => new Memcached($this->m),
+            'intervalToHalfOpen'=> 10,
         ));
 
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
@@ -149,7 +152,6 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     {
         $ganesha = $this->buildGanesha(
             1,
-            null,
             1
         );
 
@@ -204,12 +206,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     public function withRateStrategy()
     {
         $ganesha = Builder::build(array(
-            'adapterSetupFunction' => function () {
-                $m = new \Memcached();
-                $m->addServer('localhost', 11211);
-
-                return new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
-            },
+            'adapter' => new Memcached($this->m),
             'timeWindow' => 3,
             'failureRate' => 50,
             'minimumRequests' => 1,
@@ -229,18 +226,13 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
     private function buildGanesha(
         $threshold,
-        $behaviorOnTrip = null,
-        $intervalToHalfOpen = null
+        $intervalToHalfOpen = 10,
+        $behaviorOnTrip = null
     )
     {
         return Builder::buildWithCountStrategy(array(
             'failureThreshold'      => $threshold,
-            'adapterSetupFunction'  => function () {
-                $m = new \Memcached();
-                $m->addServer('localhost', 11211);
-
-                return new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
-            },
+            'adapter'               => new Memcached($this->m),
             'behaviorOnTrip'        => $behaviorOnTrip,
             'intervalToHalfOpen'    => $intervalToHalfOpen,
         ));

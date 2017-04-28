@@ -13,7 +13,6 @@ class Configuration implements \ArrayAccess
     public function __construct($params)
     {
         $default = array(
-            'adapterSetupFunction' => null,
             'behaviorOnCalmedDown' => null,
             'behaviorOnStorageError' => null,
             'behaviorOnTrip' => null,
@@ -39,19 +38,5 @@ class Configuration implements \ArrayAccess
     public function offsetGet($offset)
     {
         return isset($this->params[$offset]) ? $this->params[$offset] : null;
-    }
-
-    /**
-     * @return callable|\Closure
-     */
-    public function getAdapterSetupFunction()
-    {
-        if (isset($this->params['adapter']) && $adapter = $this->params['adapter']) {
-            return function () use ($adapter) {
-                return $adapter;
-            };
-        }
-
-        return $this->params['adapterSetupFunction'];
     }
 }

@@ -4,6 +4,12 @@ namespace Ackintosh\Ganesha;
 interface StrategyInterface
 {
     /**
+     * @param array $params
+     * @throws \LogicException
+     */
+    public static function validate($params);
+
+    /**
      * @param string $serviceName
      * @return void
      */

@@ -31,14 +31,9 @@ class Builder
      */
     private static function perform($params)
     {
+        call_user_func(array($params['strategyClass'], 'validate'), $params);
+
         $configuration = new Configuration($params);
-
-        try {
-            $configuration->validate();
-        } catch (\Exception $e) {
-            throw $e;
-        }
-
         $ganesha = new Ganesha(
             call_user_func(
                 array($configuration['strategyClass'], 'create'),

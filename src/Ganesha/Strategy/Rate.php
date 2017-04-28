@@ -20,6 +20,30 @@ class Rate implements StrategyInterface
     private $storage;
 
     /**
+     * @var array
+     */
+    private static $requirements = array(
+        'adapter',
+        'failureRate',
+        'intervalToHalfOpen',
+        'minimumRequests',
+        'timeWindow',
+    );
+
+    /**
+     * @param array $params
+     * @throws \LogicException
+     */
+    public static function validate($params)
+    {
+        foreach (self::$requirements as $r) {
+            if (!isset($params[$r])) {
+                throw new \LogicException($r . ' is required');
+            }
+        }
+    }
+
+    /**
      * @param Configuration $configuration
      * @return Rate
      */

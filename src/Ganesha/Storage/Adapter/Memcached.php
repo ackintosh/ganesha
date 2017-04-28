@@ -39,41 +39,38 @@ class Memcached implements AdapterInterface
     /**
      * @param string $serviceName
      * @param int $count
-     * @param int    $ttl
      * @return void
      * @throws StorageException
      */
-    public function save($serviceName, $count, $ttl)
+    public function save($serviceName, $count)
     {
-        if (!$this->memcached->set($serviceName, $count, $ttl)) {
+        if (!$this->memcached->set($serviceName, $count)) {
             throw new StorageException('failed to set the value : ' . $this->memcached->getResultMessage());
         }
     }
 
     /**
      * @param string $serviceName
-     * @param int    $ttl
      * @return void
      * @throws StorageException
      */
-    public function increment($serviceName, $ttl)
+    public function increment($serviceName)
     {
         // requires \Memcached::OPT_BINARY_PROTOCOL
-        if ($this->memcached->increment($serviceName, 1, 1, $ttl) === false) {
+        if ($this->memcached->increment($serviceName, 1, 1) === false) {
             throw new StorageException('failed to increment failure count : ' . $this->memcached->getResultMessage());
         }
     }
 
     /**
      * @param string $serviceName
-     * @param int    $ttl
      * @return void
      * @throws StorageException
      */
-    public function decrement($serviceName, $ttl)
+    public function decrement($serviceName)
     {
         // requires \Memcached::OPT_BINARY_PROTOCOL
-        if ($this->memcached->decrement($serviceName, 1, 0, $ttl) === false) {
+        if ($this->memcached->decrement($serviceName, 1, 0) === false) {
             throw new StorageException('failed to decrement failure count : ' . $this->memcached->getResultMessage());
         }
     }

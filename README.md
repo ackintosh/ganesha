@@ -147,7 +147,6 @@ $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
     'failureThreshold'   => 10,
     'adapter'            => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
     'intervalToHalfOpen' => 5,
-    'countTTL'           => 60,
 ]);
 ```
 

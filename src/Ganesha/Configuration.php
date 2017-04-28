@@ -17,7 +17,6 @@ class Configuration implements \ArrayAccess
             'behaviorOnCalmedDown' => null,
             'behaviorOnStorageError' => null,
             'behaviorOnTrip' => null,
-            'countTTL' => 0,
         );
         $this->params = array_merge($default, $params);
     }

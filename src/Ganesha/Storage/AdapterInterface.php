@@ -12,17 +12,15 @@ interface AdapterInterface
     /**
      * @param  string $serviceName
      * @param  int    $count
-     * @param  int    $ttl
      * @return void
      */
-    public function save($serviceName, $count, $ttl);
+    public function save($serviceName, $count);
 
     /**
      * @param  string $serviceName
-     * @param  int    $ttl
      * @return void
      */
-    public function increment($serviceName, $ttl);
+    public function increment($serviceName);
 
     /**
      * decrement failure count
@@ -30,10 +28,9 @@ interface AdapterInterface
      * If the operation would decrease the value below 0, the new value must be 0.
      *
      * @param  string $serviceName
-     * @param  int    $ttl
      * @return void
      */
-    public function decrement($serviceName, $ttl);
+    public function decrement($serviceName);
 
     /**
      * sets last failure time

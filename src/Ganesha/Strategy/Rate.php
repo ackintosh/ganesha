@@ -30,7 +30,6 @@ class Rate implements StrategyInterface
         $strategy->setStorage(
             new Storage(
                 call_user_func($configuration->getAdapterSetupFunction()),
-                $configuration['countTTL'],
                 self::serviceNameDecorator($configuration['timeWindow'])
             )
         );

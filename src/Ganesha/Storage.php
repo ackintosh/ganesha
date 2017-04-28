@@ -12,11 +12,6 @@ class Storage
     private $adapter;
 
     /**
-     * @var int
-     */
-    private $countTTL;
-
-    /**
      * @var callable
      */
     private $serviceNameDecorator;
@@ -55,12 +50,11 @@ class Storage
      * Storage constructor.
      *
      * @param AdapterInterface $adapter
-     * @param int              $countTTL
+     * @param callable         $serviceNameDecorator
      */
-    public function __construct(AdapterInterface $adapter, $countTTL, $serviceNameDecorator)
+    public function __construct(AdapterInterface $adapter, $serviceNameDecorator)
     {
         $this->adapter = $adapter;
-        $this->countTTL = $countTTL;
         $this->serviceNameDecorator = $serviceNameDecorator;
     }
 
@@ -145,7 +139,7 @@ class Storage
      */
     public function incrementFailureCount($serviceName)
     {
-        $this->adapter->increment($this->failureKey($serviceName), $this->countTTL);
+        $this->adapter->increment($this->failureKey($serviceName));
     }
 
     /**
@@ -157,7 +151,7 @@ class Storage
      */
     public function decrementFailureCount($serviceName)
     {
-        $this->adapter->decrement($this->failureKey($serviceName), $this->countTTL);
+        $this->adapter->decrement($this->failureKey($serviceName));
     }
 
     /**
@@ -169,7 +163,7 @@ class Storage
      */
     public function incrementSuccessCount($serviceName)
     {
-        $this->adapter->increment($this->successKey($serviceName), $this->countTTL);
+        $this->adapter->increment($this->successKey($serviceName));
     }
 
     /**
@@ -193,7 +187,7 @@ class Storage
      */
     public function incrementRejectionCount($serviceName)
     {
-        $this->adapter->increment($this->rejectionKey($serviceName), $this->countTTL);
+        $this->adapter->increment($this->rejectionKey($serviceName));
     }
 
     /**
@@ -205,7 +199,7 @@ class Storage
      */
     public function setFailureCount($serviceName, $failureCount)
     {
-        $this->adapter->save($this->failureKey($serviceName), $failureCount, $this->countTTL);
+        $this->adapter->save($this->failureKey($serviceName), $failureCount);
     }
 
     /**

@@ -129,28 +129,6 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function withMemcachedTTL()
-    {
-        $ganesha = Builder::buildWithCountStrategy(array(
-            'failureThreshold'      => 1,
-            'countTTL'              => 1,
-            'adapterSetupFunction'  => function () {
-                $m = new \Memcached();
-                $m->addServer('localhost', 11211);
-
-                return new Memcached($m);
-            },
-        ));
-
-        $ganesha->failure($this->serviceName);
-        $this->assertFalse($ganesha->isAvailable($this->serviceName));
-        sleep(1);
-        $this->assertTrue($ganesha->isAvailable($this->serviceName));
-    }
-
-    /**
-     * @test
-     */
     public function failureCountMustNotBeNegative()
     {
         $ganesha = $this->buildGanesha(1);
@@ -172,7 +150,6 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $ganesha = $this->buildGanesha(
             1,
             null,
-            60,
             1
         );
 
@@ -253,7 +230,6 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     private function buildGanesha(
         $threshold,
         $behaviorOnTrip = null,
-        $countTTL = 0,
         $intervalToHalfOpen = null
     )
     {
@@ -266,7 +242,6 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
                 return new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
             },
             'behaviorOnTrip'        => $behaviorOnTrip,
-            'countTTL'              => $countTTL,
             'intervalToHalfOpen'    => $intervalToHalfOpen,
         ));
     }

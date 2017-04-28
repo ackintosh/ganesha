@@ -13,7 +13,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     {
         $m = new \Memcached();
         $m->addServer('localhost', 11211);
-        $storage = new Storage(new Memcached($m), $ttl = 60, null);
+        $storage = new Storage(new Memcached($m), null);
 
         $serviceName = 'test';
         $this->assertSame($storage->getStatus($serviceName), Ganesha::STATUS_CALMED_DOWN);

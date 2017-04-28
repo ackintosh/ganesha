@@ -8,31 +8,31 @@ class Configuration implements \ArrayAccess
     /**
      * @var array
      */
-    private $container = array();
+    private $params = array();
 
     public function __construct($params)
     {
-        $this->container = $params;
+        $this->params = $params;
     }
 
     public function offsetSet($offset, $value)
     {
-        $this->container[$offset] = $value;
+        $this->params[$offset] = $value;
     }
 
     public function offsetExists($offset)
     {
-        return isset($this->container[$offset]);
+        return isset($this->params[$offset]);
     }
 
     public function offsetUnset($offset)
     {
-        unset($this->container[$offset]);
+        unset($this->params[$offset]);
     }
 
     public function offsetGet($offset)
     {
-        return isset($this->container[$offset]) ? $this->container[$offset] : null;
+        return isset($this->params[$offset]) ? $this->params[$offset] : null;
     }
 
     /**
@@ -42,8 +42,8 @@ class Configuration implements \ArrayAccess
     public function validate()
     {
         if (
-            (isset($this->container['adapter']) && !$this->container['adapter'] instanceof AdapterInterface)
-            && !isset($this->container['adapterSetupFunction'])) {
+            (isset($this->params['adapter']) && !$this->params['adapter'] instanceof AdapterInterface)
+            && !isset($this->params['adapterSetupFunction'])) {
             throw new \LogicException();
         }
     }
@@ -53,12 +53,12 @@ class Configuration implements \ArrayAccess
      */
     public function getAdapterSetupFunction()
     {
-        if (isset($this->container['adapter']) && $adapter = $this->container['adapter']) {
+        if (isset($this->params['adapter']) && $adapter = $this->params['adapter']) {
             return function () use ($adapter) {
                 return $adapter;
             };
         }
 
-        return $this->container['adapterSetupFunction'];
+        return $this->params['adapterSetupFunction'];
     }
 }

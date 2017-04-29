@@ -92,6 +92,18 @@ var_dump($ganesha->isAvailable($serviceName);
 // bool(true)
 ```
 
+#### Reset
+
+
+```php
+$ganesha = Ackintosh\Ganesha\Builder::build([
+	// ...
+]);
+
+$ganesha->reset();
+
+```
+
 ## Examples
 
 Ganesha has two strategies to detect system failure.

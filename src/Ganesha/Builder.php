@@ -41,15 +41,15 @@ class Builder
             )
         );
 
-        if ($behaviorOnStorageError = $configuration['behaviorOnStorageError']) {
+        if ($behaviorOnStorageError = $configuration['onStorageError']) {
             $ganesha->setBehaviorOnStorageError($behaviorOnStorageError);
         }
 
-        if ($behaviorOnTrip = $configuration['behaviorOnTrip']) {
+        if ($behaviorOnTrip = $configuration['onTrip']) {
             $ganesha->setBehaviorOnTrip($behaviorOnTrip);
         }
 
-        if ($behaviorOnCalmedDown = $configuration['behaviorOnCalmedDown']) {
+        if ($behaviorOnCalmedDown = $configuration['onCalmedDown']) {
             $ganesha->setBehaviorOnCalmedDown($behaviorOnCalmedDown);
         }
 

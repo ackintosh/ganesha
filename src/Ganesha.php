@@ -13,17 +13,17 @@ class Ganesha
     /**
      * @var callable
      */
-    private $behaviorOnTrip;
+    private $onTrip;
 
     /**
      * @var callable
      */
-    private $behaviorOnCalmedDown;
+    private $onCalmedDown;
 
     /**
      * @var callable
      */
-    private $behaviorOnStorageError;
+    private $onStorageError;
 
     /**
      * the status between failure count 0 and trip.
@@ -58,7 +58,7 @@ class Ganesha
      */
     public function setBehaviorOnStorageError($behavior)
     {
-        $this->behaviorOnStorageError = $behavior;
+        $this->onStorageError = $behavior;
     }
 
     /**
@@ -69,7 +69,7 @@ class Ganesha
      */
     public function setBehaviorOnTrip($behavior)
     {
-        $this->behaviorOnTrip = $behavior;
+        $this->onTrip = $behavior;
     }
 
     /**
@@ -80,7 +80,7 @@ class Ganesha
      */
     public function setBehaviorOnCalmedDown($behavior)
     {
-        $this->behaviorOnCalmedDown = $behavior;
+        $this->onCalmedDown = $behavior;
     }
 
     /**
@@ -139,11 +139,11 @@ class Ganesha
      */
     private function triggerBehaviorOnStorageError($message)
     {
-        if (is_null($this->behaviorOnStorageError)) {
+        if (is_null($this->onStorageError)) {
             return;
         }
 
-        call_user_func($this->behaviorOnStorageError, $message);
+        call_user_func($this->onStorageError, $message);
     }
 
     /**
@@ -152,11 +152,11 @@ class Ganesha
      */
     private function triggerBehaviorOnTrip($serviceName)
     {
-        if (is_null($this->behaviorOnTrip)) {
+        if (is_null($this->onTrip)) {
             return;
         }
 
-        call_user_func($this->behaviorOnTrip, $serviceName);
+        call_user_func($this->onTrip, $serviceName);
     }
 
     /**
@@ -165,11 +165,11 @@ class Ganesha
      */
     private function triggerBehaviorOnCalmedDown($serviceName)
     {
-        if (is_null($this->behaviorOnCalmedDown)) {
+        if (is_null($this->onCalmedDown)) {
             return;
         }
 
-        call_user_func($this->behaviorOnCalmedDown, $serviceName);
+        call_user_func($this->onCalmedDown, $serviceName);
     }
 
     /**

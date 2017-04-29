@@ -57,7 +57,7 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
     'adapter' =>  new Ackintosh\Ganesha\Storage\Adapter\Memcached($m),
     },
     // we can define the behavior on memcached error.
-    'behaviorOnStorageError' => function ($errorMessage) {
+    'onStorageError' => function ($errorMessage) {
         \YourLogger::error('Some errors have occurred on memcached : ' . $errorMessage);
         \YourMonitoringSystem::reportError();
     },
@@ -68,7 +68,7 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::build([
-    'behaviorOnTrip' => function ($unavailableServiceName) {
+    'onTrip' => function ($unavailableServiceName) {
         \Slack::notify("Ganesha has tripped. Something's wrong in {$unavailableServiceName} !");
     },
 ]);

@@ -41,17 +41,9 @@ class Builder
             )
         );
 
-        if ($behaviorOnStorageError = $configuration['onStorageError']) {
-            $ganesha->setBehaviorOnStorageError($behaviorOnStorageError);
-        }
-
-        if ($behaviorOnTrip = $configuration['onTrip']) {
-            $ganesha->setBehaviorOnTrip($behaviorOnTrip);
-        }
-
-        if ($behaviorOnCalmedDown = $configuration['onCalmedDown']) {
-            $ganesha->setBehaviorOnCalmedDown($behaviorOnCalmedDown);
-        }
+        $ganesha->setBehaviorOnStorageError($configuration['onStorageError']);
+        $ganesha->setBehaviorOnTrip($configuration['onTrip']);
+        $ganesha->setBehaviorOnCalmedDown($configuration['onCalmedDown']);
 
         return $ganesha;
     }

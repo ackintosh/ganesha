@@ -22,13 +22,13 @@ class Rate implements StrategyInterface
     /**
      * @var array
      */
-    private static $requirements = array(
+    private static $requirements = [
         'adapter',
         'failureRate',
         'intervalToHalfOpen',
         'minimumRequests',
         'timeWindow',
-    );
+    ];
 
     /**
      * @param array $params

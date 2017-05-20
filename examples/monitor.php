@@ -30,7 +30,7 @@ echo sprintf("current : %.2F %%\n", $rate);
 // previous
 $method = new \ReflectionMethod($strategy, 'keyForPreviousTimeWindow');
 $method->setAccessible(true);
-$key = $method->invokeArgs($strategy, array(SERVICE_NAME, TIME_WINDOW));
+$key = $method->invokeArgs($strategy, [SERVICE_NAME, TIME_WINDOW]);
 
 $failure = $storage->getFailureCountByCustomKey($key);
 $success = $storage->getSuccessCountByCustomKey($key);

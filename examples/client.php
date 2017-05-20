@@ -18,18 +18,18 @@ if (
     && ($awsSecret = getenv('SNIDEL_AWS_SECRET'))
     && ($awsRegion = getenv('SNIDEL_AWS_REGION'))
 ) {
-    $config = array(
+    $config = [
         'aws-key' => $awsKey,
         'aws-secret' => $awsSecret,
         'aws-region' => $awsRegion,
         'concurrency' => 3,
-        'taskQueue'     => array(
+        'taskQueue'     => [
             'className'         => '\Ackintosh\Snidel\Queue\Sqs\Task',
-        ),
-        'resultQueue'   => array(
+        ],
+        'resultQueue'   => [
             'className'         => '\Ackintosh\Snidel\Queue\Sqs\Result',
-        ),
-    );
+        ],
+    ];
 } else {
     $config = 3;
 }

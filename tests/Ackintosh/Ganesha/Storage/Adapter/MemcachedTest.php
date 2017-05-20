@@ -90,22 +90,22 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     public function isGaneshaDataProvider()
     {
-        return array(
-            array('ganesha_test_success', true),
-            array('ganesha_test_failure', true),
-            array('ganesha_test_rejection', true),
-            array('ganesha_test_last_failure_time', true),
-            array('ganesha_test_status', true),
-            array('ganesha_ganesha_success', true),
-            array('ganesha_success_success', true),
-            array('ganesha_http://example.com_success', true),
-            array('ganeshaa_test_success', false),
-            array('ganesha_test_successs', false),
-            array('ganesha_test_failuree', false),
-            array('ganesha_test_rejectionn', false),
-            array('ganesha_test_last_failure_timee', false),
-            array('ganesha_test_statuss', false),
-        );
+        return [
+            ['ganesha_test_success', true],
+            ['ganesha_test_failure', true],
+            ['ganesha_test_rejection', true],
+            ['ganesha_test_last_failure_time', true],
+            ['ganesha_test_status', true],
+            ['ganesha_ganesha_success', true],
+            ['ganesha_success_success', true],
+            ['ganesha_http://example.com_success', true],
+            ['ganeshaa_test_success', false],
+            ['ganesha_test_successs', false],
+            ['ganesha_test_failuree', false],
+            ['ganesha_test_rejectionn', false],
+            ['ganesha_test_last_failure_timee', false],
+            ['ganesha_test_statuss', false],
+        ];
     }
 
     /**
@@ -115,7 +115,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
     public function resetThrowsExceptionWhenFailedToConnectToMemcached()
     {
         $mock = $this->getMockBuilder('\Memcached')
-            ->setMethods(array('getStats'))
+            ->setMethods(['getStats'])
             ->getMock();
         $mock->method('getStats')
             ->will($this->returnValue(false));

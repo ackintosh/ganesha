@@ -183,11 +183,11 @@ class Memcached implements AdapterInterface
      */
     private function throwExceptionIfErrorOccurred()
     {
-        $errorResultCodes = array(
+        $errorResultCodes = [
             \Memcached::RES_FAILURE,
             \Memcached::RES_SERVER_TEMPORARILY_DISABLED,
             \Memcached::RES_SERVER_MEMORY_ALLOCATION_FAILURE,
-        );
+        ];
 
         if (in_array($this->memcached->getResultCode(), $errorResultCodes, true)) {
             throw new StorageException($this->memcached->getResultMessage());

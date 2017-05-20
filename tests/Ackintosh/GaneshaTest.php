@@ -59,7 +59,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     public function onTripInvokesItsBehaviorWhenGaneshaHasTripped()
     {
         $mock = $this->getMockBuilder('\stdClass')
-            ->setMethods(array('foo'))
+            ->setMethods(['foo'])
             ->getMock();
         $mock->expects($this->once())
             ->method('foo')
@@ -118,11 +118,11 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function withMemcached()
     {
-        $ganesha = Builder::buildWithCountStrategy(array(
+        $ganesha = Builder::buildWithCountStrategy([
             'failureThreshold'  => 1,
             'adapter'           => new Memcached($this->m),
             'intervalToHalfOpen'=> 10,
-        ));
+        ]);
 
         $this->assertTrue($ganesha->isAvailable($this->serviceName));
         $ganesha->failure($this->serviceName);
@@ -205,13 +205,13 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
      */
     public function withRateStrategy()
     {
-        $ganesha = Builder::build(array(
+        $ganesha = Builder::build([
             'adapter' => new Memcached($this->m),
             'timeWindow' => 3,
             'failureRate' => 50,
             'minimumRequests' => 1,
             'intervalToHalfOpen' => 10,
-        ));
+        ]);
 
         $this->assertTrue($ganesha->isAvailable('test'));
 
@@ -230,11 +230,11 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $onTrip = null
     )
     {
-        return Builder::buildWithCountStrategy(array(
+        return Builder::buildWithCountStrategy([
             'failureThreshold'      => $threshold,
             'adapter'               => new Memcached($this->m),
             'onTrip'                => $onTrip,
             'intervalToHalfOpen'    => $intervalToHalfOpen,
-        ));
+        ]);
     }
 }

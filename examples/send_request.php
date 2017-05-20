@@ -32,7 +32,7 @@ __EOS__;
 
 __EOS__;
 
-    return Builder::build(array(
+    return Builder::build([
         'adapterSetupFunction'  => function () {
             $m = new \Memcached();
             $m->addServer('localhost', 11211);
@@ -49,7 +49,7 @@ __EOS__;
         'failureRate'           => FAILURE_RATE,
         'minimumRequests'       => MINIMUM_REQUESTS,
         'intervalToHalfOpen'    => INTERVAL_TO_HALF_OPEN,
-    ));
+    ]);
 }
 
 function sendRequest()

@@ -27,11 +27,11 @@ class Count implements StrategyInterface
     /**
      * @var array
      */
-    private static $requirements = array(
+    private static $requirements = [
         'adapter',
         'failureThreshold',
         'intervalToHalfOpen',
-    );
+    ];
 
     /**
      * @param array $params

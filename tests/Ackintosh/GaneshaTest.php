@@ -80,6 +80,31 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function notifyTripped()
+    {
+        $ganesha = $this->buildGanesha(
+            2,
+            10
+        );
+
+        $receiver = $this->getMockBuilder('\stdClass')
+            ->setMethods(['receive'])
+            ->getMock();
+        $receiver->expects($this->once())
+            ->method('receive')
+            ->with(Ganesha::EVENT_TRIPPED, $this->serviceName, '');
+
+        $ganesha->subscribe(function ($event, $serviceName, $message) use ($receiver) {
+            $receiver->receive($event, $serviceName, $message);
+        });
+
+        $ganesha->failure($this->serviceName);
+        $ganesha->failure($this->serviceName);
+    }
+
+    /**
+     * @test
+     */
     public function onTripBehaviorIsInvokedUnderCertainConditions()
     {
         $invoked = 0;

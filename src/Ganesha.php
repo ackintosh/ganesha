@@ -6,6 +6,21 @@ use Ackintosh\Ganesha\Exception\StorageException;
 class Ganesha
 {
     /**
+     * @var string
+     */
+    const EVENT_TRIPPED = 'tripped';
+
+    /**
+     * @var string
+     */
+    const EVENT_CALMED_DOWN = 'calmed_down';
+
+    /**
+     * @var string
+     */
+    const EVENT_STORAGE_ERROR = 'storage_error';
+
+    /**
      * @var \Ackintosh\Ganesha\StrategyInterface
      */
     private $strategy;
@@ -24,6 +39,11 @@ class Ganesha
      * @var callable
      */
     private $onStorageError;
+
+    /**
+     * @var callable[]
+     */
+    private $subscribers = [];
 
     /**
      * the status between failure count 0 and trip.
@@ -93,9 +113,11 @@ class Ganesha
         try {
             if ($this->strategy->recordFailure($serviceName) === self::STATUS_TRIPPED) {
                 $this->triggerBehaviorOnTrip($serviceName);
+                $this->notify(self::EVENT_TRIPPED, $serviceName, '');
             }
         } catch (StorageException $e) {
             $this->triggerBehaviorOnStorageError('failed to record failure : ' . $e->getMessage());
+            $this->notify(self::EVENT_STORAGE_ERROR, $serviceName, 'failed to record failure : ' . $e->getMessage());
         }
     }
 
@@ -109,9 +131,11 @@ class Ganesha
         try {
             if ($this->strategy->recordSuccess($serviceName) === self::STATUS_CALMED_DOWN) {
                 $this->triggerBehaviorOnCalmedDown($serviceName);
+                $this->notify(self::EVENT_CALMED_DOWN, $serviceName, '');
             }
         } catch (StorageException $e) {
             $this->triggerBehaviorOnStorageError('failed to record success : ' . $e->getMessage());
+            $this->notify(self::EVENT_STORAGE_ERROR, $serviceName, 'failed to record success : ' . $e->getMessage());
         }
     }
 
@@ -128,8 +152,21 @@ class Ganesha
             return $this->strategy->isAvailable($serviceName);
         } catch (StorageException $e) {
             $this->triggerBehaviorOnStorageError('failed to execute isAvailable : ' . $e->getMessage());
+            $this->notify(self::EVENT_STORAGE_ERROR, $serviceName, 'failed to isAvailable : ' . $e->getMessage());
             // fail-silent
             return true;
+        }
+    }
+
+    public function subscribe($callable)
+    {
+        $this->subscribers[] = $callable;
+    }
+
+    private function notify($event, $serviceName, $message)
+    {
+        foreach ($this->subscribers as $s) {
+            call_user_func_array($s, [$event, $serviceName, $message]);
         }
     }
 

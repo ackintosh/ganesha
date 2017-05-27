@@ -21,6 +21,18 @@ class Ganesha
     const EVENT_STORAGE_ERROR = 'storage_error';
 
     /**
+     * the status between failure count 0 and trip.
+     * @var int
+     */
+    const STATUS_CALMED_DOWN = 1;
+
+    /**
+     * the status between trip and calm down.
+     * @var int
+     */
+    const STATUS_TRIPPED  = 2;
+
+    /**
      * @var \Ackintosh\Ganesha\StrategyInterface
      */
     private $strategy;
@@ -44,18 +56,6 @@ class Ganesha
      * @var callable[]
      */
     private $subscribers = [];
-
-    /**
-     * the status between failure count 0 and trip.
-     * @var int
-     */
-    const STATUS_CALMED_DOWN = 1;
-
-    /**
-     * the status between trip and calm down.
-     * @var int
-     */
-    const STATUS_TRIPPED  = 2;
 
     /**
      * @var bool

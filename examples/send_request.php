@@ -4,6 +4,7 @@ declare(ticks = 1);
 require_once __DIR__ . '/vendor/autoload.php';
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
+use \Ackintosh\Ganesha;
 use \Ackintosh\Ganesha\Builder;
 
 define('SERVICE_NAME', 'example');
@@ -19,37 +20,44 @@ if (strpos($argv[0], basename(__FILE__))) {
 
 function buildGanesha()
 {
-    $messageOnTrip = <<<__EOS__
+    $tripped = <<<__EOS__
 !!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!! TRIPPED !!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!
 
 __EOS__;
-    $messageOnCalmedDown = <<<__EOS__
+    $calmedDown = <<<__EOS__
 =======================
 ===== CALMED DOWN =====
 =======================
 
 __EOS__;
 
-    return Builder::build([
-        'adapterSetupFunction'  => function () {
-            $m = new \Memcached();
-            $m->addServer('localhost', 11211);
-
-            return new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
-        },
-        'behaviorOnTrip' => function ($serviceName) use ($messageOnTrip) {
-            file_put_contents(PATH_TO_LOG, $messageOnTrip, FILE_APPEND);
-        },
-        'behaviorOnCalmedDown' => function ($serviceName) use ($messageOnCalmedDown) {
-            file_put_contents(PATH_TO_LOG, $messageOnCalmedDown, FILE_APPEND);
-        },
+    $m = new \Memcached();
+    $m->addServer('localhost', 11211);
+    $adapter = new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
+    $ganesha =  Builder::build([
+        'adapter'               => $adapter,
         'timeWindow'            => TIME_WINDOW,
         'failureRate'           => FAILURE_RATE,
         'minimumRequests'       => MINIMUM_REQUESTS,
         'intervalToHalfOpen'    => INTERVAL_TO_HALF_OPEN,
     ]);
+
+    $ganesha->subscribe(function ($event, $serviceName, $message) use ($tripped, $calmedDown) {
+        switch ($event) {
+            case Ganesha::EVENT_TRIPPED:
+                file_put_contents(PATH_TO_LOG, $tripped, FILE_APPEND);
+                break;
+            case Ganesha::EVENT_CALMED_DOWN:
+                file_put_contents(PATH_TO_LOG, $calmedDown, FILE_APPEND);
+                break;
+            default:
+                break;
+        }
+    });
+
+    return $ganesha;
 }
 
 function sendRequest()

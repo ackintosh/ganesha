@@ -107,11 +107,21 @@ class Ganesha
         }
     }
 
-    public function subscribe($callable)
+    /**
+     * @param callable $callable
+     * @return void
+     */
+    public function subscribe(callable $callable)
     {
         $this->subscribers[] = $callable;
     }
 
+    /**
+     * @param string $event
+     * @param string $serviceName
+     * @param string $message
+     * @return void
+     */
     private function notify($event, $serviceName, $message)
     {
         foreach ($this->subscribers as $s) {

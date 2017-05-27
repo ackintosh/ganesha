@@ -39,11 +39,10 @@ if (!$ganesha->isAvailable($resource)) {
 }
 
 try {
-    $response = ExternalApi::send($request);
+    echo ExternalApi::send($request)->getBody();
     $ganesha->success($resource);
-    echo $response->getBody();
-} catch (ExternalApi\NetworkErrorException $e) {
-    // If a network error occurred, it must be recorded as failure.
+} catch (ExternalApi\RequestTimedOutException $e) {
+    // If an error occurred, it must be recorded as failure.
     $ganesha->failure($resource);
     die($e->getMessage());
 }
@@ -98,7 +97,7 @@ Ganesha has two strategies to detect system failure.
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::build([
     'timeWindow'            => 30,
-    'failureRate'           => 10,
+    'failureRate'           => 50,
     'minimumRequests'       => 10,
     'intervalToHalfOpen'    => 5,
     'adapter'               => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
@@ -109,9 +108,9 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
-    'failureThreshold'   => 10,
-    'adapter'            => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
+    'failureThreshold'   => 100,
     'intervalToHalfOpen' => 5,
+    'adapter'            => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
 ]);
 ```
 

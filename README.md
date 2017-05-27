@@ -122,11 +122,6 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 
 ### Count
 
-(ja)
-
-
-###### 設定
-
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
     'failureThreshold'   => 10,
@@ -135,34 +130,15 @@ $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
 ]);
 ```
 
-###### 挙動
 
-- 失敗/成功時に失敗数カウントを増減する
-- 失敗数カウントが10回を超えると Ganesha が open 状態になる
-	- `Ganesha::isAvailable()` が常に `false` を返す
-	- open から5秒後、half-open 状態になり、特定のアクセスのみ許可される
-		- 特定のアクセス = 5秒経過した後の最初のアクセス
-	- そのアクセスが成功すれば、失敗数カウントがしきい値を下回り close 状態になる
-		- ( = `Ganesha::isAvailable()` が `true` を返す )
-- 60秒間、失敗/成功のどちらもなければカウントがリセットされる
-
-## Build documents
+## Build documents with [Soushi](https://github.com/kentaro/soushi)
 
 https://ackintosh.github.io/ganesha/
-
-Ganesha using [Soushi](https://github.com/kentaro/soushi) for generating documents.
 
 ```
 $ path/to/soushi build docs
 ```
 
-## Great predecessors
-
-Ganesha respects the following libraries.
-
-- [ejsmont-artur/php-circuit-breaker](https://github.com/ejsmont-artur/php-circuit-breaker)
-- [itsoneiota/circuit-breaker](https://github.com/itsoneiota/circuit-breaker)
-
 ## Requirements
 
-Ganesha supports PHP 5.3 or higher.
+Ganesha supports PHP 5.6 or higher.

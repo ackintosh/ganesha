@@ -38,21 +38,6 @@ class Ganesha
     private $strategy;
 
     /**
-     * @var callable
-     */
-    private $onTrip;
-
-    /**
-     * @var callable
-     */
-    private $onCalmedDown;
-
-    /**
-     * @var callable
-     */
-    private $onStorageError;
-
-    /**
      * @var callable[]
      */
     private $subscribers = [];
@@ -73,37 +58,6 @@ class Ganesha
     }
 
     /**
-     * @param  callable $loggingBehavior
-     * @return void
-     */
-    public function setBehaviorOnStorageError($behavior)
-    {
-        $this->onStorageError = $behavior;
-    }
-
-    /**
-     * sets behavior which will be invoked when Ganesha trips
-     *
-     * @param  callable $behavior
-     * @return void
-     */
-    public function setBehaviorOnTrip($behavior)
-    {
-        $this->onTrip = $behavior;
-    }
-
-    /**
-     * sets behavior which will be invoked when Ganesha calmed down
-     *
-     * @param  callable $behavior
-     * @return void
-     */
-    public function setBehaviorOnCalmedDown($behavior)
-    {
-        $this->onCalmedDown = $behavior;
-    }
-
-    /**
      * records failure
      *
      * @return void
@@ -112,11 +66,9 @@ class Ganesha
     {
         try {
             if ($this->strategy->recordFailure($serviceName) === self::STATUS_TRIPPED) {
-                $this->triggerBehaviorOnTrip($serviceName);
                 $this->notify(self::EVENT_TRIPPED, $serviceName, '');
             }
         } catch (StorageException $e) {
-            $this->triggerBehaviorOnStorageError('failed to record failure : ' . $e->getMessage());
             $this->notify(self::EVENT_STORAGE_ERROR, $serviceName, 'failed to record failure : ' . $e->getMessage());
         }
     }
@@ -130,11 +82,9 @@ class Ganesha
     {
         try {
             if ($this->strategy->recordSuccess($serviceName) === self::STATUS_CALMED_DOWN) {
-                $this->triggerBehaviorOnCalmedDown($serviceName);
                 $this->notify(self::EVENT_CALMED_DOWN, $serviceName, '');
             }
         } catch (StorageException $e) {
-            $this->triggerBehaviorOnStorageError('failed to record success : ' . $e->getMessage());
             $this->notify(self::EVENT_STORAGE_ERROR, $serviceName, 'failed to record success : ' . $e->getMessage());
         }
     }
@@ -151,7 +101,6 @@ class Ganesha
         try {
             return $this->strategy->isAvailable($serviceName);
         } catch (StorageException $e) {
-            $this->triggerBehaviorOnStorageError('failed to execute isAvailable : ' . $e->getMessage());
             $this->notify(self::EVENT_STORAGE_ERROR, $serviceName, 'failed to isAvailable : ' . $e->getMessage());
             // fail-silent
             return true;
@@ -168,45 +117,6 @@ class Ganesha
         foreach ($this->subscribers as $s) {
             call_user_func_array($s, [$event, $serviceName, $message]);
         }
-    }
-
-    /**
-     * @param  string  $message
-     * @return void
-     */
-    private function triggerBehaviorOnStorageError($message)
-    {
-        if (is_null($this->onStorageError)) {
-            return;
-        }
-
-        call_user_func($this->onStorageError, $message);
-    }
-
-    /**
-     * @param  string $serviceName
-     * @return void
-     */
-    private function triggerBehaviorOnTrip($serviceName)
-    {
-        if (is_null($this->onTrip)) {
-            return;
-        }
-
-        call_user_func($this->onTrip, $serviceName);
-    }
-
-    /**
-     * @param  string $serviceName
-     * @return void
-     */
-    private function triggerBehaviorOnCalmedDown($serviceName)
-    {
-        if (is_null($this->onCalmedDown)) {
-            return;
-        }
-
-        call_user_func($this->onCalmedDown, $serviceName);
     }
 
     /**

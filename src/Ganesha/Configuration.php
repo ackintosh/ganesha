@@ -10,11 +10,7 @@ class Configuration implements \ArrayAccess
 
     public function __construct($params)
     {
-        $default = [
-            'onCalmedDown'      => null,
-            'onStorageError'    => null,
-            'onTrip'            => null,
-        ];
+        $default = [];
         $this->params = array_merge($default, $params);
     }
 

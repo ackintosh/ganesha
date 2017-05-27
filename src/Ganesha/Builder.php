@@ -41,10 +41,6 @@ class Builder
             )
         );
 
-        $ganesha->setBehaviorOnStorageError($configuration['onStorageError']);
-        $ganesha->setBehaviorOnTrip($configuration['onTrip']);
-        $ganesha->setBehaviorOnCalmedDown($configuration['onCalmedDown']);
-
         return $ganesha;
     }
 }

@@ -56,30 +56,6 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function onTripInvokesItsBehaviorWhenGaneshaHasTripped()
-    {
-        $mock = $this->getMockBuilder('\stdClass')
-            ->setMethods(['foo'])
-            ->getMock();
-        $mock->expects($this->once())
-            ->method('foo')
-            ->with($this->serviceName);
-
-        $ganesha = $this->buildGanesha(
-            2,
-            10,
-            function ($serviceName) use ($mock) {
-                $mock->foo($serviceName);
-            }
-        );
-
-        $ganesha->failure($this->serviceName);
-        $ganesha->failure($this->serviceName);
-    }
-
-    /**
-     * @test
-     */
     public function notifyTripped()
     {
         $ganesha = $this->buildGanesha(
@@ -102,41 +78,6 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $ganesha->failure($this->serviceName);
     }
 
-    /**
-     * @test
-     */
-    public function onTripBehaviorIsInvokedUnderCertainConditions()
-    {
-        $invoked = 0;
-        $ganesha = $this->buildGanesha(
-            2,
-            10,
-            function ($serviceName) use (&$invoked) {
-                $invoked++;
-            }
-        );
-
-        // tipped and incremented $invoked.
-        $ganesha->failure($this->serviceName);
-        $ganesha->failure($this->serviceName);
-        $this->assertSame(1, $invoked);
-
-        // closed.
-        $ganesha->success($this->serviceName);
-
-        // tripped again, but $invoke is not incremented.
-        $ganesha->failure($this->serviceName);
-        $this->assertSame(1, $invoked);
-
-        // calm down ( failure count = 0 )
-        $ganesha->success($this->serviceName);
-        $ganesha->success($this->serviceName);
-
-        // tripped and incremented $invoked.
-        $ganesha->failure($this->serviceName);
-        $ganesha->failure($this->serviceName);
-        $this->assertSame(2, $invoked);
-    }
 
     /**
      * @test
@@ -251,14 +192,12 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
     private function buildGanesha(
         $threshold,
-        $intervalToHalfOpen = 10,
-        $onTrip = null
+        $intervalToHalfOpen = 10
     )
     {
         return Builder::buildWithCountStrategy([
             'failureThreshold'      => $threshold,
             'adapter'               => new Memcached($this->m),
-            'onTrip'                => $onTrip,
             'intervalToHalfOpen'    => $intervalToHalfOpen,
         ]);
     }

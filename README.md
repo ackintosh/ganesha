@@ -49,29 +49,14 @@ try {
 }
 ```
 
-#### Behavior on storage error
+#### Monitoring
 
 ```php
-$ganesha = Ackintosh\Ganesha\Builder::build([
-    // with memcached.
-    'adapter' =>  new Ackintosh\Ganesha\Storage\Adapter\Memcached($m),
-    },
-    // we can define the behavior on memcached error.
-    'onStorageError' => function ($errorMessage) {
-        \YourLogger::error('Some errors have occurred on memcached : ' . $errorMessage);
-        \YourMonitoringSystem::reportError();
-    },
-]);
-```
+// $event is `Ganesha::EVENT_XXX`.
+$ganesha->subscribe(function ($event, $serviceName, $message) {
+    \YourMonitoringSystem::report();
+});
 
-#### Behavior on trip
-
-```php
-$ganesha = Ackintosh\Ganesha\Builder::build([
-    'onTrip' => function ($unavailableServiceName) {
-        \Slack::notify("Ganesha has tripped. Something's wrong in {$unavailableServiceName} !");
-    },
-]);
 ```
 
 #### Disable

@@ -9,7 +9,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    private $serviceName = 'GaneshaTestService';
+    private $resource = 'GaneshaTestService';
 
     /**
      * @var \Memcached
@@ -30,13 +30,13 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     public function recordsFailureAndTrips()
     {
         $ganesha = $this->buildGanesha(2);
-        $this->assertTrue($ganesha->isAvailable($this->serviceName));
+        $this->assertTrue($ganesha->isAvailable($this->resource));
 
-        $ganesha->failure($this->serviceName);
-        $ganesha->failure($this->serviceName);
-        $this->assertFalse($ganesha->isAvailable($this->serviceName));
+        $ganesha->failure($this->resource);
+        $ganesha->failure($this->resource);
+        $this->assertFalse($ganesha->isAvailable($this->resource));
         // it does not affect other services.
-        $this->assertTrue($ganesha->isAvailable('other' . $this->serviceName));
+        $this->assertTrue($ganesha->isAvailable('other' . $this->resource));
     }
 
     /**
@@ -45,12 +45,12 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     public function recordsSuccessAndClose()
     {
         $ganesha = $this->buildGanesha(2);
-        $ganesha->failure($this->serviceName);
-        $ganesha->failure($this->serviceName);
-        $this->assertFalse($ganesha->isAvailable($this->serviceName));
+        $ganesha->failure($this->resource);
+        $ganesha->failure($this->resource);
+        $this->assertFalse($ganesha->isAvailable($this->resource));
 
-        $ganesha->success($this->serviceName);
-        $this->assertTrue($ganesha->isAvailable($this->serviceName));
+        $ganesha->success($this->resource);
+        $this->assertTrue($ganesha->isAvailable($this->resource));
     }
 
     /**
@@ -68,14 +68,14 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $receiver->expects($this->once())
             ->method('receive')
-            ->with(Ganesha::EVENT_TRIPPED, $this->serviceName, '');
+            ->with(Ganesha::EVENT_TRIPPED, $this->resource, '');
 
-        $ganesha->subscribe(function ($event, $serviceName, $message) use ($receiver) {
-            $receiver->receive($event, $serviceName, $message);
+        $ganesha->subscribe(function ($event, $resource, $message) use ($receiver) {
+            $receiver->receive($event, $resource, $message);
         });
 
-        $ganesha->failure($this->serviceName);
-        $ganesha->failure($this->serviceName);
+        $ganesha->failure($this->resource);
+        $ganesha->failure($this->resource);
     }
 
 
@@ -90,9 +90,9 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
             'intervalToHalfOpen'=> 10,
         ]);
 
-        $this->assertTrue($ganesha->isAvailable($this->serviceName));
-        $ganesha->failure($this->serviceName);
-        $this->assertFalse($ganesha->isAvailable($this->serviceName));
+        $this->assertTrue($ganesha->isAvailable($this->resource));
+        $ganesha->failure($this->resource);
+        $this->assertFalse($ganesha->isAvailable($this->resource));
     }
 
     /**
@@ -102,13 +102,13 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     {
         $ganesha = $this->buildGanesha(1);
 
-        $ganesha->success($this->serviceName);
-        $ganesha->success($this->serviceName);
-        $ganesha->success($this->serviceName);
-        $this->assertTrue($ganesha->isAvailable($this->serviceName));
+        $ganesha->success($this->resource);
+        $ganesha->success($this->resource);
+        $ganesha->success($this->resource);
+        $this->assertTrue($ganesha->isAvailable($this->resource));
 
-        $ganesha->failure($this->serviceName);
-        $this->assertFalse($ganesha->isAvailable($this->serviceName));
+        $ganesha->failure($this->resource);
+        $this->assertFalse($ganesha->isAvailable($this->resource));
     }
 
     /**
@@ -121,19 +121,19 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
             1
         );
 
-        $this->assertTrue($ganesha->isAvailable($this->serviceName));
+        $this->assertTrue($ganesha->isAvailable($this->resource));
         // record a failure, ganesha has trip
-        $ganesha->failure($this->serviceName);
-        $this->assertFalse($ganesha->isAvailable($this->serviceName));
+        $ganesha->failure($this->resource);
+        $this->assertFalse($ganesha->isAvailable($this->resource));
         // wait for the interval to half-open
         sleep(2);
         // half-open
-        $this->assertTrue($ganesha->isAvailable($this->serviceName));
+        $this->assertTrue($ganesha->isAvailable($this->resource));
         // after half-open, service is not available until the interval has elapsed
-        $this->assertFalse($ganesha->isAvailable($this->serviceName));
+        $this->assertFalse($ganesha->isAvailable($this->resource));
         // record a success, ganesha has close
-        $ganesha->success($this->serviceName);
-        $this->assertTrue($ganesha->isAvailable($this->serviceName));
+        $ganesha->success($this->resource);
+        $this->assertTrue($ganesha->isAvailable($this->resource));
     }
 
     /**
@@ -143,14 +143,14 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     {
         $ganesha = $this->buildGanesha(1);
 
-        $ganesha->failure($this->serviceName);
-        $this->assertFalse($ganesha->isAvailable($this->serviceName));
+        $ganesha->failure($this->resource);
+        $this->assertFalse($ganesha->isAvailable($this->resource));
 
         Ganesha::disable();
-        $this->assertTrue($ganesha->isAvailable($this->serviceName));
+        $this->assertTrue($ganesha->isAvailable($this->resource));
 
         Ganesha::enable();
-        $this->assertFalse($ganesha->isAvailable($this->serviceName));
+        $this->assertFalse($ganesha->isAvailable($this->resource));
     }
 
     /**
@@ -160,10 +160,10 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     {
         $ganesha = $this->buildGanesha(1);
 
-        $ganesha->failure($this->serviceName);
-        $this->assertFalse($ganesha->isAvailable($this->serviceName));
+        $ganesha->failure($this->resource);
+        $this->assertFalse($ganesha->isAvailable($this->resource));
         $ganesha->reset();
-        $this->assertTrue($ganesha->isAvailable($this->serviceName));
+        $this->assertTrue($ganesha->isAvailable($this->resource));
     }
 
     /**

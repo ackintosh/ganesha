@@ -10,21 +10,21 @@ interface StrategyInterface
     public static function validate($params);
 
     /**
-     * @param string $serviceName
+     * @param string $resource
      * @return void
      */
-    public function recordSuccess($serviceName);
+    public function recordSuccess($resource);
 
     /**
-     * @param string $serviceName
+     * @param string $resource
      * @return void
      */
-    public function recordFailure($serviceName);
+    public function recordFailure($resource);
 
     /**
      * @return bool
      */
-    public function isAvailable($serviceName);
+    public function isAvailable($resource);
 
     /**
      * @return void

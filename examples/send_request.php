@@ -7,7 +7,7 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 use \Ackintosh\Ganesha;
 use \Ackintosh\Ganesha\Builder;
 
-define('SERVICE_NAME', 'example');
+define('RESOURCE', 'example');
 define('TIME_WINDOW', 20);
 define('FAILURE_RATE', 10);
 define('MINIMUM_REQUESTS', 10);
@@ -44,7 +44,7 @@ __EOS__;
         'intervalToHalfOpen'    => INTERVAL_TO_HALF_OPEN,
     ]);
 
-    $ganesha->subscribe(function ($event, $serviceName, $message) use ($tripped, $calmedDown) {
+    $ganesha->subscribe(function ($event, $resource, $message) use ($tripped, $calmedDown) {
         switch ($event) {
             case Ganesha::EVENT_TRIPPED:
                 file_put_contents(PATH_TO_LOG, $tripped, FILE_APPEND);
@@ -64,16 +64,16 @@ function sendRequest()
 {
     $ganesha = buildGanesha();
     $client = new GuzzleHttp\Client();
-    if ($ganesha->isAvailable(SERVICE_NAME)) {
+    if ($ganesha->isAvailable(RESOURCE)) {
         try {
             $client->request('GET', 'http://localhost:8080/server.php');
         } catch (\Exception $e) {
             file_put_contents(PATH_TO_LOG, date('H:i:s') . " <failure>\n", FILE_APPEND);
-            $ganesha->failure(SERVICE_NAME);
+            $ganesha->failure(RESOURCE);
             return;
         }
 
-        $ganesha->success(SERVICE_NAME);
+        $ganesha->success(RESOURCE);
         file_put_contents(PATH_TO_LOG, date('H:i:s') . " (success)\n", FILE_APPEND);
     } else {
         file_put_contents(PATH_TO_LOG, date('H:i:s') . " [[[ reject ]]]\n", FILE_APPEND);

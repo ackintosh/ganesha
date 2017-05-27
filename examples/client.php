@@ -4,7 +4,6 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use \Ackintosh\Snidel;
 
-define('SERVICE_NAME', 'example');
 define('PATH_TO_LOG', __DIR__ . '/client.log');
 
 // clean up

@@ -54,7 +54,7 @@ class Rate implements StrategyInterface
         $strategy->setStorage(
             new Storage(
                 $configuration['adapter'],
-                self::serviceNameDecorator($configuration['timeWindow'])
+                self::resourceDecorator($configuration['timeWindow'])
             )
         );
 
@@ -80,18 +80,18 @@ class Rate implements StrategyInterface
     }
 
     /**
-     * @param  string $serviceName
+     * @param  string $resource
      * @return int
      */
-    public function recordFailure($serviceName)
+    public function recordFailure($resource)
     {
-        $this->storage->setLastFailureTime($serviceName, time());
-        $this->storage->incrementFailureCount($serviceName);
+        $this->storage->setLastFailureTime($resource, time());
+        $this->storage->incrementFailureCount($resource);
         if (
-            $this->storage->getStatus($serviceName) === Ganesha::STATUS_CALMED_DOWN
-            && $this->isClosedInCurrentTimeWindow($serviceName) === false
+            $this->storage->getStatus($resource) === Ganesha::STATUS_CALMED_DOWN
+            && $this->isClosedInCurrentTimeWindow($resource) === false
         ) {
-            $this->storage->setStatus($serviceName, Ganesha::STATUS_TRIPPED);
+            $this->storage->setStatus($resource, Ganesha::STATUS_TRIPPED);
             return Ganesha::STATUS_TRIPPED;
         }
 
@@ -99,17 +99,17 @@ class Rate implements StrategyInterface
     }
 
     /**
-     * @param  string $serviceName
+     * @param  string $resource
      * @return null | int
      */
-    public function recordSuccess($serviceName)
+    public function recordSuccess($resource)
     {
-        $this->storage->incrementSuccessCount($serviceName);
+        $this->storage->incrementSuccessCount($resource);
         if (
-            $this->storage->getStatus($serviceName) === Ganesha::STATUS_TRIPPED
-            && $this->isClosedInPreviousTimeWindow($serviceName)
+            $this->storage->getStatus($resource) === Ganesha::STATUS_TRIPPED
+            && $this->isClosedInPreviousTimeWindow($resource)
         ) {
-            $this->storage->setStatus($serviceName, Ganesha::STATUS_CALMED_DOWN);
+            $this->storage->setStatus($resource, Ganesha::STATUS_CALMED_DOWN);
             return Ganesha::STATUS_CALMED_DOWN;
         }
     }
@@ -123,16 +123,16 @@ class Rate implements StrategyInterface
     }
 
     /**
-     * @param  string $serviceName
+     * @param  string $resource
      * @return bool
      */
-    public function isAvailable($serviceName)
+    public function isAvailable($resource)
     {
-        if ($this->isClosed($serviceName) || $this->isHalfOpen($serviceName)) {
+        if ($this->isClosed($resource) || $this->isHalfOpen($resource)) {
             return true;
         }
 
-        $this->storage->incrementRejectionCount($serviceName);
+        $this->storage->incrementRejectionCount($resource);
         return false;
     }
 
@@ -140,18 +140,18 @@ class Rate implements StrategyInterface
      * @return bool
      * @throws StorageException
      */
-    private function isClosed($serviceName)
+    private function isClosed($resource)
     {
-        return $this->isClosedInCurrentTimeWindow($serviceName) && $this->isClosedInPreviousTimeWindow($serviceName);
+        return $this->isClosedInCurrentTimeWindow($resource) && $this->isClosedInPreviousTimeWindow($resource);
     }
 
     /**
-     * @param  string $serviceName
+     * @param  string $resource
      * @return bool
      */
-    private function isClosedInCurrentTimeWindow($serviceName)
+    private function isClosedInCurrentTimeWindow($resource)
     {
-        $failure = $this->storage->getFailureCount($serviceName);
+        $failure = $this->storage->getFailureCount($resource);
         if (
             $failure === 0
             || ($failure / $this->configuration['minimumRequests']) * 100 < $this->configuration['failureRate']
@@ -159,19 +159,19 @@ class Rate implements StrategyInterface
             return true;
         }
 
-        $success = $this->storage->getSuccessCount($serviceName);
-        $rejection = $this->storage->getRejectionCount($serviceName);
+        $success = $this->storage->getSuccessCount($resource);
+        $rejection = $this->storage->getRejectionCount($resource);
 
         return $this->isClosedInTimeWindow($failure, $success, $rejection);
     }
 
     /**
-     * @param  string $serviceName
+     * @param  string $resource
      * @return bool
      */
-    private function isClosedInPreviousTimeWindow($serviceName)
+    private function isClosedInPreviousTimeWindow($resource)
     {
-        $failure = $this->storage->getFailureCountByCustomKey(self::keyForPreviousTimeWindow($serviceName, $this->configuration['timeWindow']));
+        $failure = $this->storage->getFailureCountByCustomKey(self::keyForPreviousTimeWindow($resource, $this->configuration['timeWindow']));
         if (
             $failure === 0
             || ($failure / $this->configuration['minimumRequests']) * 100 < $this->configuration['failureRate']
@@ -179,8 +179,8 @@ class Rate implements StrategyInterface
             return true;
         }
 
-        $success = $this->storage->getSuccessCountByCustomKey(self::keyForPreviousTimeWindow($serviceName, $this->configuration['timeWindow']));
-        $rejection = $this->storage->getRejectionCountByCustomKey(self::keyForPreviousTimeWindow($serviceName, $this->configuration['timeWindow']));
+        $success = $this->storage->getSuccessCountByCustomKey(self::keyForPreviousTimeWindow($resource, $this->configuration['timeWindow']));
+        $rejection = $this->storage->getRejectionCountByCustomKey(self::keyForPreviousTimeWindow($resource, $this->configuration['timeWindow']));
 
         return $this->isClosedInTimeWindow($failure, $success, $rejection);
     }
@@ -209,34 +209,34 @@ class Rate implements StrategyInterface
      * @return bool
      * @throws StorageException
      */
-    private function isHalfOpen($serviceName)
+    private function isHalfOpen($resource)
     {
-        if (is_null($lastFailureTime = $this->storage->getLastFailureTime($serviceName))) {
+        if (is_null($lastFailureTime = $this->storage->getLastFailureTime($resource))) {
             return false;
         }
 
         if ((time() - $lastFailureTime) > $this->configuration['intervalToHalfOpen']) {
-            $this->storage->setLastFailureTime($serviceName, time());
+            $this->storage->setLastFailureTime($resource, time());
             return true;
         }
 
         return false;
     }
 
-    private static function serviceNameDecorator($timeWindow, $current = true)
+    private static function resourceDecorator($timeWindow, $current = true)
     {
-        return function ($serviceName) use ($timeWindow, $current) {
+        return function ($resource) use ($timeWindow, $current) {
             return sprintf(
                 '%s.%d',
-                $serviceName,
+                $resource,
                 $current ? (int)floor(time() / $timeWindow) : (int)floor((time() - $timeWindow) / $timeWindow)
             );
         };
     }
 
-    private static function keyForPreviousTimeWindow($serviceName, $timeWindow)
+    private static function keyForPreviousTimeWindow($resource, $timeWindow)
     {
-        $f = self::serviceNameDecorator($timeWindow, false);
-        return $f($serviceName);
+        $f = self::resourceDecorator($timeWindow, false);
+        return $f($resource);
     }
 }

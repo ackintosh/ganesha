@@ -32,19 +32,19 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 ]);
 
 
-$serviceName = 'external_api';
+$resource = 'external_api';
 
-if (!$ganesha->isAvailable($serviceName)) {
+if (!$ganesha->isAvailable($resource)) {
     die('external api is not available');
 }
 
 try {
     $response = ExternalApi::send($request);
-    $ganesha->success($serviceName);
+    $ganesha->success($resource);
     echo $response->getBody();
 } catch (ExternalApi\NetworkErrorException $e) {
     // If a network error occurred, it must be recorded as failure.
-    $ganesha->failure($serviceName);
+    $ganesha->failure($resource);
     die($e->getMessage());
 }
 ```
@@ -53,7 +53,7 @@ try {
 
 ```php
 // $event is `Ganesha::EVENT_XXX`.
-$ganesha->subscribe(function ($event, $serviceName, $message) {
+$ganesha->subscribe(function ($event, $resource, $message) {
     \YourMonitoringSystem::report();
 });
 
@@ -68,12 +68,12 @@ Ackintosh\Ganesha::disable();
 
 // Ganesha with threshold `3`.
 // Failure count is recorded to storage.
-$ganesha->failure($serviceName);
-$ganesha->failure($serviceName);
-$ganesha->failure($serviceName);
+$ganesha->failure($resource);
+$ganesha->failure($resource);
+$ganesha->failure($resource);
 
 // But Ganesha does not trip.
-var_dump($ganesha->isAvailable($serviceName);
+var_dump($ganesha->isAvailable($resource);
 // bool(true)
 ```
 

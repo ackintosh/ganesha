@@ -19,9 +19,9 @@ $prop = new \ReflectionProperty($strategy, 'storage');
 $prop->setAccessible(true);
 $storage = $prop->getValue($strategy);
 
-$failure = $storage->getFailureCount(SERVICE_NAME);
-$success = $storage->getSuccessCount(SERVICE_NAME);
-$rejection = $storage->getRejectionCount(SERVICE_NAME);
+$failure = $storage->getFailureCount(RESOURCE);
+$success = $storage->getSuccessCount(RESOURCE);
+$rejection = $storage->getRejectionCount(RESOURCE);
 
 $total = $failure + $success + $rejection;
 $rate = $total ? ($failure / $total) * 100 : 0;
@@ -30,7 +30,7 @@ echo sprintf("current : %.2F %%\n", $rate);
 // previous
 $method = new \ReflectionMethod($strategy, 'keyForPreviousTimeWindow');
 $method->setAccessible(true);
-$key = $method->invokeArgs($strategy, [SERVICE_NAME, TIME_WINDOW]);
+$key = $method->invokeArgs($strategy, [RESOURCE, TIME_WINDOW]);
 
 $failure = $storage->getFailureCountByCustomKey($key);
 $success = $storage->getSuccessCountByCustomKey($key);

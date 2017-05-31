@@ -315,7 +315,7 @@ class Storage
      */
     private function lastFailureKey($resource)
     {
-        return $this->key($resource) . self::KEY_SUFFIX_LAST_FAILURE_TIME;
+        return $this->prefix($resource) . self::KEY_SUFFIX_LAST_FAILURE_TIME;
     }
 
     /**
@@ -324,6 +324,6 @@ class Storage
      */
     private function statusKey($resource)
     {
-        return $this->key($resource) . self::KEY_SUFFIX_STATUS;
+        return $this->prefix($resource) . self::KEY_SUFFIX_STATUS;
     }
 }

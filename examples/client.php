@@ -30,7 +30,9 @@ if (
         ],
     ];
 } else {
-    $config = 3;
+    $config = [
+        'concurrency' => 3,
+    ];
 }
 $snidel = new Snidel($config);
 $snidel->fork(function () {

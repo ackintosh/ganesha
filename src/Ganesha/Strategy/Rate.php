@@ -193,12 +193,11 @@ class Rate implements StrategyInterface
      */
     private function isClosedInTimeWindow($failure, $success, $rejection)
     {
-        $total = $failure + $success + $rejection;
-        if ($total < $this->configuration['minimumRequests']) {
+        if (($failure + $success + $rejection) < $this->configuration['minimumRequests']) {
             return true;
         }
 
-        if (($failure / $total) * 100 < $this->configuration['failureRate']) {
+        if (($failure / ($failure + $success)) * 100 < $this->configuration['failureRate']) {
             return true;
         }
 

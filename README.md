@@ -90,7 +90,7 @@ $ganesha->reset();
 
 ## Examples
 
-Ganesha has two strategies to detect system failure.
+Ganesha has two strategies which detect system failure.
 
 ### Rate
 

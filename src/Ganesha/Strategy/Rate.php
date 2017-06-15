@@ -31,6 +31,14 @@ class Rate implements StrategyInterface
     ];
 
     /**
+     * @param Configuration $configuration
+     */
+    private function __construct(Configuration $configuration)
+    {
+        $this->configuration = $configuration;
+    }
+
+    /**
      * @param array $params
      * @throws \LogicException
      */
@@ -49,8 +57,7 @@ class Rate implements StrategyInterface
      */
     public static function create(Configuration $configuration)
     {
-        $strategy = new self();
-        $strategy->setConfiguration($configuration);
+        $strategy = new self($configuration);
         $strategy->setStorage(
             new Storage(
                 $configuration['adapter'],
@@ -59,15 +66,6 @@ class Rate implements StrategyInterface
         );
 
         return $strategy;
-    }
-
-    /**
-     * @param  Configuration $configuration
-     * @return void
-     */
-    public function setConfiguration(Configuration $configuration)
-    {
-        $this->configuration = $configuration;
     }
 
     /**

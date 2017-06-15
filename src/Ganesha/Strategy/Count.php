@@ -10,14 +10,9 @@ use Ackintosh\Ganesha\Exception\StorageException;
 class Count implements StrategyInterface
 {
     /**
-     * @var int
+     * @var Configuration
      */
-    private $failureThreshold;
-
-    /**
-     * @var int
-     */
-    private $intervalToHalfOpen;
+    private $configuration;
 
     /**
      * @var \Ackintosh\Ganesha\Storage
@@ -32,6 +27,14 @@ class Count implements StrategyInterface
         'failureThreshold',
         'intervalToHalfOpen',
     ];
+
+    /**
+     * @param Configuration $configuration
+     */
+    private function __construct(Configuration $configuration)
+    {
+        $this->configuration = $configuration;
+    }
 
     /**
      * @param array $params
@@ -52,31 +55,15 @@ class Count implements StrategyInterface
      */
     public static function create(Configuration $configuration)
     {
-        $strategy = new self();
-        $strategy->setFailureThreshold($configuration['failureThreshold']);
+        $strategy = new self($configuration);
         $strategy->setStorage(
             new Storage(
                 $configuration['adapter'],
                 null
             )
         );
-        $strategy->setIntervalToHalfOpen($configuration['intervalToHalfOpen']);
 
         return $strategy;
-    }
-
-    public function setFailureThreshold($threshold)
-    {
-        $this->failureThreshold = $threshold;
-    }
-
-    /**
-     * @param  int $interval
-     * @return void
-     */
-    public function setIntervalToHalfOpen($interval)
-    {
-        $this->intervalToHalfOpen = $interval;
     }
 
     /**
@@ -95,7 +82,7 @@ class Count implements StrategyInterface
         $this->storage->setLastFailureTime($resource, time());
         $this->storage->incrementFailureCount($resource);
 
-        if ($this->storage->getFailureCount($resource) >= $this->failureThreshold
+        if ($this->storage->getFailureCount($resource) >= $this->configuration['failureThreshold']
             && $this->storage->getStatus($resource) === Ganesha::STATUS_CALMED_DOWN
         ) {
             $this->storage->setStatus($resource, Ganesha::STATUS_TRIPPED);
@@ -146,7 +133,7 @@ class Count implements StrategyInterface
     private function isClosed($resource)
     {
         try {
-            return $this->storage->getFailureCount($resource) < $this->failureThreshold;
+            return $this->storage->getFailureCount($resource) < $this->configuration['failureThreshold'];
         } catch (StorageException $e) {
             throw $e;
         }
@@ -162,8 +149,8 @@ class Count implements StrategyInterface
             return false;
         }
 
-        if ((time() - $lastFailureTime) > $this->intervalToHalfOpen) {
-            $this->storage->setFailureCount($resource, $this->failureThreshold);
+        if ((time() - $lastFailureTime) > $this->configuration['intervalToHalfOpen']) {
+            $this->storage->setFailureCount($resource, $this->configuration['failureThreshold']);
             $this->storage->setLastFailureTime($resource, time());
             return true;
         }

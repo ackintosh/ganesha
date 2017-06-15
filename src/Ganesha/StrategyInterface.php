@@ -10,6 +10,12 @@ interface StrategyInterface
     public static function validate($params);
 
     /**
+     * @param Configuration $configuration
+     * @return StrategyInterface
+     */
+    public static function create(Configuration $configuration);
+
+    /**
      * @param string $resource
      * @return void
      */

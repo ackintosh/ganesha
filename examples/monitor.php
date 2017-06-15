@@ -24,7 +24,7 @@ $success = $storage->getSuccessCount(RESOURCE);
 $rejection = $storage->getRejectionCount(RESOURCE);
 
 $total = $failure + $success + $rejection;
-$rate = $total ? ($failure / $total) * 100 : 0;
+$rate = $total ? ($failure / ($failure + $success)) * 100 : 0;
 echo sprintf("current : %.2F %%\n", $rate);
 
 // previous
@@ -37,5 +37,5 @@ $success = $storage->getSuccessCountByCustomKey($key);
 $rejection = $storage->getRejectionCountByCustomKey($key);
 
 $total = $failure + $success + $rejection;
-$rate = $total ? ($failure / $total) * 100 : 0;
+$rate = $total ? ($failure / ($failure + $success)) * 100 : 0;
 echo sprintf("previous : %.2F %%\n", $rate);

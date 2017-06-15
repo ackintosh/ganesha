@@ -3,9 +3,9 @@ namespace Ackintosh\Ganesha\Strategy;
 
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Configuration;
+use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\StrategyInterface;
-use Ackintosh\Ganesha\Exception\StorageException;
 
 class Count implements StrategyInterface
 {

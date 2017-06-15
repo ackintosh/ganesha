@@ -31,9 +31,10 @@ class Count implements StrategyInterface
     /**
      * @param Configuration $configuration
      */
-    private function __construct(Configuration $configuration)
+    private function __construct(Configuration $configuration, Storage $storage)
     {
         $this->configuration = $configuration;
+        $this->storage = $storage;
     }
 
     /**
@@ -55,8 +56,8 @@ class Count implements StrategyInterface
      */
     public static function create(Configuration $configuration)
     {
-        $strategy = new self($configuration);
-        $strategy->setStorage(
+        $strategy = new self(
+            $configuration,
             new Storage(
                 $configuration['adapter'],
                 null
@@ -64,14 +65,6 @@ class Count implements StrategyInterface
         );
 
         return $strategy;
-    }
-
-    /**
-     * @param \Ackintosh\Ganesha\Storage $storage
-     */
-    public function setStorage($storage)
-    {
-        $this->storage = $storage;
     }
 
     /**

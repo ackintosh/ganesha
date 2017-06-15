@@ -33,9 +33,10 @@ class Rate implements StrategyInterface
     /**
      * @param Configuration $configuration
      */
-    private function __construct(Configuration $configuration)
+    private function __construct(Configuration $configuration, Storage $storage)
     {
         $this->configuration = $configuration;
+        $this->storage = $storage;
     }
 
     /**
@@ -57,8 +58,8 @@ class Rate implements StrategyInterface
      */
     public static function create(Configuration $configuration)
     {
-        $strategy = new self($configuration);
-        $strategy->setStorage(
+        $strategy = new self(
+            $configuration,
             new Storage(
                 $configuration['adapter'],
                 self::resourceDecorator($configuration['timeWindow'])
@@ -66,15 +67,6 @@ class Rate implements StrategyInterface
         );
 
         return $strategy;
-    }
-
-    /**
-     * @param \Ackintosh\Ganesha\Storage $storage
-     * @return void
-     */
-    public function setStorage($storage)
-    {
-        $this->storage = $storage;
     }
 
     /**

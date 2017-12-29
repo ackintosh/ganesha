@@ -1,0 +1,16 @@
+version: '2'
+services:
+  server:
+    image: php:7.2-apache
+    container_name: server
+    volumes:
+      - ./examples:/var/www/html
+  client:
+    image: php:7.2-cli
+    container_name: client
+    volumes:
+      - .:/tmp/ganesha
+      - ./examples:/tmp/ganesha/examples
+  memcached:
+    image: memcached:1.5.4
+    container_name: memcached

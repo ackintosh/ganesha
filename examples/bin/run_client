@@ -1,0 +1,7 @@
+#!/usr/bin/env php
+<?php
+require_once dirname(__DIR__) . '/send_request.php';
+
+while (1) {
+    sendRequest();
+}

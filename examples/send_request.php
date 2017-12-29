@@ -14,10 +14,6 @@ define('MINIMUM_REQUESTS', 10);
 define('INTERVAL_TO_HALF_OPEN', 5);
 define('PATH_TO_LOG', __DIR__ . '/send_request.log');
 
-if (strpos($argv[0], basename(__FILE__))) {
-    sendRequest();
-}
-
 function buildGanesha()
 {
     $tripped = <<<__EOS__

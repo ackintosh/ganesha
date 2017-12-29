@@ -1,32 +1,27 @@
 # Example
 
-## Install
+## Setup
 
 ```
-$ cd example
+$ pwd
+~/ganesha
 $ composer install
+$ docker-compose run --rm client composer install
 ```
 
-## Server
+## Run
 
+- Starts http and memcached server
+- Starts clients (with Ganesha) that repeats http reqeuest to server
 ```
-$ ./vendor/bin/hyper-run -S localhost:8080
-```
-
-## Client
-
-```
-$ memcached
-```
-```
-$ php client.php
+$ docker-compose up
 ```
 
-## Monitor
+## Monitor your circuit
 
 ```
 $ brew install watch
-$ watch php monitor.php
+$ watch docker-compose run --rm client php monitor.php
 
 Every 2.0s: php monitor.php
 

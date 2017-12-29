@@ -6,7 +6,7 @@ services:
     volumes:
       - ./examples:/var/www/html
   client:
-    image: php:7.2-cli
+    build: ./examples/client
     container_name: client
     volumes:
       - .:/tmp/ganesha

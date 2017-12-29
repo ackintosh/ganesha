@@ -11,10 +11,15 @@ $ docker-compose run --rm client composer install
 
 ## Run
 
-- Starts http and memcached server
-- Starts clients (with Ganesha) that repeats http reqeuest to server
 ```
+# Starts http and memcached server
 $ docker-compose up
+```
+
+```
+# Starts clients (with Ganesha) that repeats http reqeuest to server
+# It is recommended to run 3 or more clients
+$ docker-compose run --rm client sh -c bin/run_client
 ```
 
 ## Monitor your circuit

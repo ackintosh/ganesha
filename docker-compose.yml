@@ -10,7 +10,6 @@ services:
     container_name: client
     volumes:
       - .:/tmp/ganesha
-      - ./examples:/tmp/ganesha/examples
     working_dir: /tmp/ganesha/examples
     environment:
       GANESHA_EXAMPLE_MEMCACHED: "memcached"

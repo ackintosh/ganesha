@@ -32,8 +32,8 @@ Every 2.0s: php monitor.php
 
 [ settings ]
 time window : 20s
-failure rate : 10s
-minumum requests : 10s
+failure rate : 10%
+minumum requests : 10
 interval to half open : 5s
 
 [ failure rate ]

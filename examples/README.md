@@ -6,7 +6,6 @@
 $ pwd
 ~/ganesha
 $ composer install
-$ docker-compose run --rm client composer install
 ```
 
 ## Run

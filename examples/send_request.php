@@ -34,7 +34,7 @@ __EOS__;
 __EOS__;
 
     $m = new \Memcached();
-    $m->addServer('localhost', 11211);
+    $m->addServer(getenv('GANESHA_EXAMPLE_MEMCACHED') ? getenv('GANESHA_EXAMPLE_MEMCACHED') : 'localhost' , 11211);
     $adapter = new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
     $ganesha =  Builder::build([
         'adapter'               => $adapter,
@@ -66,7 +66,7 @@ function sendRequest()
     $client = new GuzzleHttp\Client();
     if ($ganesha->isAvailable(RESOURCE)) {
         try {
-            $client->request('GET', 'http://localhost:8080/server.php');
+            $client->request('GET', 'http://server/server.php');
         } catch (\Exception $e) {
             file_put_contents(PATH_TO_LOG, date('H:i:s') . " <failure>\n", FILE_APPEND);
             $ganesha->failure(RESOURCE);

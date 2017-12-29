@@ -11,6 +11,10 @@ services:
     volumes:
       - .:/tmp/ganesha
       - ./examples:/tmp/ganesha/examples
+    environment:
+      GANESHA_EXAMPLE_MEMCACHED: "memcached"
   memcached:
     image: memcached:1.5.4
     container_name: memcached
+    ports:
+      - 11211:11211

@@ -41,3 +41,12 @@ previous : 12.21 %
 
 ```
 
+## Change server state
+
+```
+# Server returns 503
+$ examples/bin/change_server_state abnormal
+
+# Restore normal state
+$ examples/bin/change_server_state normal
+```

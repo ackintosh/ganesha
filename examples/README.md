@@ -1,39 +1,38 @@
 # Example
 
-## Install
+## Setup
 
 ```
-$ cd example
+$ pwd
+~/ganesha
 $ composer install
 ```
 
-## Server
+## Run
 
 ```
-$ ./vendor/bin/hyper-run -S localhost:8080
+# Starts http and memcached server
+$ docker-compose up
 ```
 
-## Client
-
 ```
-$ memcached
-```
-```
-$ php client.php
+# Starts clients (with Ganesha) that repeats http reqeuest to server
+# It is recommended to run 3 or more clients
+$ docker-compose run --rm client sh -c bin/run_client
 ```
 
-## Monitor
+## Monitor your circuit
 
 ```
 $ brew install watch
-$ watch php monitor.php
+$ watch docker-compose run --rm client php monitor.php
 
 Every 2.0s: php monitor.php
 
 [ settings ]
 time window : 20s
-failure rate : 10s
-minumum requests : 10s
+failure rate : 10%
+minumum requests : 10
 interval to half open : 5s
 
 [ failure rate ]
@@ -42,3 +41,12 @@ previous : 12.21 %
 
 ```
 
+## Change server state
+
+```
+# Server returns 503
+$ examples/bin/change_server_state abnormal
+
+# Restore normal state
+$ examples/bin/change_server_state normal
+```

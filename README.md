@@ -8,8 +8,15 @@ PHP implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/Ci
 
 https://ackintosh.github.io/ganesha/
 
-For now, Ganesha is under development heavily. :muscle:
-It's going to be awesome !
+For now, Ganesha is under development heavily.  
+It's going to be awesome! :muscle:
+
+If you have an idea about enhancement, bugfix, etc..., please let me know it via [Issues](https://github.com/ackintosh/ganesha/issues). :sparkles:
+
+## Are you interested?
+
+[Here](./examples) is an example which is easily executable. All you need is Docker.  
+You can experience how Ganesha behaves when a failure occurs.
 
 ## Unveil Ganesha
 
@@ -48,7 +55,7 @@ try {
 }
 ```
 
-#### Monitoring
+#### Subscribe to changes in ganesha's state
 
 ```php
 // $event is `Ganesha::EVENT_XXX`.

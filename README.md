@@ -121,6 +121,12 @@ $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
 ]);
 ```
 
+## Run tests
+
+```
+$ docker-compose up # Starts memcached server
+$ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
+```
 
 ## Build documents with [Soushi](https://github.com/kentaro/soushi)
 

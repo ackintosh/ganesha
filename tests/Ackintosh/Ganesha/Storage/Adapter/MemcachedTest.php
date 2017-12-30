@@ -19,7 +19,10 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $m = new \Memcached();
-        $m->addServer('localhost', 11211);
+        $m->addServer(
+            getenv('GANESHA_EXAMPLE_MEMCACHED') ? getenv('GANESHA_EXAMPLE_MEMCACHED') : 'localhost',
+            11211
+        );
         $m->delete($this->resource);
         $this->memcachedAdaper = new Memcached($m);
     }

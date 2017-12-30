@@ -20,7 +20,10 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->m = new \Memcached();
-        $this->m->addServer('localhost', 11211);
+        $this->m->addServer(
+            getenv('GANESHA_EXAMPLE_MEMCACHED') ? getenv('GANESHA_EXAMPLE_MEMCACHED') : 'localhost',
+            11211
+        );
         $this->m->flush();
     }
 
@@ -162,6 +165,10 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
         $ganesha->failure($this->resource);
         $this->assertFalse($ganesha->isAvailable($this->resource));
+
+        // For making sure that \Memcached::getAllKeys() (be called by Ganesha::reset()) takes ALL keys, we need to wait a moment...
+        sleep(1);
+
         $ganesha->reset();
         $this->assertTrue($ganesha->isAvailable($this->resource));
     }

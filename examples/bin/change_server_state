@@ -6,6 +6,6 @@ if ($argc !== 2) {
     throw new \InvalidArgumentException(basename($argv[0]) . ' requires 1 argument as server state.');
 }
 
-if (file_put_contents(dirname(__DIR__) . '/server.data', $argv[1]) === false) {
+if (file_put_contents(SERVER_STATE_DATA, $argv[1]) === false) {
     throw new \RuntimeException('Failed to change server state');
 }

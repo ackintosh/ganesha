@@ -1,6 +1,8 @@
 <?php
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
+use Ackintosh\Ganesha;
+
 class RedisTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -72,5 +74,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
      */
     public function saveAndLoadStatus()
     {
+        $this->redisAdapter->saveStatus($this->resource, Ganesha::STATUS_TRIPPED);
+        $this->assertSame(Ganesha::STATUS_TRIPPED, $this->redisAdapter->loadStatus($this->resource));
     }
 }

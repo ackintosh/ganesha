@@ -53,12 +53,12 @@ class Redis implements AdapterInterface
 
     public function saveStatus($resource, $status)
     {
-        // TODO: Implement saveStatus() method.
+        $this->redis->set($resource, $status);
     }
 
     public function loadStatus($resource)
     {
-        // TODO: Implement loadStatus() method.
+        return (int)$this->redis->get($resource);
     }
 
     public function reset()

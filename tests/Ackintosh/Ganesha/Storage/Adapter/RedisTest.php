@@ -27,7 +27,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function saveAndLoad()
+    public function incrementAndLoad()
     {
         $this->redisAdapter->increment($this->resource);
         $this->assertSame(1, $this->redisAdapter->load($this->resource));

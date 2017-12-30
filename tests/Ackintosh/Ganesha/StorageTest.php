@@ -12,7 +12,10 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     public function savesStatus()
     {
         $m = new \Memcached();
-        $m->addServer('localhost', 11211);
+        $m->addServer(
+            getenv('GANESHA_EXAMPLE_MEMCACHED') ? getenv('GANESHA_EXAMPLE_MEMCACHED') : 'localhost',
+            11211
+        );
         $storage = new Storage(new Memcached($m), null);
 
         $resource = 'test';

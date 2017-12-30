@@ -11,7 +11,6 @@ define('TIME_WINDOW', 20);
 define('FAILURE_RATE', 10);
 define('MINIMUM_REQUESTS', 10);
 define('INTERVAL_TO_HALF_OPEN', 5);
-define('PATH_TO_LOG', __DIR__ . '/send_request.log');
 define('SERVER_STATE_DATA', __DIR__ . '/server_state.dat');
 define('SERVER_STATE_NORMAL', 'normal');
 define('SERVER_STATE_ABNORMAL', 'abnormal');
@@ -45,10 +44,10 @@ __EOS__;
     $ganesha->subscribe(function ($event, $resource, $message) use ($tripped, $calmedDown) {
         switch ($event) {
             case Ganesha::EVENT_TRIPPED:
-                file_put_contents(PATH_TO_LOG, $tripped, FILE_APPEND);
+                echo $tripped;
                 break;
             case Ganesha::EVENT_CALMED_DOWN:
-                file_put_contents(PATH_TO_LOG, $calmedDown, FILE_APPEND);
+                echo $calmedDown;
                 break;
             default:
                 break;
@@ -66,14 +65,14 @@ function sendRequest()
         try {
             $client->request('GET', 'http://server/server.php');
         } catch (\Exception $e) {
-            file_put_contents(PATH_TO_LOG, date('H:i:s') . " <failure>\n", FILE_APPEND);
+            echo  date('H:i:s') . " <failure>\n";
             $ganesha->failure(RESOURCE);
             return;
         }
 
         $ganesha->success(RESOURCE);
-        file_put_contents(PATH_TO_LOG, date('H:i:s') . " (success)\n", FILE_APPEND);
+        echo date('H:i:s') . " (success)\n";
     } else {
-        file_put_contents(PATH_TO_LOG, date('H:i:s') . " [[[ reject ]]]\n", FILE_APPEND);
+        echo date('H:i:s') . " [[[ reject ]]]\n";
     }
 }

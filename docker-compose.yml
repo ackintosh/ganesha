@@ -5,6 +5,7 @@ services:
     container_name: server
     volumes:
       - ./examples:/var/www/html
+      - ./vendor:/var/www/vendor
   client:
     build: ./examples/client
     container_name: client

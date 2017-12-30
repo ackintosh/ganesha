@@ -12,7 +12,7 @@ define('FAILURE_RATE', 10);
 define('MINIMUM_REQUESTS', 10);
 define('INTERVAL_TO_HALF_OPEN', 5);
 define('PATH_TO_LOG', __DIR__ . '/send_request.log');
-define('SERVER_STATE_DATA', __DIR__ . '/server.data');
+define('SERVER_STATE_DATA', __DIR__ . '/server_state.dat');
 define('SERVER_STATE_NORMAL', 'normal');
 define('SERVER_STATE_ABNORMAL', 'abnormal');
 

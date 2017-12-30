@@ -165,6 +165,10 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
         $ganesha->failure($this->resource);
         $this->assertFalse($ganesha->isAvailable($this->resource));
+
+        // For making sure that \Memcached::getAllKeys() (be called by Ganesha::reset()) takes ALL keys, we need to wait a moment...
+        sleep(1);
+
         $ganesha->reset();
         $this->assertTrue($ganesha->isAvailable($this->resource));
     }

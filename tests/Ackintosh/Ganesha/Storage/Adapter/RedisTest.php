@@ -36,8 +36,21 @@ class RedisTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function increment()
+    public function loadLastFailureTime()
     {
+        $this->redisAdapter->increment($this->resource);
+
+        sleep(3);
+
+        $this->redisAdapter->increment($this->resource);
+        $lastFailureTime = microtime(true);
+
+        $this->assertEquals(
+            (int)$lastFailureTime,
+            $this->redisAdapter->loadLastFailureTime($this->resource),
+            null,
+            1
+        );
     }
 
     /**

@@ -26,22 +26,29 @@ class Redis implements AdapterInterface
 
     public function increment($resource)
     {
-        $this->redis->zAdd($resource, microtime(true), '1');
+        $t = microtime(true);
+        $this->redis->zAdd($resource, $t, $t);
     }
 
     public function decrement($resource)
     {
-        // TODO: Implement decrement() method.
+        // Redis adapter does not support Count strategy
     }
 
     public function saveLastFailureTime($resource, $lastFailureTime)
     {
-        // TODO: Implement saveLastFailureTime() method.
+        // nop
     }
 
     public function loadLastFailureTime($resource)
     {
-        // TODO: Implement loadLastFailureTime() method.
+        $lastFailure = $this->redis->zRange($resource, -1, -1);
+
+        if (!$lastFailure) {
+            return;
+        }
+
+        return (int)$lastFailure[0];
     }
 
     public function saveStatus($resource, $status)

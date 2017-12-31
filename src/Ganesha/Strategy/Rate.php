@@ -128,11 +128,15 @@ class Rate implements StrategyInterface
 
     /**
      * @return bool
-     * @throws StorageException
+     * @throws StorageException, \LogicException
      */
     private function isClosed($resource)
     {
-        return $this->isClosedInCurrentTimeWindow($resource) && $this->isClosedInPreviousTimeWindow($resource);
+        if ($this->storage->supportFixedTimeWindow()) {
+            return $this->isClosedInCurrentTimeWindow($resource) && $this->isClosedInPreviousTimeWindow($resource);
+        } else {
+            throw new \LogicException();
+        }
     }
 
     /**

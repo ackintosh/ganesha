@@ -2,6 +2,7 @@
 namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha\Exception\StorageException;
+use Ackintosh\Ganesha\Storage\Adapter\FixedTimeWindowInterface;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 
 class Storage
@@ -258,6 +259,14 @@ class Storage
     public function reset()
     {
         $this->adapter->reset();
+    }
+
+    /**
+     * @return bool
+     */
+    public function supportFixedTimeWindow()
+    {
+        return $this->adapter instanceof FixedTimeWindowInterface;
     }
 
     /**

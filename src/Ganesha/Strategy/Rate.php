@@ -58,15 +58,14 @@ class Rate implements StrategyInterface
      */
     public static function create(Configuration $configuration)
     {
-        $strategy = new self(
-            $configuration,
-            new Storage(
-                $configuration['adapter'],
-                self::resourceDecorator($configuration['timeWindow'])
-            )
-        );
+        $resourceDecorator = $configuration['adapter'] instanceof Storage\Adapter\FixedTimeWindowInterface ? self::resourceDecorator($configuration['timeWindow']) : null;
+        $adapter = $configuration['adapter'];
+        $adapter->setConfiguration($configuration);
 
-        return $strategy;
+        return new self(
+            $configuration,
+            new Storage($adapter, $resourceDecorator)
+        );
     }
 
     /**
@@ -128,11 +127,25 @@ class Rate implements StrategyInterface
 
     /**
      * @return bool
-     * @throws StorageException
+     * @throws StorageException, \LogicException
      */
     private function isClosed($resource)
     {
-        return $this->isClosedInCurrentTimeWindow($resource) && $this->isClosedInPreviousTimeWindow($resource);
+        switch (true) {
+            case $this->storage->supportRollingTimeWindow():
+                return $this->isClosedInCurrentTimeWindow($resource);
+                break;
+            case $this->storage->supportFixedTimeWindow():
+                return $this->isClosedInCurrentTimeWindow($resource) && $this->isClosedInPreviousTimeWindow($resource);
+                break;
+            default:
+                throw new \LogicException(sprintf(
+                    'storage adapter should implement %s and/or %s.',
+                    Storage\Adapter\RollingTimeWindowInterface::class,
+                    Storage\Adapter\FixedTimeWindowInterface::class
+                ));
+                break;
+        }
     }
 
     /**

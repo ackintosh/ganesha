@@ -14,6 +14,10 @@ services:
     working_dir: /tmp/ganesha/examples
     environment:
       GANESHA_EXAMPLE_MEMCACHED: "memcached"
+      GANESHA_EXAMPLE_REDIS: "redis"
   memcached:
     image: memcached:1.5.4
     container_name: memcached
+  redis:
+    image: redis:4.0.6
+    container_name: redis

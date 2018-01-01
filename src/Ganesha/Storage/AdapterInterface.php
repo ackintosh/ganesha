@@ -1,8 +1,16 @@
 <?php
 namespace Ackintosh\Ganesha\Storage;
 
+use Ackintosh\Ganesha\Configuration;
+
 interface AdapterInterface
 {
+    /**
+     * @param Configuration $configuration
+     * @return void
+     */
+    public function setConfiguration(Configuration $configuration);
+
     /**
      * @param  string $resource
      * @return int

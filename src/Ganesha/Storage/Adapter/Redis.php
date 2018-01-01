@@ -1,6 +1,7 @@
 <?php
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
+use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 
 class Redis implements AdapterInterface, RollingTimeWindowInterface
@@ -10,9 +11,23 @@ class Redis implements AdapterInterface, RollingTimeWindowInterface
      */
     private $redis;
 
+    /**
+     * @var Configuration
+     */
+    private $configuration;
+
     public function __construct(\Redis $redis)
     {
         $this->redis = $redis;
+    }
+
+    /**
+     * @param Configuration $configuration
+     * @return void
+     */
+    public function setConfiguration(Configuration $configuration)
+    {
+        $this->configuration = $configuration;
     }
 
     public function load($resource)

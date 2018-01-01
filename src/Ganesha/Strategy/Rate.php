@@ -132,10 +132,20 @@ class Rate implements StrategyInterface
      */
     private function isClosed($resource)
     {
-        if ($this->storage->supportFixedTimeWindow()) {
-            return $this->isClosedInCurrentTimeWindow($resource) && $this->isClosedInPreviousTimeWindow($resource);
-        } else {
-            throw new \LogicException();
+        switch (true) {
+            case $this->storage->supportRollingTimeWindow():
+                return $this->isClosedInCurrentTimeWindow($resource);
+                break;
+            case $this->storage->supportFixedTimeWindow():
+                return $this->isClosedInCurrentTimeWindow($resource) && $this->isClosedInPreviousTimeWindow($resource);
+                break;
+            default:
+                throw new \LogicException(sprintf(
+                    'storage adapter should implement %s and/or %s.',
+                    Storage\Adapter\RollingTimeWindowInterface::class,
+                    Storage\Adapter\FixedTimeWindowInterface::class
+                ));
+                break;
         }
     }
 

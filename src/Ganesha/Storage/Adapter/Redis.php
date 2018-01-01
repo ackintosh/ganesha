@@ -3,7 +3,7 @@ namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 
-class Redis implements AdapterInterface
+class Redis implements AdapterInterface, RollingTimeWindowInterface
 {
     /**
      * @var \Redis

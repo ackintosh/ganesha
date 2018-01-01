@@ -40,6 +40,7 @@ class Redis implements AdapterInterface, RollingTimeWindowInterface
 
     public function save($resouce, $count)
     {
+        // Redis adapter does not support Count strategy
     }
 
     public function increment($resource)

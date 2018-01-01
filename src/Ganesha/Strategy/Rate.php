@@ -58,15 +58,12 @@ class Rate implements StrategyInterface
      */
     public static function create(Configuration $configuration)
     {
-        $strategy = new self(
-            $configuration,
-            new Storage(
-                $configuration['adapter'],
-                self::resourceDecorator($configuration['timeWindow'])
-            )
-        );
+        $resourceDecorator = $configuration['adapter'] instanceof Storage\Adapter\FixedTimeWindowInterface ? self::resourceDecorator($configuration['timeWindow']) : null;
 
-        return $strategy;
+        return new self(
+            $configuration,
+            new Storage($configuration['adapter'], $resourceDecorator)
+        );
     }
 
     /**

@@ -2,6 +2,7 @@
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha;
+use Ackintosh\Ganesha\Configuration;
 
 class RedisTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,6 +16,11 @@ class RedisTest extends \PHPUnit_Framework_TestCase
      */
     private $resource = 'testService';
 
+    /**
+     * @var int
+     */
+    const TIME_WINDOW = 3;
+
     public function setUp()
     {
         parent::setUp();
@@ -24,6 +30,8 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         );
         $r->flushAll();
         $this->redisAdapter = new Redis($r);
+        $configuration = new Configuration(['timeWindow' => self::TIME_WINDOW]);
+        $this->redisAdapter->setConfiguration($configuration);
     }
 
     /**
@@ -32,7 +40,15 @@ class RedisTest extends \PHPUnit_Framework_TestCase
     public function incrementAndLoad()
     {
         $this->redisAdapter->increment($this->resource);
-        $this->assertSame(1, $this->redisAdapter->load($this->resource));
+        $this->redisAdapter->increment($this->resource);
+
+        sleep(self::TIME_WINDOW);
+
+        $this->redisAdapter->increment($this->resource);
+        $this->redisAdapter->increment($this->resource);
+
+        // Expired value will be remove
+        $this->assertSame(2, $this->redisAdapter->load($this->resource));
     }
 
     /**

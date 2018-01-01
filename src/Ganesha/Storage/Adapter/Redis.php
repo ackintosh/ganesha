@@ -32,6 +32,9 @@ class Redis implements AdapterInterface, RollingTimeWindowInterface
 
     public function load($resource)
     {
+        $expires = microtime(true) - $this->configuration['timeWindow'];
+        $this->redis->zRemRangeByScore($resource, '-inf', $expires);
+
         return $this->redis->zCard($resource);
     }
 

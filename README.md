@@ -60,7 +60,6 @@ try {
 #### Subscribe to changes in ganesha's state
 
 ```php
-// $event is `Ganesha::EVENT_XXX`.
 $ganesha->subscribe(function ($event, $resource, $message) {
     switch ($event) {
         case Ganesha::EVENT_TRIPPED:
@@ -70,7 +69,7 @@ $ganesha->subscribe(function ($event, $resource, $message) {
             break;
         case Ganesha::EVENT_CALMED_DOWN:
             \YourMonitoringSystem::info(
-                "The failure in {$resource} seems to have calmed down. {$message}."
+                "The failure in {$resource} seems to have calmed down :). {$message}."
             );
             break;
         case Ganesha::EVENT_STORAGE_ERROR:
@@ -89,13 +88,13 @@ Ganesha will continue to record success/failure statistics, but it will not trip
 ```php
 Ackintosh\Ganesha::disable();
 
-// Ganesha with threshold `3`.
-// Failure count is recorded to storage.
+// Ganesha with Count strategy(threshold `3`).
+// Although the failure is recorded to storage,
 $ganesha->failure($resource);
 $ganesha->failure($resource);
 $ganesha->failure($resource);
 
-// But Ganesha does not trip.
+// Ganesha does not trip and Ganesha::isAvailable() returns true.
 var_dump($ganesha->isAvailable($resource);
 // bool(true)
 ```
@@ -116,7 +115,7 @@ $ganesha->reset();
 
 Ganesha has two strategies which detects system failure.
 
-### Rate
+### Rate (default)
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::build([
@@ -129,6 +128,8 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 ```
 
 ### Count
+
+If you want use Count strategy, use `Builder::buildWithCountStrategy()`.
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
@@ -171,7 +172,7 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 ## Run tests
 
 ```
-$ docker-compose up # Starts memcached server
+$ docker-compose up # Starts redis, memcached server
 $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 ```
 

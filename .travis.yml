@@ -18,7 +18,7 @@ before_install:
   - phpenv config-add .travis.php.ini
 
 before_script:
-  - composer install --dev
+  - composer install
 
 script:
   - vendor/bin/phpunit

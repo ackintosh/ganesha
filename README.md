@@ -26,10 +26,12 @@ composer require ackintosh/ganesha:dev-master
 
 ## Usage
 
+Ganesha provides following simple interfaces. Each method receives a string (named `$resource` in example) to identify the resource. `$resource` will be the service name of the API, the endpoint name or etc. Please remember that Ganesha detects system failure for each `$resource`.
+
 ```php
-$ganesha->isAvailable();
-$ganesha->success();
-$ganesha->failure();
+$ganesha->isAvailable($resource);
+$ganesha->success($resource);
+$ganesha->failure($resource);
 ```
 
 ```php
@@ -60,9 +62,24 @@ try {
 ```php
 // $event is `Ganesha::EVENT_XXX`.
 $ganesha->subscribe(function ($event, $resource, $message) {
-    \YourMonitoringSystem::report();
+    switch ($event) {
+        case Ganesha::EVENT_TRIPPED:
+            \YourMonitoringSystem::warn(
+                "Ganesha has tripped! It seems that a failure has occurred in {$resource}. {$message}."
+            );
+            break;
+        case Ganesha::EVENT_CALMED_DOWN:
+            \YourMonitoringSystem::info(
+                "The failure in {$resource} seems to have calmed down. {$message}."
+            );
+            break;
+        case Ganesha::EVENT_STORAGE_ERROR:
+            \YourMonitoringSystem::error($message);
+            break;
+        default:
+            break;
+    }
 });
-
 ```
 
 #### Disable
@@ -95,9 +112,9 @@ $ganesha->reset();
 
 ```
 
-## Examples
+## Strategies to detect failures
 
-Ganesha has two strategies which detect system failure.
+Ganesha has two strategies which detects system failure.
 
 ### Rate
 
@@ -118,6 +135,36 @@ $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
     'failureThreshold'   => 100,
     'intervalToHalfOpen' => 5,
     'adapter'            => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
+]);
+```
+
+## Adapters
+
+### Redis
+
+Redis adapter requires [phpredis](https://github.com/phpredis/phpredis). So if you don't have it, run `pecl install redis`.
+
+```php
+$redis = new \Redis();
+$redis->connect('localhost');
+$adapter = new Ackintosh\Ganesha\Storage\Adapter\Redis($redis);
+
+$ganesha = Ackintosh\Ganesha\Builder::build([
+    'adapter' => $adapter,
+]);
+```
+
+### Memcached
+
+Memcached adapter requires [memcached](https://github.com/php-memcached-dev/php-memcached/) (NOT memcache) extension.
+
+```php
+$memcached = new \Memcached();
+$memcached->addServer('localhost', 11211);
+$adapter = new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached);
+
+$ganesha = Ackintosh\Ganesha\Builder::build([
+    'adapter' => $adapter,
 ]);
 ```
 

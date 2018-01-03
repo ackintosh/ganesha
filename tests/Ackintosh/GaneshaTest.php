@@ -88,9 +88,9 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     public function withMemcached()
     {
         $ganesha = Builder::buildWithCountStrategy([
-            'failureThreshold'  => 1,
-            'adapter'           => new Memcached($this->m),
-            'intervalToHalfOpen'=> 10,
+            'failureCountThreshold' => 1,
+            'adapter' => new Memcached($this->m),
+            'intervalToHalfOpen' => 10,
         ]);
 
         $this->assertTrue($ganesha->isAvailable($this->resource));
@@ -203,9 +203,9 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     )
     {
         return Builder::buildWithCountStrategy([
-            'failureThreshold'      => $threshold,
-            'adapter'               => new Memcached($this->m),
-            'intervalToHalfOpen'    => $intervalToHalfOpen,
+            'failureCountThreshold' => $threshold,
+            'adapter' => new Memcached($this->m),
+            'intervalToHalfOpen' => $intervalToHalfOpen,
         ]);
     }
 }

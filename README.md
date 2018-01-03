@@ -133,9 +133,9 @@ If you want use Count strategy, use `Builder::buildWithCountStrategy()`.
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
-    'failureThreshold'   => 100,
-    'intervalToHalfOpen' => 5,
-    'adapter'            => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
+    'failureCountThreshold' => 100,
+    'intervalToHalfOpen'    => 5,
+    'adapter'               => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
 ]);
 ```
 

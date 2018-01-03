@@ -24,7 +24,7 @@ class Count implements StrategyInterface
      */
     private static $requirements = [
         'adapter',
-        'failureThreshold',
+        'failureCountThreshold',
         'intervalToHalfOpen',
     ];
 
@@ -75,7 +75,7 @@ class Count implements StrategyInterface
         $this->storage->setLastFailureTime($resource, time());
         $this->storage->incrementFailureCount($resource);
 
-        if ($this->storage->getFailureCount($resource) >= $this->configuration['failureThreshold']
+        if ($this->storage->getFailureCount($resource) >= $this->configuration['failureCountThreshold']
             && $this->storage->getStatus($resource) === Ganesha::STATUS_CALMED_DOWN
         ) {
             $this->storage->setStatus($resource, Ganesha::STATUS_TRIPPED);
@@ -126,7 +126,7 @@ class Count implements StrategyInterface
     private function isClosed($resource)
     {
         try {
-            return $this->storage->getFailureCount($resource) < $this->configuration['failureThreshold'];
+            return $this->storage->getFailureCount($resource) < $this->configuration['failureCountThreshold'];
         } catch (StorageException $e) {
             throw $e;
         }
@@ -143,7 +143,7 @@ class Count implements StrategyInterface
         }
 
         if ((time() - $lastFailureTime) > $this->configuration['intervalToHalfOpen']) {
-            $this->storage->setFailureCount($resource, $this->configuration['failureThreshold']);
+            $this->storage->setFailureCount($resource, $this->configuration['failureCountThreshold']);
             $this->storage->setLastFailureTime($resource, time());
             return true;
         }

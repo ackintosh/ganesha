@@ -36,7 +36,7 @@ __EOS__;
     $ganesha =  Builder::build([
         'adapter'               => $adapter,
         'timeWindow'            => TIME_WINDOW,
-        'failureRate'           => FAILURE_RATE,
+        'failureRateThreshold'  => FAILURE_RATE,
         'minimumRequests'       => MINIMUM_REQUESTS,
         'intervalToHalfOpen'    => INTERVAL_TO_HALF_OPEN,
     ]);

@@ -36,8 +36,8 @@ $ganesha->failure($resource);
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::build([
-    'failureRate' => 50,
-    'adapter'     => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
+    'failureRateThreshold' => 50,
+    'adapter'              => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
 ]);
 
 
@@ -120,7 +120,7 @@ Ganesha has two strategies which detects system failure.
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::build([
     'timeWindow'            => 30,
-    'failureRate'           => 50,
+    'failureRateThreshold'  => 50,
     'minimumRequests'       => 10,
     'intervalToHalfOpen'    => 5,
     'adapter'               => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),

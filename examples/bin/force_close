@@ -16,7 +16,7 @@ $m->addServer('localhost', 11211);
 $ganesha = Builder::build([
     'adapter'               => new Memcached($m),
     'timeWindow'            => TIME_WINDOW,
-    'failureRate'           => FAILURE_RATE,
+    'failureRateThreshold'  => FAILURE_RATE,
     'minimumRequests'       => MINIMUM_REQUESTS,
     'intervalToHalfOpen'    => INTERVAL_TO_HALF_OPEN,
 ]);

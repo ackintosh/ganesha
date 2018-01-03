@@ -181,7 +181,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
         $ganesha = Builder::build([
             'adapter' => new Memcached($this->m),
             'timeWindow' => 3,
-            'failureRate' => 50,
+            'failureRateThreshold' => 50,
             'minimumRequests' => 1,
             'intervalToHalfOpen' => 10,
         ]);

@@ -24,7 +24,7 @@ class Rate implements StrategyInterface
      */
     private static $requirements = [
         'adapter',
-        'failureRate',
+        'failureRateThreshold',
         'intervalToHalfOpen',
         'minimumRequests',
         'timeWindow',
@@ -157,7 +157,7 @@ class Rate implements StrategyInterface
         $failure = $this->storage->getFailureCount($resource);
         if (
             $failure === 0
-            || ($failure / $this->configuration['minimumRequests']) * 100 < $this->configuration['failureRate']
+            || ($failure / $this->configuration['minimumRequests']) * 100 < $this->configuration['failureRateThreshold']
         ) {
             return true;
         }
@@ -177,7 +177,7 @@ class Rate implements StrategyInterface
         $failure = $this->storage->getFailureCountByCustomKey(self::keyForPreviousTimeWindow($resource, $this->configuration['timeWindow']));
         if (
             $failure === 0
-            || ($failure / $this->configuration['minimumRequests']) * 100 < $this->configuration['failureRate']
+            || ($failure / $this->configuration['minimumRequests']) * 100 < $this->configuration['failureRateThreshold']
         ) {
             return true;
         }
@@ -200,7 +200,7 @@ class Rate implements StrategyInterface
             return true;
         }
 
-        if (($failure / ($failure + $success)) * 100 < $this->configuration['failureRate']) {
+        if (($failure / ($failure + $success)) * 100 < $this->configuration['failureRateThreshold']) {
             return true;
         }
 

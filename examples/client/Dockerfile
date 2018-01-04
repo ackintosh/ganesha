@@ -7,4 +7,6 @@ RUN apt-get update \
  && echo 'extension=memcached.so' >> /usr/local/etc/php/php.ini \
  && yes '' | pecl install redis \
  && echo 'extension=redis.so' >> /usr/local/etc/php/php.ini \
+ && yes '' | pecl install xdebug-2.6.0beta1 \
+ && echo 'zend_extension=xdebug.so' >> /usr/local/etc/php/php.ini \
  && useradd -m ganesha

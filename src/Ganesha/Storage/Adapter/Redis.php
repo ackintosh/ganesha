@@ -41,12 +41,20 @@ class Redis implements AdapterInterface, RollingTimeWindowInterface
         $expires = microtime(true) - $this->configuration['timeWindow'];
 
         try {
-            $this->redis->zRemRangeByScore($resource, '-inf', $expires);
+            if ($this->redis->zRemRangeByScore($resource, '-inf', $expires) === false) {
+                throw new StorageException('Failed to remove expired elements. resource: ' . $resource);
+            }
 
-            return $this->redis->zCard($resource);
+            $r =  $this->redis->zCard($resource);
         } catch (\RedisException $e) {
             throw new StorageException($e->getMessage());
         }
+
+        if ($r === false) {
+            throw new StorageException('Failed to load cardinality. resource: ' . $resource);
+        }
+
+        return $r;
     }
 
     public function save($resouce, $count)
@@ -62,9 +70,13 @@ class Redis implements AdapterInterface, RollingTimeWindowInterface
     {
         $t = microtime(true);
         try {
-            $this->redis->zAdd($resource, $t, $t);
+            $r = $this->redis->zAdd($resource, $t, $t);
         } catch (\RedisException $e) {
             throw new StorageException($e->getMessage());
+        }
+
+        if ($r === false) {
+            throw new StorageException('Failed to add sorted set. resource: ' . $resource);
         }
     }
 
@@ -106,9 +118,17 @@ class Redis implements AdapterInterface, RollingTimeWindowInterface
     public function saveStatus($resource, $status)
     {
         try {
-            $this->redis->set($resource, $status);
+            $r = $this->redis->set($resource, $status);
         } catch (\RedisException $e) {
             throw new StorageException($e->getMessage());
+        }
+
+        if ($r === false) {
+            throw new StorageException(sprintf(
+                'Failed to save status. resource: %s, status: %d',
+                $resource,
+                $status
+            ));
         }
     }
 
@@ -120,10 +140,16 @@ class Redis implements AdapterInterface, RollingTimeWindowInterface
     public function loadStatus($resource)
     {
         try {
-            return (int)$this->redis->get($resource);
+            $r = $this->redis->get($resource);
         } catch (\RedisException $e) {
             throw new StorageException($e->getMessage());
         }
+
+        if ($r === false) {
+            throw new StorageException('Failed to load status. resource: ' . $resource);
+        }
+
+        return (int)$r;
     }
 
     public function reset()

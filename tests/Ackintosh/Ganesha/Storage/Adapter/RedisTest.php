@@ -170,20 +170,6 @@ class RedisTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function decrement()
-    {
-    }
-
-    /**
-     * @test
-     */
-    public function saveAndLoadLastFailureTime()
-    {
-    }
-
-    /**
-     * @test
-     */
     public function saveAndLoadStatus()
     {
         $this->redisAdapter->saveStatus($this->resource, Ganesha::STATUS_TRIPPED);

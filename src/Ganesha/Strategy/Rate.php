@@ -141,7 +141,7 @@ class Rate implements StrategyInterface
             default:
                 throw new \LogicException(sprintf(
                     'storage adapter should implement %s and/or %s.',
-                    Storage\Adapter\RollingTimeWindowInterface::class,
+                    Storage\Adapter\SlidingTimeWindowInterface::class,
                     Storage\Adapter\TumblingTimeWindowInterface::class
                 ));
                 break;

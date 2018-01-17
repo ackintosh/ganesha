@@ -3,7 +3,7 @@ namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage\Adapter\TumblingTimeWindowInterface;
-use Ackintosh\Ganesha\Storage\Adapter\RollingTimeWindowInterface;
+use Ackintosh\Ganesha\Storage\Adapter\SlidingTimeWindowInterface;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 
 class Storage
@@ -275,7 +275,7 @@ class Storage
      */
     public function supportRollingTimeWindow()
     {
-        return $this->adapter instanceof RollingTimeWindowInterface;
+        return $this->adapter instanceof SlidingTimeWindowInterface;
     }
 
     /**

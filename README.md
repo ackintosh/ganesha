@@ -171,6 +171,8 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 
 ## Run tests
 
+We can run unit tests on docker container, so it is not necessary to install dependencies in local machine.
+
 ```
 $ docker-compose up # Starts redis, memcached server
 $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit

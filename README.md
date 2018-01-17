@@ -8,7 +8,7 @@ PHP implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/Ci
 
 https://ackintosh.github.io/ganesha/
 
-For now, Ganesha is under development heavily.  
+For now, Ganesha is under development heavily and growing up day by day.  
 It's going to be awesome! :muscle:
 
 If you have an idea about enhancement, bugfix, etc..., please let me know it via [Issues](https://github.com/ackintosh/ganesha/issues). :sparkles:
@@ -169,9 +169,13 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 ]);
 ```
 
+## Ganesha :heart: Guzzle
+
+[Guzzle Middleware](http://docs.guzzlephp.org/en/stable/handlers-and-middleware.html) powered by Ganesha will [comming soon](https://github.com/ackintosh/ganesha/issues/10).
+
 ## Run tests
 
-We can run unit tests on docker container, so it is not necessary to install dependencies in local machine.
+We can run unit tests on Docker container, so it is not necessary to install dependencies in local machine.
 
 ```
 $ docker-compose up # Starts redis, memcached server

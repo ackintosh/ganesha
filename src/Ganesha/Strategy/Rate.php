@@ -58,7 +58,7 @@ class Rate implements StrategyInterface
      */
     public static function create(Configuration $configuration)
     {
-        $resourceDecorator = $configuration['adapter'] instanceof Storage\Adapter\FixedTimeWindowInterface ? self::resourceDecorator($configuration['timeWindow']) : null;
+        $resourceDecorator = $configuration['adapter'] instanceof Storage\Adapter\TumblingTimeWindowInterface ? self::resourceDecorator($configuration['timeWindow']) : null;
         $adapter = $configuration['adapter'];
         $adapter->setConfiguration($configuration);
 
@@ -142,7 +142,7 @@ class Rate implements StrategyInterface
                 throw new \LogicException(sprintf(
                     'storage adapter should implement %s and/or %s.',
                     Storage\Adapter\RollingTimeWindowInterface::class,
-                    Storage\Adapter\FixedTimeWindowInterface::class
+                    Storage\Adapter\TumblingTimeWindowInterface::class
                 ));
                 break;
         }

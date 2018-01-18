@@ -5,7 +5,7 @@ use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 
-class Redis implements AdapterInterface, RollingTimeWindowInterface
+class Redis implements AdapterInterface, SlidingTimeWindowInterface
 {
     /**
      * @var \Redis

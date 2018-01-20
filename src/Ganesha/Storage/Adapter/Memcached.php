@@ -7,7 +7,7 @@ use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 
-class Memcached implements AdapterInterface, FixedTimeWindowInterface
+class Memcached implements AdapterInterface, TumblingTimeWindowInterface
 {
     /**
      * @var \Memcached

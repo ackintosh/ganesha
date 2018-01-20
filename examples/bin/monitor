@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 use Ackintosh\Ganesha\Storage\Adapter\TumblingTimeWindowInterface;
 

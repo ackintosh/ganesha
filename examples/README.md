@@ -25,7 +25,7 @@ $ docker-compose run --rm client sh -c examples/bin/run_client
 
 ```
 $ brew install watch
-$ watch docker-compose run --rm client php examples/monitor.php
+$ watch docker-compose run --rm client examples/bin/monitor
 
 Every 2.0s: php monitor.php
 

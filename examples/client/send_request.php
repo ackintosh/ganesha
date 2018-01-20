@@ -11,7 +11,7 @@ define('TIME_WINDOW', 20);
 define('FAILURE_RATE', 10);
 define('MINIMUM_REQUESTS', 10);
 define('INTERVAL_TO_HALF_OPEN', 5);
-define('SERVER_STATE_DATA', __DIR__ . '/server_state.dat');
+define('SERVER_STATE_DATA', __DIR__ . '/../server/state.dat');
 define('SERVER_STATE_NORMAL', 'normal');
 define('SERVER_STATE_ABNORMAL', 'abnormal');
 
@@ -76,7 +76,7 @@ function sendRequest($storage)
     $client = new GuzzleHttp\Client();
     if ($ganesha->isAvailable(RESOURCE)) {
         try {
-            $client->request('GET', 'http://server/server.php');
+            $client->request('GET', 'http://server/server/server.php');
         } catch (\Exception $e) {
             echo  date('H:i:s') . " <failure>\n";
             $ganesha->failure(RESOURCE);

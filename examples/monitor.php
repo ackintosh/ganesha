@@ -1,4 +1,6 @@
 <?php
+use Ackintosh\Ganesha\Storage\Adapter\TumblingTimeWindowInterface;
+
 require_once __DIR__ . '/send_request.php';
 echo "[ settings ]\n";
 echo "time window : " . TIME_WINDOW . "s\n";
@@ -9,7 +11,9 @@ echo "\n";
 
 echo "[ failure rate ]\n";
 
-$ganesha = buildGanesha();
+$storage = $argv[1] ?: 'redis';
+
+$ganesha = buildGanesha($storage);
 $prop = new \ReflectionProperty($ganesha, 'strategy');
 $prop->setAccessible(true);
 $strategy = $prop->getValue($ganesha);
@@ -27,15 +31,18 @@ $total = $failure + $success + $rejection;
 $rate = $total ? ($failure / ($failure + $success)) * 100 : 0;
 echo sprintf("current : %.2F %%\n", $rate);
 
-// previous
-$method = new \ReflectionMethod($strategy, 'keyForPreviousTimeWindow');
-$method->setAccessible(true);
-$key = $method->invokeArgs($strategy, [RESOURCE, TIME_WINDOW]);
+if ($storage instanceof TumblingTimeWindowInterface) {
+    // previous
+    $method = new \ReflectionMethod($strategy, 'keyForPreviousTimeWindow');
+    $method->setAccessible(true);
+    $key = $method->invokeArgs($strategy, [RESOURCE, TIME_WINDOW]);
 
-$failure = $storage->getFailureCountByCustomKey($key);
-$success = $storage->getSuccessCountByCustomKey($key);
-$rejection = $storage->getRejectionCountByCustomKey($key);
+    $failure = $storage->getFailureCountByCustomKey($key);
+    $success = $storage->getSuccessCountByCustomKey($key);
+    $rejection = $storage->getRejectionCountByCustomKey($key);
 
-$total = $failure + $success + $rejection;
-$rate = $total ? ($failure / ($failure + $success)) * 100 : 0;
-echo sprintf("previous : %.2F %%\n", $rate);
+    $total = $failure + $success + $rejection;
+    $rate = $total ? ($failure / ($failure + $success)) * 100 : 0;
+    echo sprintf("previous : %.2F %%\n", $rate);
+}
+

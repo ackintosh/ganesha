@@ -2,6 +2,8 @@
 <?php
 require_once dirname(__DIR__) . '/send_request.php';
 
+$storage = $argv[1] ?: 'redis';
+
 while (1) {
-    sendRequest();
+    sendRequest($storage);
 }

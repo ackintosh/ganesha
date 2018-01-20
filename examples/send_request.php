@@ -15,7 +15,7 @@ define('SERVER_STATE_DATA', __DIR__ . '/server_state.dat');
 define('SERVER_STATE_NORMAL', 'normal');
 define('SERVER_STATE_ABNORMAL', 'abnormal');
 
-function buildGanesha()
+function buildGanesha($storage)
 {
     $tripped = <<<__EOS__
 !!!!!!!!!!!!!!!!!!!!!!!
@@ -30,9 +30,22 @@ __EOS__;
 
 __EOS__;
 
-    $m = new \Memcached();
-    $m->addServer(getenv('GANESHA_EXAMPLE_MEMCACHED') ? getenv('GANESHA_EXAMPLE_MEMCACHED') : 'localhost' , 11211);
-    $adapter = new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
+    switch ($storage) {
+        case 'redis':
+            $redis = new \Redis();
+            $redis->connect(getenv('GANESHA_EXAMPLE_REDIS') ? getenv('GANESHA_EXAMPLE_REDIS') : 'localhost');
+            $adapter = new Ackintosh\Ganesha\Storage\Adapter\Redis($redis);
+            break;
+        case 'memcached':
+            $m = new \Memcached();
+            $m->addServer(getenv('GANESHA_EXAMPLE_MEMCACHED') ? getenv('GANESHA_EXAMPLE_MEMCACHED') : 'localhost' , 11211);
+            $adapter = new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
+            break;
+        default:
+            throw new \InvalidArgumentException();
+            break;
+    }
+
     $ganesha =  Builder::build([
         'adapter'               => $adapter,
         'timeWindow'            => TIME_WINDOW,
@@ -57,9 +70,9 @@ __EOS__;
     return $ganesha;
 }
 
-function sendRequest()
+function sendRequest($storage)
 {
-    $ganesha = buildGanesha();
+    $ganesha = buildGanesha($storage);
     $client = new GuzzleHttp\Client();
     if ($ganesha->isAvailable(RESOURCE)) {
         try {

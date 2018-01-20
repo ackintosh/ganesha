@@ -1,35 +1,20 @@
 <?php
-declare(ticks = 1);
-
-require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
-
 use \Ackintosh\Ganesha;
 use \Ackintosh\Ganesha\Builder;
+
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 define('RESOURCE', 'example');
 define('TIME_WINDOW', 20);
 define('FAILURE_RATE', 10);
 define('MINIMUM_REQUESTS', 10);
 define('INTERVAL_TO_HALF_OPEN', 5);
-define('SERVER_STATE_DATA', __DIR__ . '/../server/state.dat');
+define('SERVER_STATE_DATA', __DIR__ . '/server/state.dat');
 define('SERVER_STATE_NORMAL', 'normal');
 define('SERVER_STATE_ABNORMAL', 'abnormal');
 
 function buildGanesha($storage)
 {
-    $tripped = <<<__EOS__
-!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!! TRIPPED !!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!
-
-__EOS__;
-    $calmedDown = <<<__EOS__
-=======================
-===== CALMED DOWN =====
-=======================
-
-__EOS__;
-
     switch ($storage) {
         case 'redis':
             $redis = new \Redis();
@@ -54,13 +39,26 @@ __EOS__;
         'intervalToHalfOpen'    => INTERVAL_TO_HALF_OPEN,
     ]);
 
-    $ganesha->subscribe(function ($event, $resource, $message) use ($tripped, $calmedDown) {
+    $messageOnTripped = <<<__EOS__
+!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!! TRIPPED !!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!
+
+__EOS__;
+    $messageOnCalmedDown = <<<__EOS__
+=======================
+===== CALMED DOWN =====
+=======================
+
+__EOS__;
+
+    $ganesha->subscribe(function ($event, $resource, $message) use ($messageOnTripped, $messageOnCalmedDown) {
         switch ($event) {
             case Ganesha::EVENT_TRIPPED:
-                echo $tripped;
+                echo $messageOnTripped;
                 break;
             case Ganesha::EVENT_CALMED_DOWN:
-                echo $calmedDown;
+                echo $messageOnCalmedDown;
                 break;
             default:
                 break;
@@ -68,25 +66,4 @@ __EOS__;
     });
 
     return $ganesha;
-}
-
-function sendRequest($storage)
-{
-    $ganesha = buildGanesha($storage);
-    $client = new GuzzleHttp\Client();
-    if ($ganesha->isAvailable(RESOURCE)) {
-        try {
-            $serverHost = getenv('GANESHA_EXAMPLE_SERVER') ?: 'localhost';
-            $client->request('GET', "http://{$serverHost}/server/index.php");
-        } catch (\Exception $e) {
-            echo  date('H:i:s') . " <failure>\n";
-            $ganesha->failure(RESOURCE);
-            return;
-        }
-
-        $ganesha->success(RESOURCE);
-        echo date('H:i:s') . " (success)\n";
-    } else {
-        echo date('H:i:s') . " [[[ reject ]]]\n";
-    }
 }

@@ -2,7 +2,7 @@
 <?php
 use Ackintosh\Ganesha\Storage\Adapter\TumblingTimeWindowInterface;
 
-require_once __DIR__ . '/../client/send_request.php';
+require_once dirname(__DIR__) . '/common.php';
 echo "[ settings ]\n";
 echo "time window : " . TIME_WINDOW . "s\n";
 echo "failure rate : " . FAILURE_RATE . "%\n";

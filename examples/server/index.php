@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../client/send_request.php';
+require_once dirname(__DIR__) . '/common.php';
 
 if (trim(file_get_contents(SERVER_STATE_DATA)) === SERVER_STATE_ABNORMAL) {
     sleep(5);

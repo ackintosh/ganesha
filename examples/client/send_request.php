@@ -76,7 +76,7 @@ function sendRequest($storage)
     $client = new GuzzleHttp\Client();
     if ($ganesha->isAvailable(RESOURCE)) {
         try {
-            $client->request('GET', 'http://server/server/server.php');
+            $client->request('GET', 'http://server/server/index.php');
         } catch (\Exception $e) {
             echo  date('H:i:s') . " <failure>\n";
             $ganesha->failure(RESOURCE);

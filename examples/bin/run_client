@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-require_once dirname(__DIR__) . '/send_request.php';
+require_once dirname(__DIR__) . '/client/send_request.php';
 
 $storage = $argv[1] ?: 'redis';
 

@@ -33,12 +33,12 @@ __EOS__;
     switch ($storage) {
         case 'redis':
             $redis = new \Redis();
-            $redis->connect(getenv('GANESHA_EXAMPLE_REDIS') ? getenv('GANESHA_EXAMPLE_REDIS') : 'localhost');
+            $redis->connect(getenv('GANESHA_EXAMPLE_REDIS') ?: 'localhost');
             $adapter = new Ackintosh\Ganesha\Storage\Adapter\Redis($redis);
             break;
         case 'memcached':
             $m = new \Memcached();
-            $m->addServer(getenv('GANESHA_EXAMPLE_MEMCACHED') ? getenv('GANESHA_EXAMPLE_MEMCACHED') : 'localhost' , 11211);
+            $m->addServer(getenv('GANESHA_EXAMPLE_MEMCACHED') ?: 'localhost' , 11211);
             $adapter = new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
             break;
         default:
@@ -76,7 +76,8 @@ function sendRequest($storage)
     $client = new GuzzleHttp\Client();
     if ($ganesha->isAvailable(RESOURCE)) {
         try {
-            $client->request('GET', 'http://server/server/index.php');
+            $serverHost = getenv('GANESHA_EXAMPLE_SERVER') ?: 'localhost';
+            $client->request('GET', "http://{$serverHost}/server/index.php");
         } catch (\Exception $e) {
             echo  date('H:i:s') . " <failure>\n";
             $ganesha->failure(RESOURCE);

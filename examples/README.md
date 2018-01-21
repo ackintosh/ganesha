@@ -18,14 +18,14 @@ $ docker-compose up
 ```
 # Starts clients (with Ganesha) that repeats http reqeuest to server
 # It is recommended to run 3 or more clients
-$ docker-compose run --rm client sh -c bin/run_client
+$ docker-compose run --rm client sh -c examples/bin/run_client
 ```
 
 ## Monitor your circuit
 
 ```
 $ brew install watch
-$ watch docker-compose run --rm client php monitor.php
+$ watch docker-compose run --rm client examples/bin/monitor
 
 Every 2.0s: php monitor.php
 

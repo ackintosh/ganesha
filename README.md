@@ -1,6 +1,6 @@
 # Ganesha
 
-PHP implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/CircuitBreaker.html)
+Ganesha is PHP implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/CircuitBreaker.html) which has multi strategies to detect failures and supports various storages to record statistics.
 
 [![Build Status](https://travis-ci.org/ackintosh/ganesha.svg?branch=master)](https://travis-ci.org/ackintosh/ganesha) [![Coverage Status](https://coveralls.io/repos/github/ackintosh/ganesha/badge.svg?branch=master)](https://coveralls.io/github/ackintosh/ganesha?branch=master)
 
@@ -20,13 +20,17 @@ You can experience how Ganesha behaves when a failure occurs.
 
 ## Unveil Ganesha
 
-```
-composer require ackintosh/ganesha:dev-master
+```bash
+# Install Composer
+$ curl -sS https://getcomposer.org/installer | php
+
+# Run the Composer command to install the latest version of Ganesha
+$ php composer.phar ackintosh/ganesha
 ```
 
 ## Usage
 
-Ganesha provides following simple interfaces. Each method receives a string (named `$resource` in example) to identify the resource. `$resource` will be the service name of the API, the endpoint name or etc. Please remember that Ganesha detects system failure for each `$resource`.
+Ganesha provides following simple interface. Each method receives a string (named `$resource` in example) to identify the resource. `$resource` will be the service name of the API, the endpoint name or etc. Please remember that Ganesha detects system failure for each `$resource`.
 
 ```php
 $ganesha->isAvailable($resource);
@@ -177,8 +181,11 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 
 We can run unit tests on Docker container, so it is not necessary to install dependencies in local machine.
 
-```
-$ docker-compose up # Starts redis, memcached server
+```bash
+# Start redis, memcached server
+$ docker-compose up 
+
+# Run tests in container
 $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 ```
 
@@ -186,7 +193,7 @@ $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 
 https://ackintosh.github.io/ganesha/
 
-```
+```bash
 $ path/to/soushi build docs
 ```
 

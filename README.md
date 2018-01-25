@@ -25,7 +25,7 @@ You can experience how Ganesha behaves when a failure occurs.
 $ curl -sS https://getcomposer.org/installer | php
 
 # Run the Composer command to install the latest version of Ganesha
-$ php composer.phar ackintosh/ganesha
+$ php composer.phar require ackintosh/ganesha
 ```
 
 ## Usage

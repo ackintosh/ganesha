@@ -30,5 +30,7 @@ class ResourceNameExtractor implements ResourceNameExtractorInterface
         if (count($header)) {
             return $header[0];
         }
+
+        return $request->getUri()->getHost();
     }
 }

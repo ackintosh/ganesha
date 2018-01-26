@@ -1,6 +1,8 @@
 <?php
 namespace Ackintosh\Ganesha;
 
+use Ackintosh\Ganesha\Exception\RejectedException;
+use Ackintosh\Ganesha\Storage\Adapter\Memcached;
 use Ackintosh\Ganesha\Storage\Adapter\Redis;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -115,6 +117,38 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
             1,
             $this->adapter->load(Storage::KEY_PREFIX . 'server' . Storage::KEY_SUFFIX_FAILURE)
         );
+    }
+
+    /**
+     * @test
+     * @expectedException \Ackintosh\Ganesha\Exception\RejectedException
+     */
+    public function reject()
+    {
+        // Build Ganesha which has count strategy with memcached adapter
+        $m = new \Memcached();
+        $m->addServer(
+            getenv('GANESHA_EXAMPLE_MEMCACHED') ? getenv('GANESHA_EXAMPLE_MEMCACHED') : 'localhost',
+            11211
+        );
+        $m->flush();
+        $ganesha = Builder::buildWithCountStrategy([
+            'failureCountThreshold' => 3,
+            'adapter' => new Memcached($m),
+            'intervalToHalfOpen' => 10,
+        ]);
+        // Setup a client
+        $middleware = new GuzzleMiddleware($ganesha);
+        $handlers = HandlerStack::create();
+        $handlers->push($middleware);
+        $client = new Client(['handler' => $handlers]);
+
+        $resource = 'api.example.com';
+        $ganesha->failure($resource);
+        $ganesha->failure($resource);
+        $ganesha->failure($resource);
+
+        $client->get('http://' . $resource . '/awesome_resource');
     }
 
     /**

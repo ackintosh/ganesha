@@ -2,6 +2,7 @@
 namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha;
+use Ackintosh\Ganesha\Exception\RejectedException;
 use Ackintosh\Ganesha\GuzzleMiddleware\ResourceNameExtractor;
 use Ackintosh\Ganesha\GuzzleMiddleware\ResourceNameExtractorInterface;
 use Psr\Http\Message\RequestInterface;
@@ -35,6 +36,15 @@ class GuzzleMiddleware
     {
         return function (RequestInterface $request, array $options) use ($handler) {
             $resourceName = $this->reresourceNameExtractor->extract($request, $options);
+
+            if (!$this->ganesha->isAvailable($resourceName)) {
+                return \GuzzleHttp\Promise\rejection_for(
+                    new RejectedException(
+                        sprintf('"%s" is not available', $resourceName)
+                    )
+                );
+            }
+
             $promise = $handler($request, $options);
 
             return $promise->then(

@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-require_once dirname(__DIR__) . '/send_request.php';
+require_once dirname(__DIR__) . '/common.php';
 
 if ($argc !== 2) {
     throw new \InvalidArgumentException(basename($argv[0]) . ' requires 1 argument as server state.');

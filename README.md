@@ -1,6 +1,6 @@
 # Ganesha
 
-PHP implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/CircuitBreaker.html)
+Ganesha is PHP implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/CircuitBreaker.html) which has multi strategies to detect failures and supports various storages to record statistics.
 
 [![Build Status](https://travis-ci.org/ackintosh/ganesha.svg?branch=master)](https://travis-ci.org/ackintosh/ganesha) [![Coverage Status](https://coveralls.io/repos/github/ackintosh/ganesha/badge.svg?branch=master)](https://coveralls.io/github/ackintosh/ganesha?branch=master)
 
@@ -8,7 +8,7 @@ PHP implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/Ci
 
 https://ackintosh.github.io/ganesha/
 
-For now, Ganesha is under development heavily.  
+For now, Ganesha is under development heavily and growing up day by day.  
 It's going to be awesome! :muscle:
 
 If you have an idea about enhancement, bugfix, etc..., please let me know it via [Issues](https://github.com/ackintosh/ganesha/issues). :sparkles:
@@ -20,13 +20,17 @@ You can experience how Ganesha behaves when a failure occurs.
 
 ## Unveil Ganesha
 
-```
-composer require ackintosh/ganesha:dev-master
+```bash
+# Install Composer
+$ curl -sS https://getcomposer.org/installer | php
+
+# Run the Composer command to install the latest version of Ganesha
+$ php composer.phar require ackintosh/ganesha
 ```
 
 ## Usage
 
-Ganesha provides following simple interfaces. Each method receives a string (named `$resource` in example) to identify the resource. `$resource` will be the service name of the API, the endpoint name or etc. Please remember that Ganesha detects system failure for each `$resource`.
+Ganesha provides following simple interface. Each method receives a string (named `$resource` in example) to identify the resource. `$resource` will be the service name of the API, the endpoint name or etc. Please remember that Ganesha detects system failure for each `$resource`.
 
 ```php
 $ganesha->isAvailable($resource);
@@ -169,10 +173,19 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 ]);
 ```
 
+## Ganesha :heart: Guzzle
+
+[Guzzle Middleware](http://docs.guzzlephp.org/en/stable/handlers-and-middleware.html) powered by Ganesha will [comming soon](https://github.com/ackintosh/ganesha/issues/10).
+
 ## Run tests
 
-```
-$ docker-compose up # Starts redis, memcached server
+We can run unit tests on Docker container, so it is not necessary to install dependencies in local machine.
+
+```bash
+# Start redis, memcached server
+$ docker-compose up 
+
+# Run tests in container
 $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 ```
 
@@ -180,7 +193,7 @@ $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 
 https://ackintosh.github.io/ganesha/
 
-```
+```bash
 $ path/to/soushi build docs
 ```
 

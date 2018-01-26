@@ -5,6 +5,7 @@ use Ackintosh\Ganesha\Storage\Adapter\Redis;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\HandlerStack;
 
 class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
@@ -56,6 +57,26 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
             $client->get('http://api.example.com/awesome_resource/400');
         } catch (ClientException $e) {
             // 4xx error has occured, it is as expected.
+        }
+
+        $this->assertSame(
+            1,
+            $this->adapter->load(Storage::KEY_PREFIX . 'api.example.com' . Storage::KEY_SUFFIX_SUCCESS)
+        );
+    }
+
+    /**
+     * @test
+     * @vcr responses.yml
+     */
+    public function recordsSuccessOn500()
+    {
+        $client = $this->buildClient();
+
+        try {
+            $client->get('http://api.example.com/awesome_resource/500');
+        } catch (ServerException $e) {
+            // 5xx error has occured, it is as expected.
         }
 
         $this->assertSame(

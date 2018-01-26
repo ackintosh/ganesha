@@ -3,6 +3,7 @@ namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha\Storage\Adapter\Redis;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\HandlerStack;
 
 class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
@@ -50,6 +51,51 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             1,
             $adapter->load(Storage::KEY_PREFIX . 'api.example.com' . Storage::KEY_SUFFIX_SUCCESS)
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function recordsFailureOnRequestTimedOut()
+    {
+        $redis = new \Redis();
+        $redis->connect(
+            getenv('GANESHA_EXAMPLE_REDIS') ? getenv('GANESHA_EXAMPLE_REDIS') : 'localhost'
+        );
+        $adapter = new Redis($redis);
+        $ganesha = Builder::build([
+            'timeWindow'            => 30,
+            'failureRateThreshold'  => 50,
+            'minimumRequests'       => 10,
+            'intervalToHalfOpen'    => 5,
+            'adapter'               => $adapter,
+        ]);
+
+        $middleware = new GuzzleMiddleware($ganesha);
+        $handlers = HandlerStack::create();
+        $handlers->push($middleware);
+        $client = new Client([
+            'timeout' => 3,
+            'handler' => $handlers,
+        ]);
+
+        $requestTimedOut = false;
+        try {
+            // Server takes 10secs, so it always times out.
+            // @see examples/server/timeout.php
+            $client->get('http://server/server/timeout.php');
+        } catch (ConnectException $e) {
+            $requestTimedOut = true;
+        }
+
+        if (!$requestTimedOut) {
+            $this->fail('The request did not time out, so the test can not be continued.');
+        }
+
+        $this->assertSame(
+            1,
+            $adapter->load(Storage::KEY_PREFIX . 'server' . Storage::KEY_SUFFIX_FAILURE)
         );
     }
 }

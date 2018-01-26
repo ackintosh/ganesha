@@ -1,0 +1,20 @@
+-
+    request:
+        method: GET
+        url: 'http://api.example.com/awesome_resource'
+        headers:
+            Host: 'api.example.com'
+            Accept: null
+            User-Agent: 'Ganesha Unit Test'
+    response:
+        status:
+            http_version: '1.1'
+            code: '200'
+            message: 'OK'
+        headers:
+            Content-Type: 'text/plain; charset=utf-8'
+            Content-Length: '0'
+            Server: 'Web Server'
+            Date: 'Mon, 1 Jan 2017 00:00:00 GMT'
+            Connection: Keep-Alive
+        body: ''

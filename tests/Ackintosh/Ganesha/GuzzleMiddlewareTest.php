@@ -3,6 +3,7 @@ namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha\Storage\Adapter\Redis;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\HandlerStack;
 
@@ -46,8 +47,46 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
             'handler' => $handlers,
         ]);
 
-        $response = $client->get('http://api.example.com/awesome_resource');
+        $response = $client->get('http://api.example.com/awesome_resource/200');
         $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(
+            1,
+            $adapter->load(Storage::KEY_PREFIX . 'api.example.com' . Storage::KEY_SUFFIX_SUCCESS)
+        );
+    }
+
+    /**
+     * @test
+     * @vcr responses.yml
+     */
+    public function recordsSuccessOn400()
+    {
+        $redis = new \Redis();
+        $redis->connect(
+            getenv('GANESHA_EXAMPLE_REDIS') ? getenv('GANESHA_EXAMPLE_REDIS') : 'localhost'
+        );
+        $adapter = new Redis($redis);
+        $ganesha = Builder::build([
+            'timeWindow'            => 30,
+            'failureRateThreshold'  => 50,
+            'minimumRequests'       => 10,
+            'intervalToHalfOpen'    => 5,
+            'adapter'               => $adapter,
+        ]);
+
+        $middleware = new GuzzleMiddleware($ganesha);
+        $handlers = HandlerStack::create();
+        $handlers->push($middleware);
+        $client = new Client([
+            'handler' => $handlers,
+        ]);
+
+        try {
+            $client->get('http://api.example.com/awesome_resource/400');
+        } catch (ClientException $e) {
+            // 4xx error has occured, it is as expected.
+        }
+
         $this->assertSame(
             1,
             $adapter->load(Storage::KEY_PREFIX . 'api.example.com' . Storage::KEY_SUFFIX_SUCCESS)

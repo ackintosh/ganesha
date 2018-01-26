@@ -8,6 +8,17 @@ class ResourceNameExtractorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function extractFromHeader()
+    {
+        $this->assertSame(
+            'resource_name_in_header',
+            (new ResourceNameExtractor())->extract($this->request(), [])
+        );
+    }
+
+    /**
+     * @test
+     */
     public function extractFromOptions()
     {
         $this->assertSame(

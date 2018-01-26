@@ -9,16 +9,23 @@ use GuzzleHttp\HandlerStack;
 
 class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Redis
+     */
+    private $adapter;
+
     public function setUp()
     {
         parent::setUp();
 
         // Cleanup test statistics before run tests
-        $r = new \Redis();
-        $r->connect(
+        $redis = new \Redis();
+        $redis->connect(
             getenv('GANESHA_EXAMPLE_REDIS') ? getenv('GANESHA_EXAMPLE_REDIS') : 'localhost'
         );
-        $r->flushAll();
+        $redis->flushAll();
+
+        $this->adapter = new Redis($redis);
     }
 
     /**
@@ -27,31 +34,13 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     public function recordsSuccessOn200()
     {
-        $redis = new \Redis();
-        $redis->connect(
-            getenv('GANESHA_EXAMPLE_REDIS') ? getenv('GANESHA_EXAMPLE_REDIS') : 'localhost'
-        );
-        $adapter = new Redis($redis);
-        $ganesha = Builder::build([
-            'timeWindow'            => 30,
-            'failureRateThreshold'  => 50,
-            'minimumRequests'       => 10,
-            'intervalToHalfOpen'    => 5,
-            'adapter'               => $adapter,
-        ]);
-
-        $middleware = new GuzzleMiddleware($ganesha);
-        $handlers = HandlerStack::create();
-        $handlers->push($middleware);
-        $client = new Client([
-            'handler' => $handlers,
-        ]);
-
+        $client = $this->buildClient();
         $response = $client->get('http://api.example.com/awesome_resource/200');
+
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame(
             1,
-            $adapter->load(Storage::KEY_PREFIX . 'api.example.com' . Storage::KEY_SUFFIX_SUCCESS)
+            $this->adapter->load(Storage::KEY_PREFIX . 'api.example.com' . Storage::KEY_SUFFIX_SUCCESS)
         );
     }
 
@@ -61,25 +50,7 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     public function recordsSuccessOn400()
     {
-        $redis = new \Redis();
-        $redis->connect(
-            getenv('GANESHA_EXAMPLE_REDIS') ? getenv('GANESHA_EXAMPLE_REDIS') : 'localhost'
-        );
-        $adapter = new Redis($redis);
-        $ganesha = Builder::build([
-            'timeWindow'            => 30,
-            'failureRateThreshold'  => 50,
-            'minimumRequests'       => 10,
-            'intervalToHalfOpen'    => 5,
-            'adapter'               => $adapter,
-        ]);
-
-        $middleware = new GuzzleMiddleware($ganesha);
-        $handlers = HandlerStack::create();
-        $handlers->push($middleware);
-        $client = new Client([
-            'handler' => $handlers,
-        ]);
+        $client = $this->buildClient();
 
         try {
             $client->get('http://api.example.com/awesome_resource/400');
@@ -89,7 +60,7 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             1,
-            $adapter->load(Storage::KEY_PREFIX . 'api.example.com' . Storage::KEY_SUFFIX_SUCCESS)
+            $this->adapter->load(Storage::KEY_PREFIX . 'api.example.com' . Storage::KEY_SUFFIX_SUCCESS)
         );
     }
 
@@ -104,25 +75,7 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
             );
         }
 
-        $redis = new \Redis();
-        $redis->connect(
-            getenv('GANESHA_EXAMPLE_REDIS') ? getenv('GANESHA_EXAMPLE_REDIS') : 'localhost'
-        );
-        $adapter = new Redis($redis);
-        $ganesha = Builder::build([
-            'timeWindow'            => 30,
-            'failureRateThreshold'  => 50,
-            'minimumRequests'       => 10,
-            'intervalToHalfOpen'    => 5,
-            'adapter'               => $adapter,
-        ]);
-
-        $middleware = new GuzzleMiddleware($ganesha);
-        $handlers = HandlerStack::create();
-        $handlers->push($middleware);
-        $client = new Client([
-            'handler' => $handlers,
-        ]);
+        $client = $this->buildClient();
 
         $requestTimedOut = false;
         try {
@@ -139,7 +92,27 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             1,
-            $adapter->load(Storage::KEY_PREFIX . 'server' . Storage::KEY_SUFFIX_FAILURE)
+            $this->adapter->load(Storage::KEY_PREFIX . 'server' . Storage::KEY_SUFFIX_FAILURE)
         );
+    }
+
+    /**
+     * @return Client
+     */
+    private function buildClient()
+    {
+        $ganesha = Builder::build([
+            'timeWindow'           => 30,
+            'failureRateThreshold' => 50,
+            'minimumRequests'      => 10,
+            'intervalToHalfOpen'   => 5,
+            'adapter'              => $this->adapter,
+        ]);
+
+        $middleware = new GuzzleMiddleware($ganesha);
+        $handlers = HandlerStack::create();
+        $handlers->push($middleware);
+
+        return new Client(['handler' => $handlers]);
     }
 }

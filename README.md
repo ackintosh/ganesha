@@ -41,9 +41,8 @@ $ganesha->failure($resource);
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::build([
     'failureRateThreshold' => 50,
-    'adapter'              => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
+    'adapter'              => new Ackintosh\Ganesha\Storage\Adapter\Redis($redis),
 ]);
-
 
 $resource = 'external_api';
 
@@ -52,9 +51,9 @@ if (!$ganesha->isAvailable($resource)) {
 }
 
 try {
-    echo ExternalApi::send($request)->getBody();
+    echo \Api::send($request)->getBody();
     $ganesha->success($resource);
-} catch (ExternalApi\RequestTimedOutException $e) {
+} catch (\Api\RequestTimedOutException $e) {
     // If an error occurred, it must be recorded as failure.
     $ganesha->failure($resource);
     die($e->getMessage());
@@ -90,9 +89,12 @@ $ganesha->subscribe(function ($event, $resource, $message) {
 Ganesha will continue to record success/failure statistics, but it will not trip.
 
 ```php
+// Ganesha with Count strategy(threshold `3`).
+// $ganesha = ...
+
+// Disable
 Ackintosh\Ganesha::disable();
 
-// Ganesha with Count strategy(threshold `3`).
 // Although the failure is recorded to storage,
 $ganesha->failure($resource);
 $ganesha->failure($resource);

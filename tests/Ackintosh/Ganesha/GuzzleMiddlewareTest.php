@@ -121,7 +121,6 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
         $handlers = HandlerStack::create();
         $handlers->push($middleware);
         $client = new Client([
-            'timeout' => 3,
             'handler' => $handlers,
         ]);
 
@@ -129,7 +128,7 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
         try {
             // Server takes 10secs, so it always times out.
             // @see examples/server/timeout.php
-            $client->get('http://server/server/timeout.php');
+            $client->get('http://server/server/timeout.php', ['timeout' => 3]);
         } catch (ConnectException $e) {
             $requestTimedOut = true;
         }

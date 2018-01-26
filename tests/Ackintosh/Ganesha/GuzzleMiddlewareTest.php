@@ -59,6 +59,12 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     public function recordsFailureOnRequestTimedOut()
     {
+        if (!getenv('RUN_IN_DOCKER_COMPOSE')) {
+            $this->markTestSkipped(
+                'This test can only run in docker-compose provided in this repository, as it depends on server which causes a time-out error.'
+            );
+        }
+
         $redis = new \Redis();
         $redis->connect(
             getenv('GANESHA_EXAMPLE_REDIS') ? getenv('GANESHA_EXAMPLE_REDIS') : 'localhost'

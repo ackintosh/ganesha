@@ -17,7 +17,7 @@ class GuzzleMiddleware
     /*
      * @var ResourceNameExtractorInterface
      */
-    private $reresourceNameExtractor;
+    private $resourceNameExtractor;
 
     public function __construct(
         Ganesha $ganesha,
@@ -25,7 +25,7 @@ class GuzzleMiddleware
     )
     {
         $this->ganesha = $ganesha;
-        $this->reresourceNameExtractor = $resourceNameExtractor ?: new ResourceNameExtractor();
+        $this->resourceNameExtractor = $resourceNameExtractor ?: new ResourceNameExtractor();
     }
 
     /**
@@ -35,7 +35,7 @@ class GuzzleMiddleware
     public function __invoke(callable $handler)
     {
         return function (RequestInterface $request, array $options) use ($handler) {
-            $resourceName = $this->reresourceNameExtractor->extract($request, $options);
+            $resourceName = $this->resourceNameExtractor->extract($request, $options);
 
             if (!$this->ganesha->isAvailable($resourceName)) {
                 return \GuzzleHttp\Promise\rejection_for(

@@ -60,51 +60,51 @@ class Ganesha
     /**
      * records failure
      *
-     * @param string $resource
+     * @param string $service
      * @return void
      */
-    public function failure($resource)
+    public function failure($service)
     {
         try {
-            if ($this->strategy->recordFailure($resource) === self::STATUS_TRIPPED) {
-                $this->notify(self::EVENT_TRIPPED, $resource, '');
+            if ($this->strategy->recordFailure($service) === self::STATUS_TRIPPED) {
+                $this->notify(self::EVENT_TRIPPED, $service, '');
             }
         } catch (StorageException $e) {
-            $this->notify(self::EVENT_STORAGE_ERROR, $resource, 'failed to record failure : ' . $e->getMessage());
+            $this->notify(self::EVENT_STORAGE_ERROR, $service, 'failed to record failure : ' . $e->getMessage());
         }
     }
 
     /**
      * records success
      *
-     * @param string $resource
+     * @param string $service
      * @return void
      */
-    public function success($resource)
+    public function success($service)
     {
         try {
-            if ($this->strategy->recordSuccess($resource) === self::STATUS_CALMED_DOWN) {
-                $this->notify(self::EVENT_CALMED_DOWN, $resource, '');
+            if ($this->strategy->recordSuccess($service) === self::STATUS_CALMED_DOWN) {
+                $this->notify(self::EVENT_CALMED_DOWN, $service, '');
             }
         } catch (StorageException $e) {
-            $this->notify(self::EVENT_STORAGE_ERROR, $resource, 'failed to record success : ' . $e->getMessage());
+            $this->notify(self::EVENT_STORAGE_ERROR, $service, 'failed to record success : ' . $e->getMessage());
         }
     }
 
     /**
-     * @param string $resource
+     * @param string $service
      * @return bool
      */
-    public function isAvailable($resource)
+    public function isAvailable($service)
     {
         if (self::$disabled) {
             return true;
         }
 
         try {
-            return $this->strategy->isAvailable($resource);
+            return $this->strategy->isAvailable($service);
         } catch (StorageException $e) {
-            $this->notify(self::EVENT_STORAGE_ERROR, $resource, 'failed to isAvailable : ' . $e->getMessage());
+            $this->notify(self::EVENT_STORAGE_ERROR, $service, 'failed to isAvailable : ' . $e->getMessage());
             // fail-silent
             return true;
         }
@@ -121,14 +121,14 @@ class Ganesha
 
     /**
      * @param string $event
-     * @param string $resource
+     * @param string $service
      * @param string $message
      * @return void
      */
-    private function notify($event, $resource, $message)
+    private function notify($event, $service, $message)
     {
         foreach ($this->subscribers as $s) {
-            call_user_func_array($s, [$event, $resource, $message]);
+            call_user_func_array($s, [$event, $service, $message]);
         }
     }
 

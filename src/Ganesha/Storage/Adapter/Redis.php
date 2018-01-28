@@ -32,26 +32,26 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
     }
 
     /**
-     * @param string $resource
+     * @param string $service
      * @return int
      * @throws StorageException
      */
-    public function load($resource)
+    public function load($service)
     {
         $expires = microtime(true) - $this->configuration['timeWindow'];
 
         try {
-            if ($this->redis->zRemRangeByScore($resource, '-inf', $expires) === false) {
-                throw new StorageException('Failed to remove expired elements. resource: ' . $resource);
+            if ($this->redis->zRemRangeByScore($service, '-inf', $expires) === false) {
+                throw new StorageException('Failed to remove expired elements. service: ' . $service);
             }
 
-            $r =  $this->redis->zCard($resource);
+            $r =  $this->redis->zCard($service);
         } catch (\RedisException $e) {
             throw new StorageException($e->getMessage());
         }
 
         if ($r === false) {
-            throw new StorageException('Failed to load cardinality. resource: ' . $resource);
+            throw new StorageException('Failed to load cardinality. service: ' . $service);
         }
 
         return $r;
@@ -63,42 +63,42 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
     }
 
     /**
-     * @param string $resource
+     * @param string $service
      * @throws StorageException
      */
-    public function increment($resource)
+    public function increment($service)
     {
         $t = microtime(true);
         try {
-            $r = $this->redis->zAdd($resource, $t, $t);
+            $r = $this->redis->zAdd($service, $t, $t);
         } catch (\RedisException $e) {
             throw new StorageException($e->getMessage());
         }
 
         if ($r === false) {
-            throw new StorageException('Failed to add sorted set. resource: ' . $resource);
+            throw new StorageException('Failed to add sorted set. service: ' . $service);
         }
     }
 
-    public function decrement($resource)
+    public function decrement($service)
     {
         // Redis adapter does not support Count strategy
     }
 
-    public function saveLastFailureTime($resource, $lastFailureTime)
+    public function saveLastFailureTime($service, $lastFailureTime)
     {
         // nop
     }
 
     /**
-     * @param $resource
+     * @param $service
      * @return int|void
      * @throws StorageException
      */
-    public function loadLastFailureTime($resource)
+    public function loadLastFailureTime($service)
     {
         try {
-            $lastFailure = $this->redis->zRange($resource, -1, -1);
+            $lastFailure = $this->redis->zRange($service, -1, -1);
         } catch (\RedisException $e) {
             throw new StorageException($e->getMessage());
         }
@@ -111,42 +111,42 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
     }
 
     /**
-     * @param string $resource
+     * @param string $service
      * @param int $status
      * @throws StorageException
      */
-    public function saveStatus($resource, $status)
+    public function saveStatus($service, $status)
     {
         try {
-            $r = $this->redis->set($resource, $status);
+            $r = $this->redis->set($service, $status);
         } catch (\RedisException $e) {
             throw new StorageException($e->getMessage());
         }
 
         if ($r === false) {
             throw new StorageException(sprintf(
-                'Failed to save status. resource: %s, status: %d',
-                $resource,
+                'Failed to save status. service: %s, status: %d',
+                $service,
                 $status
             ));
         }
     }
 
     /**
-     * @param string $resource
+     * @param string $service
      * @return int
      * @throws StorageException
      */
-    public function loadStatus($resource)
+    public function loadStatus($service)
     {
         try {
-            $r = $this->redis->get($resource);
+            $r = $this->redis->get($service);
         } catch (\RedisException $e) {
             throw new StorageException($e->getMessage());
         }
 
         if ($r === false) {
-            throw new StorageException('Failed to load status. resource: ' . $resource);
+            throw new StorageException('Failed to load status. service: ' . $service);
         }
 
         return (int)$r;

@@ -14,7 +14,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    private $resource = 'testService';
+    private $service = 'testService';
 
     /**
      * @var int
@@ -39,16 +39,16 @@ class RedisTest extends \PHPUnit_Framework_TestCase
      */
     public function incrementAndLoad()
     {
-        $this->redisAdapter->increment($this->resource);
-        $this->redisAdapter->increment($this->resource);
+        $this->redisAdapter->increment($this->service);
+        $this->redisAdapter->increment($this->service);
 
         sleep(self::TIME_WINDOW);
 
-        $this->redisAdapter->increment($this->resource);
-        $this->redisAdapter->increment($this->resource);
+        $this->redisAdapter->increment($this->service);
+        $this->redisAdapter->increment($this->service);
 
         // Expired value will be remove
-        $this->assertSame(2, $this->redisAdapter->load($this->resource));
+        $this->assertSame(2, $this->redisAdapter->load($this->service));
     }
 
     /**
@@ -62,7 +62,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         $mock->method('zAdd')
             ->willReturn(false);
 
-        (new Redis($mock))->increment($this->resource);
+        (new Redis($mock))->increment($this->service);
     }
 
     /**
@@ -76,7 +76,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         $mock->method('zAdd')
             ->willThrowException(new \RedisException('exception test'));
 
-        (new Redis($mock))->increment($this->resource);
+        (new Redis($mock))->increment($this->service);
     }
 
     /**
@@ -90,7 +90,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         $mock->method('zRemRangeByScore')
             ->willReturn(false);
 
-        (new Redis($mock))->load($this->resource);
+        (new Redis($mock))->load($this->service);
     }
 
     /**
@@ -104,7 +104,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         $mock->method('zCard')
             ->willReturn(false);
 
-        (new Redis($mock))->load($this->resource);
+        (new Redis($mock))->load($this->service);
     }
 
     /**
@@ -118,7 +118,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         $mock->method('zRemRangeByScore')
             ->willThrowException(new \RedisException('exception test'));
 
-        (new Redis($mock))->load($this->resource);
+        (new Redis($mock))->load($this->service);
     }
 
     /**
@@ -126,16 +126,16 @@ class RedisTest extends \PHPUnit_Framework_TestCase
      */
     public function loadLastFailureTime()
     {
-        $this->redisAdapter->increment($this->resource);
+        $this->redisAdapter->increment($this->service);
 
         sleep(3);
 
-        $this->redisAdapter->increment($this->resource);
+        $this->redisAdapter->increment($this->service);
         $lastFailureTime = microtime(true);
 
         $this->assertEquals(
             (int)$lastFailureTime,
-            $this->redisAdapter->loadLastFailureTime($this->resource),
+            $this->redisAdapter->loadLastFailureTime($this->service),
             null,
             1
         );
@@ -150,7 +150,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         $mock->method('zRange')
             ->willReturn(false);
 
-        $this->assertNull((new Redis($mock))->loadLastFailureTime($this->resource));
+        $this->assertNull((new Redis($mock))->loadLastFailureTime($this->service));
     }
 
     /**
@@ -164,7 +164,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         $mock->method('zRange')
             ->willThrowException(new \RedisException('exception test'));
 
-        (new Redis($mock))->loadLastFailureTime($this->resource);
+        (new Redis($mock))->loadLastFailureTime($this->service);
     }
 
     /**
@@ -172,8 +172,8 @@ class RedisTest extends \PHPUnit_Framework_TestCase
      */
     public function saveAndLoadStatus()
     {
-        $this->redisAdapter->saveStatus($this->resource, Ganesha::STATUS_TRIPPED);
-        $this->assertSame(Ganesha::STATUS_TRIPPED, $this->redisAdapter->loadStatus($this->resource));
+        $this->redisAdapter->saveStatus($this->service, Ganesha::STATUS_TRIPPED);
+        $this->assertSame(Ganesha::STATUS_TRIPPED, $this->redisAdapter->loadStatus($this->service));
     }
 
     /**
@@ -187,7 +187,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         $mock->method('set')
             ->willReturn(false);
 
-        $this->assertNull((new Redis($mock))->saveStatus($this->resource, Ganesha::STATUS_TRIPPED));
+        $this->assertNull((new Redis($mock))->saveStatus($this->service, Ganesha::STATUS_TRIPPED));
     }
 
     /**
@@ -201,7 +201,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         $mock->method('set')
             ->willThrowException(new \RedisException('exception test'));
 
-        (new Redis($mock))->saveStatus($this->resource, Ganesha::STATUS_TRIPPED);
+        (new Redis($mock))->saveStatus($this->service, Ganesha::STATUS_TRIPPED);
     }
 
     /**
@@ -215,7 +215,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         $mock->method('get')
             ->willReturn(false);
 
-        $this->assertNull((new Redis($mock))->loadStatus($this->resource));
+        $this->assertNull((new Redis($mock))->loadStatus($this->service));
     }
 
     /**
@@ -229,6 +229,6 @@ class RedisTest extends \PHPUnit_Framework_TestCase
         $mock->method('get')
             ->willThrowException(new \RedisException('exception test'));
 
-        (new Redis($mock))->loadStatus($this->resource);
+        (new Redis($mock))->loadStatus($this->service);
     }
 }

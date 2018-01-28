@@ -16,7 +16,7 @@ class Storage
     /**
      * @var callable
      */
-    private $resourceDecorator;
+    private $serviceNameDecorator;
 
     /**
      * @var string
@@ -52,12 +52,12 @@ class Storage
      * Storage constructor.
      *
      * @param AdapterInterface $adapter
-     * @param callable         $resourceDecorator
+     * @param callable         $serviceNameDecorator
      */
-    public function __construct(AdapterInterface $adapter, $resourceDecorator)
+    public function __construct(AdapterInterface $adapter, $serviceNameDecorator)
     {
         $this->adapter = $adapter;
-        $this->resourceDecorator = $resourceDecorator;
+        $this->serviceNameDecorator = $serviceNameDecorator;
     }
 
     /**
@@ -111,147 +111,147 @@ class Storage
     /**
      * returns failure count
      *
-     * @param  string $resource
+     * @param  string $service
      * @return int
      * @throws StorageException
      */
-    public function getFailureCount($resource)
+    public function getFailureCount($service)
     {
-        return $this->getCount($this->failureKey($resource));
+        return $this->getCount($this->failureKey($service));
     }
 
     /**
      * returns success count
      *
-     * @param  string $resource
+     * @param  string $service
      * @return int
      * @throws StorageException
      */
-    public function getSuccessCount($resource)
+    public function getSuccessCount($service)
     {
-        return $this->getCount($this->successKey($resource));
+        return $this->getCount($this->successKey($service));
     }
 
     /**
      * increments failure count
      *
-     * @param  string $resource
+     * @param  string $service
      * @return void
      * @throws StorageException
      */
-    public function incrementFailureCount($resource)
+    public function incrementFailureCount($service)
     {
-        $this->adapter->increment($this->failureKey($resource));
+        $this->adapter->increment($this->failureKey($service));
     }
 
     /**
      * decrements failure count
      *
-     * @param  string $resource
+     * @param  string $service
      * @return void
      * @throws StorageException
      */
-    public function decrementFailureCount($resource)
+    public function decrementFailureCount($service)
     {
-        $this->adapter->decrement($this->failureKey($resource));
+        $this->adapter->decrement($this->failureKey($service));
     }
 
     /**
      * increments success count
      *
-     * @param  string $resource
+     * @param  string $service
      * @return void
      * @throws StorageException
      */
-    public function incrementSuccessCount($resource)
+    public function incrementSuccessCount($service)
     {
-        $this->adapter->increment($this->successKey($resource));
+        $this->adapter->increment($this->successKey($service));
     }
 
     /**
      * returns rejection count
      *
-     * @param  string $resource
+     * @param  string $service
      * @return int
      * @throws StorageException
      */
-    public function getRejectionCount($resource)
+    public function getRejectionCount($service)
     {
-        return $this->getCount($this->rejectionKey($resource));
+        return $this->getCount($this->rejectionKey($service));
     }
 
     /**
      * increments rejection count
      *
-     * @param  string $resource
+     * @param  string $service
      * @return void
      * @throws StorageException
      */
-    public function incrementRejectionCount($resource)
+    public function incrementRejectionCount($service)
     {
-        $this->adapter->increment($this->rejectionKey($resource));
+        $this->adapter->increment($this->rejectionKey($service));
     }
 
     /**
      * sets failure count
      *
-     * @param $resource
+     * @param $service
      * @param $failureCount
      * @throws StorageException
      */
-    public function setFailureCount($resource, $failureCount)
+    public function setFailureCount($service, $failureCount)
     {
-        $this->adapter->save($this->failureKey($resource), $failureCount);
+        $this->adapter->save($this->failureKey($service), $failureCount);
     }
 
     /**
      * sets last failure time
      *
-     * @param  string $resource
+     * @param  string $service
      * @param  int    $lastFailureTime
      * @return void
      * @throws StorageException
      */
-    public function setLastFailureTime($resource, $lastFailureTime)
+    public function setLastFailureTime($service, $lastFailureTime)
     {
-        $this->adapter->saveLastFailureTime($this->lastFailureKey($resource), $lastFailureTime);
+        $this->adapter->saveLastFailureTime($this->lastFailureKey($service), $lastFailureTime);
     }
 
     /**
      * returns last failure time
      *
-     * @param  string $resource
+     * @param  string $service
      * @return int | null
      * @throws StorageException
      */
-    public function getLastFailureTime($resource)
+    public function getLastFailureTime($service)
     {
-        return $this->adapter->loadLastFailureTime($this->lastFailureKey($resource));
+        return $this->adapter->loadLastFailureTime($this->lastFailureKey($service));
     }
 
     /**
      * sets status
      *
-     * @param  string $resource
+     * @param  string $service
      * @param  int    $status
      * @return void
      * @throws StorageException
      */
-    public function setStatus($resource, $status)
+    public function setStatus($service, $status)
     {
-        $this->adapter->saveStatus($this->statusKey($resource), $status);
+        $this->adapter->saveStatus($this->statusKey($service), $status);
     }
 
     /**
      * returns status
      *
-     * @param  string $resource
+     * @param  string $service
      * @return int
      * @throws StorageException
      */
-    public function getStatus($resource)
+    public function getStatus($service)
     {
-        return $this->adapter->loadStatus($this->statusKey($resource));
+        return $this->adapter->loadStatus($this->statusKey($service));
     }
 
     /**
@@ -279,16 +279,16 @@ class Storage
     }
 
     /**
-     * @param  string $resource
+     * @param  string $service
      * @return string
      */
-    private function key($resource)
+    private function key($service)
     {
-        if ($this->resourceDecorator) {
-            $resource = call_user_func($this->resourceDecorator, $resource);
+        if ($this->serviceNameDecorator) {
+            $service = call_user_func($this->serviceNameDecorator, $service);
         }
 
-        return $this->prefix($resource);
+        return $this->prefix($service);
     }
 
     /**
@@ -301,47 +301,47 @@ class Storage
     }
 
     /**
-     * @param  string $resource
+     * @param  string $service
      * @return string
      */
-    private function successKey($resource)
+    private function successKey($service)
     {
-        return $this->key($resource) . self::KEY_SUFFIX_SUCCESS;
+        return $this->key($service) . self::KEY_SUFFIX_SUCCESS;
     }
 
     /**
-     * @param  string $resource
+     * @param  string $service
      * @return string
      */
-    private function failureKey($resource)
+    private function failureKey($service)
     {
-        return $this->key($resource) . self::KEY_SUFFIX_FAILURE;
+        return $this->key($service) . self::KEY_SUFFIX_FAILURE;
     }
 
     /**
-     * @param  string $resource
+     * @param  string $service
      * @return string
      */
-    private function rejectionKey($resource)
+    private function rejectionKey($service)
     {
-        return $this->key($resource) . self::KEY_SUFFIX_REJECTION;
+        return $this->key($service) . self::KEY_SUFFIX_REJECTION;
     }
 
     /**
-     * @param  string $resource
+     * @param  string $service
      * @return string
      */
-    private function lastFailureKey($resource)
+    private function lastFailureKey($service)
     {
-        return $this->prefix($resource) . self::KEY_SUFFIX_LAST_FAILURE_TIME;
+        return $this->prefix($service) . self::KEY_SUFFIX_LAST_FAILURE_TIME;
     }
 
     /**
-     * @param  string $resource
+     * @param  string $service
      * @return string
      */
-    private function statusKey($resource)
+    private function statusKey($service)
     {
-        return $this->prefix($resource) . self::KEY_SUFFIX_STATUS;
+        return $this->prefix($service) . self::KEY_SUFFIX_STATUS;
     }
 }

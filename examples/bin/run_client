@@ -12,17 +12,17 @@ function sendRequest($storage)
 {
     $ganesha = buildGanesha($storage);
     $client = new GuzzleHttp\Client();
-    if ($ganesha->isAvailable(RESOURCE)) {
+    if ($ganesha->isAvailable(SERVICE)) {
         try {
             $serverHost = getenv('GANESHA_EXAMPLE_SERVER') ?: 'localhost';
             $client->request('GET', "http://{$serverHost}/server/index.php");
         } catch (\Exception $e) {
             echo  date('H:i:s') . " <failure>\n";
-            $ganesha->failure(RESOURCE);
+            $ganesha->failure(SERVICE);
             return;
         }
 
-        $ganesha->success(RESOURCE);
+        $ganesha->success(SERVICE);
         echo date('H:i:s') . " (success)\n";
     } else {
         echo date('H:i:s') . " [[[ reject ]]]\n";

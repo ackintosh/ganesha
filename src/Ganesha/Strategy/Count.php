@@ -70,15 +70,15 @@ class Count implements StrategyInterface
     /**
      * @return int
      */
-    public function recordFailure($resource)
+    public function recordFailure($service)
     {
-        $this->storage->setLastFailureTime($resource, time());
-        $this->storage->incrementFailureCount($resource);
+        $this->storage->setLastFailureTime($service, time());
+        $this->storage->incrementFailureCount($service);
 
-        if ($this->storage->getFailureCount($resource) >= $this->configuration['failureCountThreshold']
-            && $this->storage->getStatus($resource) === Ganesha::STATUS_CALMED_DOWN
+        if ($this->storage->getFailureCount($service) >= $this->configuration['failureCountThreshold']
+            && $this->storage->getStatus($service) === Ganesha::STATUS_CALMED_DOWN
         ) {
-            $this->storage->setStatus($resource, Ganesha::STATUS_TRIPPED);
+            $this->storage->setStatus($service, Ganesha::STATUS_TRIPPED);
             return Ganesha::STATUS_TRIPPED;
         }
 
@@ -88,14 +88,14 @@ class Count implements StrategyInterface
     /**
      * @return void
      */
-    public function recordSuccess($resource)
+    public function recordSuccess($service)
     {
-        $this->storage->decrementFailureCount($resource);
+        $this->storage->decrementFailureCount($service);
 
-        if ($this->storage->getFailureCount($resource) === 0
-            && $this->storage->getStatus($resource) === Ganesha::STATUS_TRIPPED
+        if ($this->storage->getFailureCount($service) === 0
+            && $this->storage->getStatus($service) === Ganesha::STATUS_TRIPPED
         ) {
-            $this->storage->setStatus($resource, Ganesha::STATUS_CALMED_DOWN);
+            $this->storage->setStatus($service, Ganesha::STATUS_CALMED_DOWN);
         }
     }
 
@@ -110,10 +110,10 @@ class Count implements StrategyInterface
     /**
      * @return bool
      */
-    public function isAvailable($resource)
+    public function isAvailable($service)
     {
         try {
-            return $this->isClosed($resource) || $this->isHalfOpen($resource);
+            return $this->isClosed($service) || $this->isHalfOpen($service);
         } catch (StorageException $e) {
             throw $e;
         }
@@ -123,10 +123,10 @@ class Count implements StrategyInterface
      * @return bool
      * @throws StorageException
      */
-    private function isClosed($resource)
+    private function isClosed($service)
     {
         try {
-            return $this->storage->getFailureCount($resource) < $this->configuration['failureCountThreshold'];
+            return $this->storage->getFailureCount($service) < $this->configuration['failureCountThreshold'];
         } catch (StorageException $e) {
             throw $e;
         }
@@ -136,15 +136,15 @@ class Count implements StrategyInterface
      * @return bool
      * @throws StorageException
      */
-    private function isHalfOpen($resource)
+    private function isHalfOpen($service)
     {
-        if (is_null($lastFailureTime = $this->storage->getLastFailureTime($resource))) {
+        if (is_null($lastFailureTime = $this->storage->getLastFailureTime($service))) {
             return false;
         }
 
         if ((time() - $lastFailureTime) > $this->configuration['intervalToHalfOpen']) {
-            $this->storage->setFailureCount($resource, $this->configuration['failureCountThreshold']);
-            $this->storage->setLastFailureTime($resource, time());
+            $this->storage->setFailureCount($service, $this->configuration['failureCountThreshold']);
+            $this->storage->setLastFailureTime($service, time());
             return true;
         }
 

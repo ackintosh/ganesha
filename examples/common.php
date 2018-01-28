@@ -4,7 +4,7 @@ use \Ackintosh\Ganesha\Builder;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-define('RESOURCE', 'example');
+define('SERVICE', 'example');
 define('TIME_WINDOW', 20);
 define('FAILURE_RATE', 10);
 define('MINIMUM_REQUESTS', 10);
@@ -52,7 +52,7 @@ __EOS__;
 
 __EOS__;
 
-    $ganesha->subscribe(function ($event, $resource, $message) use ($messageOnTripped, $messageOnCalmedDown) {
+    $ganesha->subscribe(function ($event, $service, $message) use ($messageOnTripped, $messageOnCalmedDown) {
         switch ($event) {
             case Ganesha::EVENT_TRIPPED:
                 echo $messageOnTripped;

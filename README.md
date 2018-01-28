@@ -30,33 +30,32 @@ $ php composer.phar require ackintosh/ganesha
 
 ## Usage
 
-Ganesha provides following simple interface. Each method receives a string (named `$resource` in example) to identify the resource. `$resource` will be the service name of the API, the endpoint name or etc. Please remember that Ganesha detects system failure for each `$resource`.
+Ganesha provides following simple interface. Each method receives a string (named `$service` in example) to identify the service. `$service` will be the service name of the API, the endpoint name or etc. Please remember that Ganesha detects system failure for each `$service`.
 
 ```php
-$ganesha->isAvailable($resource);
-$ganesha->success($resource);
-$ganesha->failure($resource);
+$ganesha->isAvailable($service);
+$ganesha->success($service);
+$ganesha->failure($service);
 ```
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::build([
     'failureRateThreshold' => 50,
-    'adapter'              => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
+    'adapter'              => new Ackintosh\Ganesha\Storage\Adapter\Redis($redis),
 ]);
 
+$service = 'external_api';
 
-$resource = 'external_api';
-
-if (!$ganesha->isAvailable($resource)) {
+if (!$ganesha->isAvailable($service)) {
     die('external api is not available');
 }
 
 try {
-    echo ExternalApi::send($request)->getBody();
-    $ganesha->success($resource);
-} catch (ExternalApi\RequestTimedOutException $e) {
+    echo \Api::send($request)->getBody();
+    $ganesha->success($service);
+} catch (\Api\RequestTimedOutException $e) {
     // If an error occurred, it must be recorded as failure.
-    $ganesha->failure($resource);
+    $ganesha->failure($service);
     die($e->getMessage());
 }
 ```
@@ -64,16 +63,16 @@ try {
 #### Subscribe to changes in ganesha's state
 
 ```php
-$ganesha->subscribe(function ($event, $resource, $message) {
+$ganesha->subscribe(function ($event, $service, $message) {
     switch ($event) {
         case Ganesha::EVENT_TRIPPED:
             \YourMonitoringSystem::warn(
-                "Ganesha has tripped! It seems that a failure has occurred in {$resource}. {$message}."
+                "Ganesha has tripped! It seems that a failure has occurred in {$service}. {$message}."
             );
             break;
         case Ganesha::EVENT_CALMED_DOWN:
             \YourMonitoringSystem::info(
-                "The failure in {$resource} seems to have calmed down :). {$message}."
+                "The failure in {$service} seems to have calmed down :). {$message}."
             );
             break;
         case Ganesha::EVENT_STORAGE_ERROR:
@@ -90,16 +89,19 @@ $ganesha->subscribe(function ($event, $resource, $message) {
 Ganesha will continue to record success/failure statistics, but it will not trip.
 
 ```php
+// Ganesha with Count strategy(threshold `3`).
+// $ganesha = ...
+
+// Disable
 Ackintosh\Ganesha::disable();
 
-// Ganesha with Count strategy(threshold `3`).
 // Although the failure is recorded to storage,
-$ganesha->failure($resource);
-$ganesha->failure($resource);
-$ganesha->failure($resource);
+$ganesha->failure($service);
+$ganesha->failure($service);
+$ganesha->failure($service);
 
 // Ganesha does not trip and Ganesha::isAvailable() returns true.
-var_dump($ganesha->isAvailable($resource);
+var_dump($ganesha->isAvailable($service);
 // bool(true)
 ```
 

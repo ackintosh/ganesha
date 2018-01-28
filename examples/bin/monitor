@@ -24,9 +24,9 @@ $prop = new \ReflectionProperty($strategy, 'storage');
 $prop->setAccessible(true);
 $storage = $prop->getValue($strategy);
 
-$failure = $storage->getFailureCount(RESOURCE);
-$success = $storage->getSuccessCount(RESOURCE);
-$rejection = $storage->getRejectionCount(RESOURCE);
+$failure = $storage->getFailureCount(SERVICE);
+$success = $storage->getSuccessCount(SERVICE);
+$rejection = $storage->getRejectionCount(SERVICE);
 
 $total = $failure + $success + $rejection;
 $rate = $total ? ($failure / ($failure + $success)) * 100 : 0;
@@ -36,7 +36,7 @@ if ($storage instanceof TumblingTimeWindowInterface) {
     // previous
     $method = new \ReflectionMethod($strategy, 'keyForPreviousTimeWindow');
     $method->setAccessible(true);
-    $key = $method->invokeArgs($strategy, [RESOURCE, TIME_WINDOW]);
+    $key = $method->invokeArgs($strategy, [SERVICE, TIME_WINDOW]);
 
     $failure = $storage->getFailureCountByCustomKey($key);
     $success = $storage->getSuccessCountByCustomKey($key);

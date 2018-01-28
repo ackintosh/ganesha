@@ -6,10 +6,7 @@ Ganesha is PHP implementation of [Circuit Breaker pattern](http://martinfowler.c
 
 ![ganesha](https://ackintosh.github.io/assets/images/ganesha.png)
 
-https://ackintosh.github.io/ganesha/
-
-For now, Ganesha is under development heavily and growing up day by day.  
-It's going to be awesome! :muscle:
+It is one of the very active Circuit Breaker in PHP and production ready: well-tested, well-documented. :muscle:  You can integrate Ganesha to your existing code base easily as Ganesha provides just simple interface and [Guzzle Middleware](https://github.com/ackintosh/ganesha#ganesha-heart-guzzle) behaves transparency.
 
 If you have an idea about enhancement, bugfix, etc..., please let me know it via [Issues](https://github.com/ackintosh/ganesha/issues). :sparkles:
 
@@ -177,7 +174,107 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 
 ## Ganesha :heart: Guzzle
 
-[Guzzle Middleware](http://docs.guzzlephp.org/en/stable/handlers-and-middleware.html) powered by Ganesha will [comming soon](https://github.com/ackintosh/ganesha/issues/10).
+Ganesha provides [Guzzle Middleware](http://docs.guzzlephp.org/en/stable/handlers-and-middleware.html). If you using Guzzle(6 or higher), you can integrate Ganesha to your code base easily.
+
+```php
+use Ackintosh\Ganesha\Builder;
+use Ackintosh\Ganesha\GuzzleMiddleware;
+use Ackintosh\Ganesha\Exception\RejectedException;
+use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
+
+$ganesha = Builder::build([
+    'timeWindow'           => 30,
+    'failureRateThreshold' => 50,
+    'minimumRequests'      => 10,
+    'intervalToHalfOpen'   => 5,
+    'adapter'              => $adapter,
+]);
+$middleware = new GuzzleMiddleware($ganesha);
+
+$handlers = HandlerStack::create();
+$handlers->push($middleware);
+
+$client = new Client(['handler' => $handlers]);
+
+try {
+    $client->get('http://api.example.com/awesome_resource');
+} catch (RejectedException $e) {
+    // If the circuit breaker is open, RejectedException will be thrown.
+}
+```
+
+### How does Guzzle Middleware determine the `$service`?
+
+As documented in [Usage](https://github.com/ackintosh/ganesha#usage), Ganesha detects failures for each `$service`. Below, We will show you how Guzzle Middleware determine `$service` and how we specify `$service` explicitly.
+
+By default, the host name is used as `$service`.
+
+
+```php
+// In the example above, `api.example.com` is used as `$service`.
+$client->get('http://api.example.com/awesome_resource');
+```
+
+You can also specify `$service` via a option passed to client, or request header. If both are specified, the option value takes precedence.
+
+```php
+// via constructor argument
+$client = new Client([
+    'handler' => $handlers,
+    // 'ganesha.service_name' is defined as ServiceNameExtractor::OPTION_KEY
+    'ganesha.service_name' => 'specified_service_name',
+]);
+
+// via request method argument
+$client->get(
+    'http://api.example.com/awesome_resource',
+    [
+        'ganesha.service_name' => 'specified_service_name',
+    ]
+);
+
+// via request header
+$request = new Request(
+    'GET',
+    'http://api.example.com/awesome_resource',
+    [
+        // 'X-Ganesha-Service-Name' is defined as ServiceNameExtractor::HEADER_NAME
+        'X-Ganesha-Service-Name' => 'specified_service_name'
+    ]
+);
+$client->send($request);
+```
+
+Alternatively, you can apply your own rules by implementing a class that implements the `ServiceNameExtractorInterface`.
+
+```php
+use Ackintosh\Ganesha\GuzzleMiddleware\ServiceNameExtractorInterface;
+use Psr\Http\Message\RequestInterface;
+
+class SampleExtractor implements ServiceNameExtractorInterface
+{
+    /**
+     * @override
+     */
+    public function extract(RequestInterface $request, array $requestOptions)
+    {
+        // We treat the combination of host name and HTTP method name as $service.
+        return $request->getUri()->getHost() . '_' . $request->getMethod();
+    }
+}
+
+// ---
+
+$ganesha = Builder::build([
+    // ...
+]);
+$middleware = new GuzzleMiddleware(
+    $ganesha,
+    // Pass the extractor as an argument of GuzzleMiddleware constructor.
+    new SampleExtractor()
+);
+```
 
 ## Run tests
 

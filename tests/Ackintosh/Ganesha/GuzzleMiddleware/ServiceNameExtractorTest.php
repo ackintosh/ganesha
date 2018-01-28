@@ -3,7 +3,7 @@ namespace Ackintosh\Ganesha\GuzzleMiddleware;
 
 use GuzzleHttp\Psr7\Request;
 
-class ResourceNameExtractorTest extends \PHPUnit_Framework_TestCase
+class ServiceNameExtractorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -11,8 +11,8 @@ class ResourceNameExtractorTest extends \PHPUnit_Framework_TestCase
     public function extractFromHeader()
     {
         $this->assertSame(
-            'resource_name_in_header',
-            (new ResourceNameExtractor())->extract($this->request(), [])
+            'service_name_in_header',
+            (new ServiceNameExtractor())->extract($this->request(), [])
         );
     }
 
@@ -22,8 +22,8 @@ class ResourceNameExtractorTest extends \PHPUnit_Framework_TestCase
     public function extractFromOptions()
     {
         $this->assertSame(
-            'resource_name_in_option',
-            (new ResourceNameExtractor())->extract($this->request(), $this->requestOptions())
+            'service_name_in_option',
+            (new ServiceNameExtractor())->extract($this->request(), $this->requestOptions())
         );
     }
 
@@ -38,7 +38,7 @@ class ResourceNameExtractorTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertSame(
             'api.example.com',
-            (new ResourceNameExtractor())->extract($request, [])
+            (new ServiceNameExtractor())->extract($request, [])
         );
     }
 
@@ -47,14 +47,14 @@ class ResourceNameExtractorTest extends \PHPUnit_Framework_TestCase
         return new Request(
             'GET',
             'http://api.example.com/awesome_resource',
-            [ResourceNameExtractor::HEADER_NAME => 'resource_name_in_header']
+            [ServiceNameExtractor::HEADER_NAME => 'service_name_in_header']
         );
     }
 
     private function requestOptions()
     {
         return [
-            ResourceNameExtractor::OPTION_KEY => 'resource_name_in_option',
+            ServiceNameExtractor::OPTION_KEY => 'service_name_in_option',
         ];
     }
 }

@@ -3,7 +3,7 @@ namespace Ackintosh\Ganesha\GuzzleMiddleware;
 
 use Psr\Http\Message\RequestInterface;
 
-interface ResourceNameExtractorInterface
+interface ServiceNameExtractorInterface
 {
     /**
      * @param RequestInterface $request

@@ -3,8 +3,8 @@ namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Exception\RejectedException;
-use Ackintosh\Ganesha\GuzzleMiddleware\ResourceNameExtractor;
-use Ackintosh\Ganesha\GuzzleMiddleware\ResourceNameExtractorInterface;
+use Ackintosh\Ganesha\GuzzleMiddleware\ServiceNameExtractor;
+use Ackintosh\Ganesha\GuzzleMiddleware\ServiceNameExtractorInterface;
 use Psr\Http\Message\RequestInterface;
 
 class GuzzleMiddleware
@@ -17,15 +17,15 @@ class GuzzleMiddleware
     /*
      * @var ResourceNameExtractorInterface
      */
-    private $resourceNameExtractor;
+    private $serviceNameExtractor;
 
     public function __construct(
         Ganesha $ganesha,
-        ResourceNameExtractorInterface $resourceNameExtractor = null
+        ServiceNameExtractorInterface $serviceNameExtractor = null
     )
     {
         $this->ganesha = $ganesha;
-        $this->resourceNameExtractor = $resourceNameExtractor ?: new ResourceNameExtractor();
+        $this->serviceNameExtractor = $serviceNameExtractor ?: new ServiceNameExtractor();
     }
 
     /**
@@ -35,12 +35,12 @@ class GuzzleMiddleware
     public function __invoke(callable $handler)
     {
         return function (RequestInterface $request, array $options) use ($handler) {
-            $resourceName = $this->resourceNameExtractor->extract($request, $options);
+            $serviceName = $this->serviceNameExtractor->extract($request, $options);
 
-            if (!$this->ganesha->isAvailable($resourceName)) {
+            if (!$this->ganesha->isAvailable($serviceName)) {
                 return \GuzzleHttp\Promise\rejection_for(
                     new RejectedException(
-                        sprintf('"%s" is not available', $resourceName)
+                        sprintf('"%s" is not available', $serviceName)
                     )
                 );
             }
@@ -48,12 +48,12 @@ class GuzzleMiddleware
             $promise = $handler($request, $options);
 
             return $promise->then(
-                function ($value) use ($resourceName) {
-                    $this->ganesha->success($resourceName);
+                function ($value) use ($serviceName) {
+                    $this->ganesha->success($serviceName);
                     return \GuzzleHttp\Promise\promise_for($value);
                 },
-                function ($reason) use ($resourceName) {
-                    $this->ganesha->failure($resourceName);
+                function ($reason) use ($serviceName) {
+                    $this->ganesha->failure($serviceName);
                     return \GuzzleHttp\Promise\rejection_for($reason);
                 }
             );

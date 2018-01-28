@@ -3,17 +3,17 @@ namespace Ackintosh\Ganesha\GuzzleMiddleware;
 
 use Psr\Http\Message\RequestInterface;
 
-class ResourceNameExtractor implements ResourceNameExtractorInterface
+class ServiceNameExtractor implements ServiceNameExtractorInterface
 {
     /**
      * @var string
      */
-    const OPTION_KEY = 'ganesha.resource_name';
+    const OPTION_KEY = 'ganesha.service_name';
 
     /**
      * @var string
      */
-    const HEADER_NAME = 'X-Ganesha-Resource-Name';
+    const HEADER_NAME = 'X-Ganesha-Service-Name';
 
     /**
      * @param RequestInterface $request

@@ -142,12 +142,12 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
         $handlers->push($middleware);
         $client = new Client(['handler' => $handlers]);
 
-        $resource = 'api.example.com';
-        $ganesha->failure($resource);
-        $ganesha->failure($resource);
-        $ganesha->failure($resource);
+        $service = 'api.example.com';
+        $ganesha->failure($service);
+        $ganesha->failure($service);
+        $ganesha->failure($service);
 
-        $client->get('http://' . $resource . '/awesome_resource');
+        $client->get('http://' . $service . '/awesome_resource');
     }
 
     /**

@@ -12,66 +12,66 @@ interface AdapterInterface
     public function setConfiguration(Configuration $configuration);
 
     /**
-     * @param  string $resource
+     * @param  string $service
      * @return int
      */
-    public function load($resource);
+    public function load($service);
 
     /**
-     * @param  string $resource
+     * @param  string $service
      * @param  int    $count
      * @return void
      */
-    public function save($resource, $count);
+    public function save($service, $count);
 
     /**
-     * @param  string $resource
+     * @param  string $service
      * @return void
      */
-    public function increment($resource);
+    public function increment($service);
 
     /**
      * decrement failure count
      *
      * If the operation would decrease the value below 0, the new value must be 0.
      *
-     * @param  string $resource
+     * @param  string $service
      * @return void
      */
-    public function decrement($resource);
+    public function decrement($service);
 
     /**
      * sets last failure time
      *
-     * @param  string $resource
+     * @param  string $service
      * @param  int    $lastFailureTime
      * @return void
      */
-    public function saveLastFailureTime($resource, $lastFailureTime);
+    public function saveLastFailureTime($service, $lastFailureTime);
 
     /**
      * returns last failure time
      *
      * @return int | null
      */
-    public function loadLastFailureTime($resource);
+    public function loadLastFailureTime($service);
 
     /**
      * sets status
      *
-     * @param  string $resource
+     * @param  string $service
      * @param  int    $status
      * @return void
      */
-    public function saveStatus($resource, $status);
+    public function saveStatus($service, $status);
 
     /**
      * returns status
      *
-     * @param  string $resource
+     * @param  string $service
      * @return int
      */
-    public function loadStatus($resource);
+    public function loadStatus($service);
 
     /**
      * resets all counts

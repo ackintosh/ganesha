@@ -13,7 +13,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    private $resource = 'testService';
+    private $service = 'testService';
 
     public function setUp()
     {
@@ -23,7 +23,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
             getenv('GANESHA_EXAMPLE_MEMCACHED') ? getenv('GANESHA_EXAMPLE_MEMCACHED') : 'localhost',
             11211
         );
-        $m->delete($this->resource);
+        $m->delete($this->service);
         $this->memcachedAdaper = new Memcached($m);
     }
 
@@ -32,8 +32,8 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function saveAndLoad()
     {
-        $this->memcachedAdaper->save($this->resource, 1);
-        $this->assertSame(1, $this->memcachedAdaper->load($this->resource));
+        $this->memcachedAdaper->save($this->service, 1);
+        $this->assertSame(1, $this->memcachedAdaper->load($this->service));
     }
 
     /**
@@ -41,10 +41,10 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function increment()
     {
-        $this->memcachedAdaper->increment($this->resource);
-        $this->assertSame(1, $this->memcachedAdaper->load($this->resource));
-        $this->memcachedAdaper->increment($this->resource);
-        $this->assertSame(2, $this->memcachedAdaper->load($this->resource));
+        $this->memcachedAdaper->increment($this->service);
+        $this->assertSame(1, $this->memcachedAdaper->load($this->service));
+        $this->memcachedAdaper->increment($this->service);
+        $this->assertSame(2, $this->memcachedAdaper->load($this->service));
     }
 
     /**
@@ -52,14 +52,14 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function decrement()
     {
-        $this->memcachedAdaper->decrement($this->resource);
-        $this->assertSame(0, $this->memcachedAdaper->load($this->resource));
+        $this->memcachedAdaper->decrement($this->service);
+        $this->assertSame(0, $this->memcachedAdaper->load($this->service));
 
-        $this->memcachedAdaper->increment($this->resource);
-        $this->memcachedAdaper->increment($this->resource);
-        $this->memcachedAdaper->increment($this->resource);
-        $this->memcachedAdaper->decrement($this->resource);
-        $this->assertSame(2, $this->memcachedAdaper->load($this->resource));
+        $this->memcachedAdaper->increment($this->service);
+        $this->memcachedAdaper->increment($this->service);
+        $this->memcachedAdaper->increment($this->service);
+        $this->memcachedAdaper->decrement($this->service);
+        $this->assertSame(2, $this->memcachedAdaper->load($this->service));
     }
 
     /**
@@ -68,8 +68,8 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
     public function saveAndLoadLastFailureTime()
     {
         $time = time();
-        $this->memcachedAdaper->saveLastFailureTime($this->resource, $time);
-        $this->assertSame($time, $this->memcachedAdaper->loadLastFailureTime($this->resource));
+        $this->memcachedAdaper->saveLastFailureTime($this->service, $time);
+        $this->assertSame($time, $this->memcachedAdaper->loadLastFailureTime($this->service));
     }
 
     /**
@@ -78,8 +78,8 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
     public function saveAndLoadStatus()
     {
         $status = Ganesha::STATUS_TRIPPED;
-        $this->memcachedAdaper->saveStatus($this->resource, $status);
-        $this->assertSame($status, $this->memcachedAdaper->loadStatus($this->resource));
+        $this->memcachedAdaper->saveStatus($this->service, $status);
+        $this->assertSame($status, $this->memcachedAdaper->loadStatus($this->service));
     }
 
     /**

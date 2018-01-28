@@ -18,9 +18,9 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         );
         $storage = new Storage(new Memcached($m), null);
 
-        $resource = 'test';
-        $this->assertSame($storage->getStatus($resource), Ganesha::STATUS_CALMED_DOWN);
-        $storage->setStatus($resource, Ganesha::STATUS_TRIPPED);
-        $this->assertSame($storage->getStatus($resource), Ganesha::STATUS_TRIPPED);
+        $service = 'test';
+        $this->assertSame($storage->getStatus($service), Ganesha::STATUS_CALMED_DOWN);
+        $storage->setStatus($service, Ganesha::STATUS_TRIPPED);
+        $this->assertSame($storage->getStatus($service), Ganesha::STATUS_TRIPPED);
     }
 }

@@ -16,21 +16,21 @@ interface StrategyInterface
     public static function create(Configuration $configuration);
 
     /**
-     * @param string $resource
+     * @param string $service
      * @return void
      */
-    public function recordSuccess($resource);
+    public function recordSuccess($service);
 
     /**
-     * @param string $resource
+     * @param string $service
      * @return void
      */
-    public function recordFailure($resource);
+    public function recordFailure($service);
 
     /**
      * @return bool
      */
-    public function isAvailable($resource);
+    public function isAvailable($service);
 
     /**
      * @return void

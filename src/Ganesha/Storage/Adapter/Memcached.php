@@ -40,103 +40,103 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * @param string $resource
+     * @param string $service
      * @return int
      * @throws StorageException
      */
-    public function load($resource)
+    public function load($service)
     {
-        $r = (int)$this->memcached->get($resource);
+        $r = (int)$this->memcached->get($service);
         $this->throwExceptionIfErrorOccurred();
         return $r;
     }
 
     /**
-     * @param string $resource
+     * @param string $service
      * @param int $count
      * @return void
      * @throws StorageException
      */
-    public function save($resource, $count)
+    public function save($service, $count)
     {
-        if (!$this->memcached->set($resource, $count)) {
+        if (!$this->memcached->set($service, $count)) {
             throw new StorageException('failed to set the value : ' . $this->memcached->getResultMessage());
         }
     }
 
     /**
-     * @param string $resource
+     * @param string $service
      * @return void
      * @throws StorageException
      */
-    public function increment($resource)
+    public function increment($service)
     {
         // requires \Memcached::OPT_BINARY_PROTOCOL
-        if ($this->memcached->increment($resource, 1, 1) === false) {
+        if ($this->memcached->increment($service, 1, 1) === false) {
             throw new StorageException('failed to increment failure count : ' . $this->memcached->getResultMessage());
         }
     }
 
     /**
-     * @param string $resource
+     * @param string $service
      * @return void
      * @throws StorageException
      */
-    public function decrement($resource)
+    public function decrement($service)
     {
         // requires \Memcached::OPT_BINARY_PROTOCOL
-        if ($this->memcached->decrement($resource, 1, 0) === false) {
+        if ($this->memcached->decrement($service, 1, 0) === false) {
             throw new StorageException('failed to decrement failure count : ' . $this->memcached->getResultMessage());
         }
     }
 
     /**
-     * @param string $resource
+     * @param string $service
      * @param int    $lastFailureTime
      * @throws StorageException
      */
-    public function saveLastFailureTime($resource, $lastFailureTime)
+    public function saveLastFailureTime($service, $lastFailureTime)
     {
-        if (!$this->memcached->set($resource, $lastFailureTime)) {
+        if (!$this->memcached->set($service, $lastFailureTime)) {
             throw new StorageException('failed to set the last failure time : ' . $this->memcached->getResultMessage());
         }
     }
 
     /**
-     * @param  string $resource
+     * @param  string $service
      * @return int
      * @throws StorageException
      */
-    public function loadLastFailureTime($resource)
+    public function loadLastFailureTime($service)
     {
-        $r = $this->memcached->get($resource);
+        $r = $this->memcached->get($service);
         $this->throwExceptionIfErrorOccurred();
         return $r;
     }
 
     /**
-     * @param string $resource
+     * @param string $service
      * @param int    $status
      * @throws StorageException
      */
-    public function saveStatus($resource, $status)
+    public function saveStatus($service, $status)
     {
-        if (!$this->memcached->set($resource, $status)) {
+        if (!$this->memcached->set($service, $status)) {
             throw new StorageException('failed to set the status : ' . $this->memcached->getResultMessage());
         }
     }
 
     /**
-     * @param  string $resource
+     * @param  string $service
      * @return int
      * @throws StorageException
      */
-    public function loadStatus($resource)
+    public function loadStatus($service)
     {
-        $status = $this->memcached->get($resource);
+        $status = $this->memcached->get($service);
         $this->throwExceptionIfErrorOccurred();
         if ($status === false && $this->memcached->getResultCode() === \Memcached::RES_NOTFOUND) {
-            $this->saveStatus($resource, Ganesha::STATUS_CALMED_DOWN);
+            $this->saveStatus($service, Ganesha::STATUS_CALMED_DOWN);
             return Ganesha::STATUS_CALMED_DOWN;
         }
 

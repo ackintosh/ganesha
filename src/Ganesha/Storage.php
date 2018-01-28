@@ -75,7 +75,7 @@ class Storage
     /**
      * returns success count
      *
-     * @param  string $resource
+     * @param  string $key
      * @return int
      * @throws StorageException
      */
@@ -87,7 +87,7 @@ class Storage
     /**
      * returns failure count
      *
-     * @param  string $resource
+     * @param  string $key
      * @return int
      * @throws StorageException
      */
@@ -99,7 +99,7 @@ class Storage
     /**
      * returns rejection count
      *
-     * @param  string $resource
+     * @param  string $key
      * @return int
      * @throws StorageException
      */

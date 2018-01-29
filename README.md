@@ -1,6 +1,6 @@
 # Ganesha
 
-Ganesha is PHP implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/CircuitBreaker.html) which has multi strategies to detect failures and supports various storages to record statistics.
+Ganesha is PHP implementation of [Circuit Breaker pattern](http://martinfowler.com/bliki/CircuitBreaker.html) which has multi strategies to avoid cascading failures and supports various storages to record statistics.
 
 [![Build Status](https://travis-ci.org/ackintosh/ganesha.svg?branch=master)](https://travis-ci.org/ackintosh/ganesha) [![Coverage Status](https://coveralls.io/repos/github/ackintosh/ganesha/badge.svg?branch=master)](https://coveralls.io/github/ackintosh/ganesha?branch=master)
 
@@ -114,9 +114,9 @@ $ganesha->reset();
 
 ```
 
-## Strategies to detect failures
+## Strategies
 
-Ganesha has two strategies which detects system failure.
+Ganesha has two strategies which avoids cascading failures.
 
 ### Rate (default)
 

@@ -288,12 +288,12 @@ $ docker-compose up
 $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 ```
 
-## Build documents with [Soushi](https://github.com/kentaro/soushi)
+## Build PR site with [Soushi](https://github.com/kentaro/soushi)
 
 https://ackintosh.github.io/ganesha/
 
 ```bash
-$ path/to/soushi build docs
+$ docker-compose run --rm client soushi build docs
 ```
 
 ## Requirements

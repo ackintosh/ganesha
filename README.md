@@ -174,7 +174,7 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 
 ## Ganesha :heart: Guzzle
 
-Ganesha provides [Guzzle Middleware](http://docs.guzzlephp.org/en/stable/handlers-and-middleware.html). If you using Guzzle(6 or higher), you can integrate Ganesha to your code base easily.
+If you using Guzzle(6 or higher), [Guzzle Middleware](http://docs.guzzlephp.org/en/stable/handlers-and-middleware.html) powered by Ganesha makes it easy to integrate Circuit Breaker to your existing code base.
 
 ```php
 use Ackintosh\Ganesha\Builder;

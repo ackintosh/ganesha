@@ -9,22 +9,11 @@
         <link href="default.css" rel="stylesheet" type="text/css" media="all" />
     </head>
     <body>
-        <div id="header" class="container">
-        	<div id="logo">
-        		<h1><a href="/ganesha/">Ganesha</a></h1>
-        	</div>
-        	<div id="menu">
-        		<ul>
-        			<li><a href="/ganesha/" title="">Top</a></li>
-        			<li><a href="./usage.html" title="">Usage</a></li>
-        		</ul>
-        	</div>
-        </div>
         <div id="<?= $bg ?>">
         	<div class="container">
         		<?php if (isset($title)): ?>
         			<div class="title">
-        				<h2><?= $title ?></h2>
+        				<h1><?= $title ?></h1>
         				<?php if (isset($subtitle)): ?>
         					<span class="byline"><?= $subtitle ?></span>
         				<?php endif; ?>

@@ -384,8 +384,8 @@
 	#banner
 	{
 		overflow: hidden;
-		padding: 7em 0em 5em 0em;
-		background: #27AE61;
+		padding: 4em 0em 5em 0em;
+		background: #070258;
 		background-size: cover;
 		text-align: center;
 		color: rgba(255,255,255,.8);
@@ -393,6 +393,11 @@
 
 	#banner .title
 	{
+	}
+
+	#banner .title h1
+	{
+		color: #FFF;
 	}
 
 	#banner .title h2

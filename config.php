@@ -1,6 +1,7 @@
 <?php
 /**
- * Configurations for PR site generate by Soushi
+ * Configurations for PR site generate by Soushi.
+ * Details for generating the site, see https://github.com/ackintosh/ganesha#build-pr-site-with-soushi
  */
 return [
     'site_title'   => 'Ganesha - PHP implementation of Circuit Breaker pattern',

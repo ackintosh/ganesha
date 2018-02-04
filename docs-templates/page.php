@@ -18,9 +18,6 @@ Released   : 20140107
 <meta name="description" content="Ganesha is PHP implementation of Circuit Breaker pattern which has multi strategies to avoid cascading failures and supports various storages to record statistics." />
 <link href="http://fonts.googleapis.com/css?family=News+Cycle:400,700" rel="stylesheet" />
 <link href="default.css" rel="stylesheet" type="text/css" media="all" />
-
-<!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
-
 </head>
 <body>
 <div id="header" class="container">

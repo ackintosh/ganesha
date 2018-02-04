@@ -294,6 +294,9 @@ https://ackintosh.github.io/ganesha/
 
 ```bash
 $ docker-compose run --rm client soushi build docs
+
+# The site will be generate into `docs` directory and let's confirm your changes.
+$ open docs/index.html
 ```
 
 ## Requirements

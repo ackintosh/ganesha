@@ -1,6 +1,7 @@
 {
   "name": "ackintosh/ganesha",
   "description": "PHP implementation of Circuit Breaker pattern",
+  "keywords": ["circuit breaker", "microservices", "fault tolerance", "error handling", "guzzle middleware"],
   "type": "library",
   "license": "MIT",
   "authors": [

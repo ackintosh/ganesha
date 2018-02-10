@@ -57,7 +57,7 @@ try {
 }
 ```
 
-#### Subscribe to changes in ganesha's state
+#### Subscribe to events in ganesha
 
 ```php
 $ganesha->subscribe(function ($event, $service, $message) {
@@ -302,7 +302,7 @@ try {
 
 ## Run tests
 
-We can run unit tests on Docker container, so it is not necessary to install dependencies in local machine.
+We can run unit tests on Docker container, so it is not necessary to install dependencies in your machine.
 
 ```bash
 # Start redis, memcached server

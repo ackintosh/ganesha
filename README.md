@@ -83,7 +83,7 @@ $ganesha->subscribe(function ($event, $service, $message) {
 
 #### Disable
 
-Ganesha will continue to record success/failure statistics, but it will not trip.
+Ganesha continue to record success/failure statistics, but Ganesha does not trip even if failure count reached to threshold.
 
 ```php
 // Ganesha with Count strategy(threshold `3`).

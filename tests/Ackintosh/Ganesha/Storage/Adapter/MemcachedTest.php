@@ -38,6 +38,40 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     */
+    public function loadThrowsException()
+    {
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['getResultCode'])
+            ->getMock();
+        $m->expects($this->once())
+            ->method('getResultCode')
+            ->willReturn(\Memcached::RES_FAILURE);
+
+        $adapter = new Memcached($m);
+        $adapter->load($this->service);
+    }
+
+    /**
+     * @test
+     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     */
+    public function saveThrowsException()
+    {
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['set'])
+            ->getMock();
+        $m->expects($this->once())
+            ->method('set')
+            ->willReturn(false);
+
+        $adapter = new Memcached($m);
+        $adapter->save($this->service, 'test');
+    }
+
+    /**
+     * @test
      */
     public function increment()
     {
@@ -45,6 +79,23 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(1, $this->memcachedAdaper->load($this->service));
         $this->memcachedAdaper->increment($this->service);
         $this->assertSame(2, $this->memcachedAdaper->load($this->service));
+    }
+
+    /**
+     * @test
+     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     */
+    public function incrementThrowsException()
+    {
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['increment'])
+            ->getMock();
+        $m->expects($this->once())
+            ->method('increment')
+            ->willReturn(false);
+
+        $adapter = new Memcached($m);
+        $adapter->increment($this->service);
     }
 
     /**
@@ -64,6 +115,23 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     */
+    public function decrementThrowsException()
+    {
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['decrement'])
+            ->getMock();
+        $m->expects($this->once())
+            ->method('decrement')
+            ->willReturn(false);
+
+        $adapter = new Memcached($m);
+        $adapter->decrement($this->service);
+    }
+
+    /**
+     * @test
      */
     public function saveAndLoadLastFailureTime()
     {
@@ -74,12 +142,148 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     */
+    public function saveLastFailureTimeThrowsException()
+    {
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['set'])
+            ->getMock();
+        $m->expects($this->once())
+            ->method('set')
+            ->willReturn(false);
+
+        $adapter = new Memcached($m);
+        $adapter->saveLastFailureTime($this->service, time());
+    }
+
+    /**
+     * @test
+     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     */
+    public function loadLastFailureTimeThrowsException()
+    {
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['getResultCode'])
+            ->getMock();
+        $m->expects($this->once())
+            ->method('getResultCode')
+            ->willReturn(\Memcached::RES_FAILURE);
+
+        $adapter = new Memcached($m);
+        $adapter->loadLastFailureTime($this->service);
+    }
+
+    /**
+     * @test
      */
     public function saveAndLoadStatus()
     {
         $status = Ganesha::STATUS_TRIPPED;
         $this->memcachedAdaper->saveStatus($this->service, $status);
         $this->assertSame($status, $this->memcachedAdaper->loadStatus($this->service));
+    }
+
+    /**
+     * @test
+     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     */
+    public function saveStatusThrowsException()
+    {
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['set'])
+            ->getMock();
+        $m->expects($this->once())
+            ->method('set')
+            ->willReturn(false);
+
+        $adapter = new Memcached($m);
+        $adapter->saveStatus($this->service, Ganesha::STATUS_TRIPPED);
+    }
+
+    /**
+     * @test
+     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     */
+    public function loadStatusThrowsException()
+    {
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['getResultCode'])
+            ->getMock();
+        $m->expects($this->once())
+            ->method('getResultCode')
+            ->willReturn(\Memcached::RES_FAILURE);
+
+        $adapter = new Memcached($m);
+        $adapter->loadStatus($this->service);
+    }
+
+    /**
+     * @test
+     */
+    public function resetWillDoNothingIfNoDataExists()
+    {
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['getStats', 'getAllKeys', 'getResultCode'])
+            ->getMock();
+        $m->expects($this->once())
+            ->method('getStats')
+            ->willReturn(['localhost:11211' => ['pid' => 1]]);
+
+        $m->expects($this->once())
+            ->method('getAllKeys')
+            ->willReturn(false);
+
+        $m->expects($this->once())
+            ->method('getResultCode')
+            ->willReturn(\Memcached::RES_SUCCESS);
+
+        $adapter = new Memcached($m);
+        $adapter->reset();
+    }
+
+    /**
+     * @test
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Couldn't connect to memcached.
+     */
+    public function resetThrowsExceptionWhenFailedToGetStats()
+    {
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['getStats'])
+            ->getMock();
+        $m->expects($this->once())
+            ->method('getStats')
+            ->willReturn(false);
+
+        $adapter = new Memcached($m);
+        $adapter->reset();
+    }
+
+    /**
+     * @test
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessageRegExp /\Afailed to get memcached keys/
+     */
+    public function resetThrowsExceptionWhenFailedToGetAllKeys()
+    {
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['getStats', 'getAllKeys', 'getResultCode'])
+            ->getMock();
+        $m->expects($this->once())
+            ->method('getStats')
+            ->willReturn(['localhost:11211' => ['pid' => 1]]);
+
+        $m->expects($this->once())
+            ->method('getAllKeys')
+            ->willReturn(false);
+
+        $m->expects($this->once())
+            ->method('getResultCode')
+            ->willReturn(\Memcached::RES_FAILURE);
+
+        $adapter = new Memcached($m);
+        $adapter->reset();
     }
 
     /**
@@ -109,21 +313,5 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
             ['ganesha_test_last_failure_timee', false],
             ['ganesha_test_statuss', false],
         ];
-    }
-
-    /**
-     * @test
-     * @expectedException \RuntimeException
-     */
-    public function resetThrowsExceptionWhenFailedToConnectToMemcached()
-    {
-        $mock = $this->getMockBuilder('\Memcached')
-            ->setMethods(['getStats'])
-            ->getMock();
-        $mock->method('getStats')
-            ->will($this->returnValue(false));
-
-        $memcachedAdapter = new Memcached($mock);
-        $memcachedAdapter->reset();
     }
 }

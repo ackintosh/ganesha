@@ -42,7 +42,9 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function loadThrowsException()
     {
-        $m = $this->getMockBuilder(\Memcached::class)->getMock();
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['getResultCode'])
+            ->getMock();
         $m->expects($this->once())
             ->method('getResultCode')
             ->willReturn(\Memcached::RES_FAILURE);
@@ -57,7 +59,9 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function saveThrowsException()
     {
-        $m = $this->getMockBuilder(\Memcached::class)->getMock();
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['set'])
+            ->getMock();
         $m->expects($this->once())
             ->method('set')
             ->willReturn(false);
@@ -83,7 +87,9 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function incrementThrowsException()
     {
-        $m = $this->getMockBuilder(\Memcached::class)->getMock();
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['increment'])
+            ->getMock();
         $m->expects($this->once())
             ->method('increment')
             ->willReturn(false);
@@ -113,7 +119,9 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function decrementThrowsException()
     {
-        $m = $this->getMockBuilder(\Memcached::class)->getMock();
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['decrement'])
+            ->getMock();
         $m->expects($this->once())
             ->method('decrement')
             ->willReturn(false);
@@ -138,7 +146,9 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function saveLastFailureTimeThrowsException()
     {
-        $m = $this->getMockBuilder(\Memcached::class)->getMock();
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['set'])
+            ->getMock();
         $m->expects($this->once())
             ->method('set')
             ->willReturn(false);
@@ -153,7 +163,9 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function loadLastFailureTimeThrowsException()
     {
-        $m = $this->getMockBuilder(\Memcached::class)->getMock();
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['getResultCode'])
+            ->getMock();
         $m->expects($this->once())
             ->method('getResultCode')
             ->willReturn(\Memcached::RES_FAILURE);
@@ -178,7 +190,9 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function saveStatusThrowsException()
     {
-        $m = $this->getMockBuilder(\Memcached::class)->getMock();
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['set'])
+            ->getMock();
         $m->expects($this->once())
             ->method('set')
             ->willReturn(false);
@@ -193,7 +207,9 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function loadStatusThrowsException()
     {
-        $m = $this->getMockBuilder(\Memcached::class)->getMock();
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['getResultCode'])
+            ->getMock();
         $m->expects($this->once())
             ->method('getResultCode')
             ->willReturn(\Memcached::RES_FAILURE);
@@ -207,7 +223,9 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function resetWillDoNothingIfNoDataExists()
     {
-        $m = $this->getMockBuilder(\Memcached::class)->getMock();
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['getStats', 'getAllKeys', 'getResultCode'])
+            ->getMock();
         $m->expects($this->once())
             ->method('getStats')
             ->willReturn(['localhost:11211' => ['pid' => 1]]);
@@ -231,7 +249,9 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function resetThrowsExceptionWhenFailedToGetStats()
     {
-        $m = $this->getMockBuilder(\Memcached::class)->getMock();
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['getStats'])
+            ->getMock();
         $m->expects($this->once())
             ->method('getStats')
             ->willReturn(false);
@@ -247,7 +267,9 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
      */
     public function resetThrowsExceptionWhenFailedToGetAllKeys()
     {
-        $m = $this->getMockBuilder(\Memcached::class)->getMock();
+        $m = $this->getMockBuilder(\Memcached::class)
+            ->setMethods(['getStats', 'getAllKeys', 'getResultCode'])
+            ->getMock();
         $m->expects($this->once())
             ->method('getStats')
             ->willReturn(['localhost:11211' => ['pid' => 1]]);

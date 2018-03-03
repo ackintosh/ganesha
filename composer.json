@@ -19,7 +19,7 @@
     "phpunit/phpunit": "<6.0.0",
     "php-vcr/php-vcr": "~1.0",
     "php-vcr/phpunit-testlistener-vcr": "~2.0",
-    "satooshi/php-coveralls": "*"
+    "php-coveralls/php-coveralls": "~2.0"
   },
   "autoload": {
     "psr-4": {

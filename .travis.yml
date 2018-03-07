@@ -6,6 +6,11 @@ php:
   - 7.1
   - nightly
 
+env:
+  matrix:
+    - COMPOSER_OPTS=""
+    - COMPOSER_OPTS="--prefer-lowest --prefer-stable"
+
 matrix:
   allow_failures:
     - php: nightly
@@ -18,6 +23,8 @@ before_install:
   - phpenv config-add .travis.php.ini
 
 before_script:
+  - composer self-update
+  - composer update $COMPOSER_OPTS
   - composer install
 
 script:

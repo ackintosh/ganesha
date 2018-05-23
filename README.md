@@ -98,7 +98,7 @@ $ganesha->failure($service);
 $ganesha->failure($service);
 
 // Ganesha does not trip and Ganesha::isAvailable() returns true.
-var_dump($ganesha->isAvailable($service);
+var_dump($ganesha->isAvailable($service));
 // bool(true)
 ```
 

@@ -17,8 +17,15 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
      */
     private $configuration;
 
-    public function __construct(\Redis $redis)
+    /**
+     * @param $redis \Redis|\RedisArray
+     */
+    public function __construct($redis)
     {
+        if (!$redis instanceof \Redis && !$redis instanceof \RedisArray) {
+            throw new \InvalidArgumentException(sprintf('%s() expects parameter 1 to be Redis, RedisArray', __METHOD__));
+        }
+
         $this->redis = $redis;
     }
 

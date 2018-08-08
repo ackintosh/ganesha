@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha\Configuration;
@@ -8,7 +9,7 @@ use Ackintosh\Ganesha\Storage\AdapterInterface;
 class Redis implements AdapterInterface, SlidingTimeWindowInterface
 {
     /**
-     * @var \Redis
+     * @var \Ackintosh\Ganesha\Storage\Adapter\RedisStore
      */
     private $redis;
 
@@ -18,12 +19,12 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
     private $configuration;
 
     /**
-     * @param $redis \Redis|\RedisArray
+     * @param \Redis|\RedisArray|\RedisCluster|\Predis\Client|\Ackintosh\Ganesha\Storage\Adapter\RedisStore $redis
      */
     public function __construct($redis)
     {
-        if (!$redis instanceof \Redis && !$redis instanceof \RedisArray) {
-            throw new \InvalidArgumentException(sprintf('%s() expects parameter 1 to be Redis, RedisArray', __METHOD__));
+        if (!($redis instanceof RedisStore)) {
+            $redis = new RedisStore($redis);
         }
 
         $this->redis = $redis;
@@ -31,6 +32,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
 
     /**
      * @param Configuration $configuration
+     *
      * @return void
      */
     public function setConfiguration(Configuration $configuration)
@@ -40,6 +42,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
 
     /**
      * @param string $service
+     *
      * @return int
      * @throws StorageException
      */
@@ -47,15 +50,11 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
     {
         $expires = microtime(true) - $this->configuration['timeWindow'];
 
-        try {
-            if ($this->redis->zRemRangeByScore($service, '-inf', $expires) === false) {
-                throw new StorageException('Failed to remove expired elements. service: ' . $service);
-            }
-
-            $r =  $this->redis->zCard($service);
-        } catch (\RedisException $e) {
-            throw new StorageException($e->getMessage());
+        if ($this->redis->zRemRangeByScore($service, '-inf', $expires) === false) {
+            throw new StorageException('Failed to remove expired elements. service: ' . $service);
         }
+
+        $r = $this->redis->zCard($service);
 
         if ($r === false) {
             throw new StorageException('Failed to load cardinality. service: ' . $service);
@@ -71,16 +70,13 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
 
     /**
      * @param string $service
+     *
      * @throws StorageException
      */
     public function increment($service)
     {
         $t = microtime(true);
-        try {
-            $r = $this->redis->zAdd($service, $t, $t);
-        } catch (\RedisException $e) {
-            throw new StorageException($e->getMessage());
-        }
+        $r = $this->redis->zAdd($service, $t, $t);
 
         if ($r === false) {
             throw new StorageException('Failed to add sorted set. service: ' . $service);
@@ -99,16 +95,13 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
 
     /**
      * @param $service
+     *
      * @return int|void
      * @throws StorageException
      */
     public function loadLastFailureTime($service)
     {
-        try {
-            $lastFailure = $this->redis->zRange($service, -1, -1);
-        } catch (\RedisException $e) {
-            throw new StorageException($e->getMessage());
-        }
+        $lastFailure = $this->redis->zRange($service, -1, -1);
 
         if (!$lastFailure) {
             return;
@@ -119,16 +112,13 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
 
     /**
      * @param string $service
-     * @param int $status
+     * @param int    $status
+     *
      * @throws StorageException
      */
     public function saveStatus($service, $status)
     {
-        try {
-            $r = $this->redis->set($service, $status);
-        } catch (\RedisException $e) {
-            throw new StorageException($e->getMessage());
-        }
+        $r = $this->redis->set($service, $status);
 
         if ($r === false) {
             throw new StorageException(sprintf(
@@ -141,16 +131,13 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
 
     /**
      * @param string $service
+     *
      * @return int
      * @throws StorageException
      */
     public function loadStatus($service)
     {
-        try {
-            $r = $this->redis->get($service);
-        } catch (\RedisException $e) {
-            throw new StorageException($e->getMessage());
-        }
+        $r = $this->redis->get($service);
 
         if ($r === false) {
             throw new StorageException('Failed to load status. service: ' . $service);

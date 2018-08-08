@@ -132,18 +132,15 @@ class RedisStore
      *
      * @param   string $key
      * @param   string $value
-     * @param   int    $timeout [optional] Calling setex() is preferred if you want a timeout.
      *
      * @return  bool    TRUE if the command is successful.
      *
      * @throws \Ackintosh\Ganesha\Exception\StorageException
      */
-    public function set($key, $value, $timeout = 0)
+    public function set($key, $value)
     {
         try {
-            if ($this->redis instanceof \Redis) {
-                return $this->redis->set($key, $value, $timeout = 0);
-            }
+            return $this->redis->set($key, $value);
         } catch (Exception $exception) {
             throw new StorageException($exception->getMessage(), $exception->getCode(), $exception);
         }
@@ -161,9 +158,7 @@ class RedisStore
     public function get($key)
     {
         try {
-            if ($this->redis instanceof \Redis) {
-                return $this->redis->get($key);
-            }
+            return $this->redis->get($key);
         } catch (Exception $exception) {
             throw new StorageException($exception->getMessage(), $exception->getCode(), $exception);
         }

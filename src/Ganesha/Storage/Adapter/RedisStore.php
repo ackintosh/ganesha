@@ -49,7 +49,7 @@ class RedisStore
     public function zRemRangeByScore($key, $start, $end)
     {
         try {
-            if ($this->redis instanceof \Redis) {
+            if ($this->redis instanceof \Redis || $this->redis instanceof \RedisArray) {
                 return $this->redis->zRemRangeByScore($key, $start, $end);
             }
         } catch (Exception $exception) {
@@ -69,7 +69,7 @@ class RedisStore
     public function zCard($key)
     {
         try {
-            if ($this->redis instanceof \Redis) {
+            if ($this->redis instanceof \Redis || $this->redis instanceof \RedisArray) {
                 return $this->redis->zCard($key);
             }
         } catch (Exception $exception) {
@@ -91,7 +91,7 @@ class RedisStore
     public function zAdd($key, $score1, $value1)
     {
         try {
-            if ($this->redis instanceof \Redis) {
+            if ($this->redis instanceof \Redis || $this->redis instanceof \RedisArray) {
                 return $this->redis->zAdd($key, $score1, $value1);
             }
         } catch (Exception $exception) {
@@ -119,7 +119,7 @@ class RedisStore
     public function zRange($key, $start, $end, $withscores = null)
     {
         try {
-            if ($this->redis instanceof \Redis) {
+            if ($this->redis instanceof \Redis || $this->redis instanceof \RedisArray) {
                 return $this->redis->zRange($key, $start, $end, $withscores = null);
             }
         } catch (Exception $exception) {

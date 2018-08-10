@@ -4,7 +4,7 @@ namespace Ackintosh\Ganesha\Storage\Adapter;
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Configuration;
 
-class RedisTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractRedisTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Redis
@@ -21,15 +21,16 @@ class RedisTest extends \PHPUnit_Framework_TestCase
      */
     const TIME_WINDOW = 3;
 
+    /**
+     * @return \Redis|\RedisArray|\RedisCluster|\Predis\Client
+     */
+    abstract protected function getRedisConnection();
+
     public function setUp()
     {
         parent::setUp();
-        $r = new \Redis();
-        $r->connect(
-            getenv('GANESHA_EXAMPLE_REDIS') ? getenv('GANESHA_EXAMPLE_REDIS') : 'localhost'
-        );
-        $r->flushAll();
-        $this->redisAdapter = new Redis($r);
+
+        $this->redisAdapter = new Redis($this->getRedisConnection());
         $configuration = new Configuration(['timeWindow' => self::TIME_WINDOW]);
         $this->redisAdapter->setConfiguration($configuration);
     }

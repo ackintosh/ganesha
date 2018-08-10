@@ -49,9 +49,7 @@ class RedisStore
     public function zRemRangeByScore($key, $start, $end)
     {
         try {
-            if ($this->redis instanceof \Redis || $this->redis instanceof \RedisArray) {
-                return $this->redis->zRemRangeByScore($key, $start, $end);
-            }
+            return $this->redis->zRemRangeByScore($key, $start, $end);
         } catch (Exception $exception) {
             throw new StorageException($exception->getMessage(), $exception->getCode(), $exception);
         }
@@ -69,9 +67,7 @@ class RedisStore
     public function zCard($key)
     {
         try {
-            if ($this->redis instanceof \Redis || $this->redis instanceof \RedisArray) {
-                return $this->redis->zCard($key);
-            }
+            return $this->redis->zCard($key);
         } catch (Exception $exception) {
             throw new StorageException($exception->getMessage(), $exception->getCode(), $exception);
         }
@@ -91,9 +87,7 @@ class RedisStore
     public function zAdd($key, $score1, $value1)
     {
         try {
-            if ($this->redis instanceof \Redis || $this->redis instanceof \RedisArray) {
-                return $this->redis->zAdd($key, $score1, $value1);
-            }
+            return $this->redis->zAdd($key, $score1, $value1);
         } catch (Exception $exception) {
             throw new StorageException($exception->getMessage(), $exception->getCode(), $exception);
         }
@@ -110,18 +104,15 @@ class RedisStore
      * @param   string $key
      * @param   int    $start
      * @param   int    $end
-     * @param   bool   $withscores
      *
      * @return  array   Array containing the values in specified range.
      *
      * @throws \Ackintosh\Ganesha\Exception\StorageException
      */
-    public function zRange($key, $start, $end, $withscores = null)
+    public function zRange($key, $start, $end)
     {
         try {
-            if ($this->redis instanceof \Redis || $this->redis instanceof \RedisArray) {
-                return $this->redis->zRange($key, $start, $end, $withscores = null);
-            }
+            return $this->redis->zRange($key, $start, $end);
         } catch (Exception $exception) {
             throw new StorageException($exception->getMessage(), $exception->getCode(), $exception);
         }

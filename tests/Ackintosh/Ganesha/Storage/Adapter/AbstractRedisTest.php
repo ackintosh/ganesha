@@ -3,6 +3,7 @@ namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Configuration;
+use Ackintosh\Ganesha\Exception\StorageException;
 
 abstract class AbstractRedisTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,16 +41,22 @@ abstract class AbstractRedisTest extends \PHPUnit_Framework_TestCase
      */
     public function incrementAndLoad()
     {
-        $this->redisAdapter->increment($this->service);
-        $this->redisAdapter->increment($this->service);
+        try {
+            $this->redisAdapter->increment($this->service);
+            $this->redisAdapter->increment($this->service);
 
-        sleep(self::TIME_WINDOW);
+            sleep(self::TIME_WINDOW);
 
-        $this->redisAdapter->increment($this->service);
-        $this->redisAdapter->increment($this->service);
+            $this->redisAdapter->increment($this->service);
+            $this->redisAdapter->increment($this->service);
 
-        // Expired value will be remove
-        $this->assertSame(2, $this->redisAdapter->load($this->service));
+            // Expired values will be removed
+            $result = $this->redisAdapter->load($this->service);
+        } catch (StorageException $exception) {
+            $this->fail($exception->getMessage());
+        }
+
+        $this->assertSame(2, $result);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
-class RedisRedisTest extends AbstractRedisTest
+class PredisRedisTest extends AbstractRedisTest
 {
     /**
      * @return \Predis\Client

@@ -11,10 +11,8 @@ class RedisArrayTest extends AbstractRedisTest
      */
     protected function getRedisConnection()
     {
-        $r = new RedisArray([new \Redis()]);
-        $r->connect(
-            getenv('GANESHA_EXAMPLE_REDIS') ?: 'localhost'
-        );
+        $r = new RedisArray([getenv('GANESHA_EXAMPLE_REDIS') ?: 'localhost']);
+        $r->connect();
         $r->flushAll();
 
         return $r;

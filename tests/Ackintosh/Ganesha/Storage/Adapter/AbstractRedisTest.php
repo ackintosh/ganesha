@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha;
@@ -8,24 +9,17 @@ use Ackintosh\Ganesha\Exception\StorageException;
 abstract class AbstractRedisTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var int
+     */
+    const TIME_WINDOW = 3;
+    /**
      * @var Redis
      */
     private $redisAdapter;
-
     /**
      * @var string
      */
     private $service = 'testService';
-
-    /**
-     * @var int
-     */
-    const TIME_WINDOW = 3;
-
-    /**
-     * @return \Redis|\RedisArray|\RedisCluster|\Predis\Client
-     */
-    abstract protected function getRedisConnection();
 
     public function setUp()
     {
@@ -35,6 +29,11 @@ abstract class AbstractRedisTest extends \PHPUnit_Framework_TestCase
         $configuration = new Configuration(['timeWindow' => self::TIME_WINDOW]);
         $this->redisAdapter->setConfiguration($configuration);
     }
+
+    /**
+     * @return \Redis|\RedisArray|\RedisCluster|\Predis\Client
+     */
+    abstract protected function getRedisConnection();
 
     /**
      * @test
@@ -134,19 +133,23 @@ abstract class AbstractRedisTest extends \PHPUnit_Framework_TestCase
      */
     public function loadLastFailureTime()
     {
-        $this->redisAdapter->increment($this->service);
+        try {
+            $this->redisAdapter->increment($this->service);
 
-        sleep(3);
+            sleep(3);
 
-        $this->redisAdapter->increment($this->service);
-        $lastFailureTime = microtime(true);
+            $this->redisAdapter->increment($this->service);
+            $lastFailureTime = microtime(true);
 
-        $this->assertEquals(
-            (int)$lastFailureTime,
-            $this->redisAdapter->loadLastFailureTime($this->service),
-            null,
-            1
-        );
+            $this->assertEquals(
+                (int)$lastFailureTime,
+                $this->redisAdapter->loadLastFailureTime($this->service),
+                null,
+                1
+            );
+        } catch (StorageException $exception) {
+            $this->fail($exception->getMessage());
+        }
     }
 
     /**

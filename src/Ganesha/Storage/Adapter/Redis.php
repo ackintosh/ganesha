@@ -79,7 +79,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
         $r = $this->redis->zAdd($service, $t, $t);
 
         if ($r === false) {
-            throw new StorageException('Failed to add sorted set. service: ' . $service);
+            throw new StorageException('Failed to add sorted set. service: ' . $service . ', returned: ' . print_r($r, true));
         }
     }
 

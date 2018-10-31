@@ -1,6 +1,7 @@
 <?php
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
+use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
@@ -145,8 +146,11 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
             throw new StorageException($e->getMessage());
         }
 
+        // \Redis::get() returns FALSE if key didn't exist.
+        // @see https://github.com/phpredis/phpredis#get
         if ($r === false) {
-            throw new StorageException('Failed to load status. service: ' . $service);
+            $this->saveStatus($service, Ganesha::STATUS_CALMED_DOWN);
+            return Ganesha::STATUS_CALMED_DOWN;
         }
 
         return (int)$r;

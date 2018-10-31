@@ -170,6 +170,14 @@ class RedisTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function loadStatusReturns_STATUS_CALMED_DOWN_AsInitialStatus()
+    {
+        $this->assertSame(Ganesha::STATUS_CALMED_DOWN, $this->redisAdapter->loadStatus($this->service));
+    }
+
+    /**
+     * @test
+     */
     public function saveAndLoadStatus()
     {
         $this->redisAdapter->saveStatus($this->service, Ganesha::STATUS_TRIPPED);
@@ -202,20 +210,6 @@ class RedisTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \RedisException('exception test'));
 
         (new Redis($mock))->saveStatus($this->service, Ganesha::STATUS_TRIPPED);
-    }
-
-    /**
-     * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
-     * @expectedExceptionMessageRegExp /\AFailed to load status/
-     */
-    public function loadStatusThrowsExceptionWhenFailedToRunset()
-    {
-        $mock = $this->getMockBuilder(\Redis::class)->getMock();
-        $mock->method('get')
-            ->willReturn(false);
-
-        $this->assertNull((new Redis($mock))->loadStatus($this->service));
     }
 
     /**

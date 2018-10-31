@@ -215,20 +215,6 @@ class RedisTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @expectedException \Ackintosh\Ganesha\Exception\StorageException
-     * @expectedExceptionMessageRegExp /\AFailed to load status/
-     */
-    public function loadStatusThrowsExceptionWhenFailedToRunset()
-    {
-        $mock = $this->getMockBuilder(\Redis::class)->getMock();
-        $mock->method('get')
-            ->willReturn(false);
-
-        $this->assertNull((new Redis($mock))->loadStatus($this->service));
-    }
-
-    /**
-     * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
      * @expectedExceptionMessage exception test
      */
     public function loadStatusThrowsException()

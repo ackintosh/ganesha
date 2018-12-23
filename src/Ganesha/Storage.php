@@ -333,7 +333,12 @@ class Storage
      */
     private function lastFailureKey($service)
     {
-        return $this->prefix($service) . self::KEY_SUFFIX_LAST_FAILURE_TIME;
+        return $this->supportRollingTimeWindow()
+            // If the adapter supports RollingTimeWindow use failureKey() instead,
+            // because Redis doesn't save lastFailureTime.
+            // @see Ackintosh\Ganesha\Storage\Adapter\Redis#saveLastFailureTime()
+            ? $this->failureKey($service)
+            : $this->prefix($service) . self::KEY_SUFFIX_LAST_FAILURE_TIME;
     }
 
     /**

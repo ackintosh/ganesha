@@ -3,6 +3,7 @@ namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Storage\Adapter\Memcached;
+use Ackintosh\Ganesha\Storage\Adapter\Redis;
 
 class StorageTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,5 +23,23 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($storage->getStatus($service), Ganesha::STATUS_CALMED_DOWN);
         $storage->setStatus($service, Ganesha::STATUS_TRIPPED);
         $this->assertSame($storage->getStatus($service), Ganesha::STATUS_TRIPPED);
+    }
+
+    /**
+     * @test
+     */
+    public function getLastFailureTimeWithRollingTimeWindow()
+    {
+        $r = new \Redis();
+        $r->connect(
+            getenv('GANESHA_EXAMPLE_REDIS') ? getenv('GANESHA_EXAMPLE_REDIS') : 'localhost'
+        );
+        $r->flushAll();
+        $storage = new Storage(new Redis(($r)), null);
+
+        $service = 'test';
+        $storage->incrementFailureCount($service);
+
+        $this->assertNotNull($storage->getLastFailureTime($service));
     }
 }

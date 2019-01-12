@@ -273,7 +273,7 @@ class Storage
     /**
      * @return bool
      */
-    public function supportRollingTimeWindow()
+    public function supportSlidingTimeWindow()
     {
         return $this->adapter instanceof SlidingTimeWindowInterface;
     }
@@ -333,8 +333,8 @@ class Storage
      */
     private function lastFailureKey($service)
     {
-        return $this->supportRollingTimeWindow()
-            // If the adapter supports RollingTimeWindow use failureKey() instead,
+        return $this->supportSlidingTimeWindow()
+            // If the adapter supports SlidingTimeWindow use failureKey() instead,
             // because Redis doesn't save lastFailureTime.
             // @see Ackintosh\Ganesha\Storage\Adapter\Redis#saveLastFailureTime()
             ? $this->failureKey($service)

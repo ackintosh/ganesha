@@ -265,7 +265,7 @@ class Storage
     /**
      * @return bool
      */
-    public function supportFixedTimeWindow()
+    public function supportTumblingTimeWindow()
     {
         return $this->adapter instanceof TumblingTimeWindowInterface;
     }

@@ -135,7 +135,7 @@ class Rate implements StrategyInterface
             case $this->storage->supportRollingTimeWindow():
                 return $this->isClosedInCurrentTimeWindow($service);
                 break;
-            case $this->storage->supportFixedTimeWindow():
+            case $this->storage->supportTumblingTimeWindow():
                 return $this->isClosedInCurrentTimeWindow($service) && $this->isClosedInPreviousTimeWindow($service);
                 break;
             default:

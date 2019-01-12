@@ -132,10 +132,10 @@ class Rate implements StrategyInterface
     private function isClosed($service)
     {
         switch (true) {
-            case $this->storage->supportRollingTimeWindow():
+            case $this->storage->supportSlidingTimeWindow():
                 return $this->isClosedInCurrentTimeWindow($service);
                 break;
-            case $this->storage->supportFixedTimeWindow():
+            case $this->storage->supportTumblingTimeWindow():
                 return $this->isClosedInCurrentTimeWindow($service) && $this->isClosedInPreviousTimeWindow($service);
                 break;
             default:

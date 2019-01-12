@@ -28,7 +28,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function getLastFailureTimeWithRollingTimeWindow()
+    public function getLastFailureTimeWithSlidingTimeWindow()
     {
         $r = new \Redis();
         $r->connect(

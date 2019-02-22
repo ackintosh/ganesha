@@ -20,7 +20,7 @@ Ganesha is PHP implementation of [Circuit Breaker pattern](http://martinfowler.c
 
 It is one of the very active Circuit Breaker in PHP and production ready: well-tested, well-documented. :muscle:  You can integrate Ganesha to your existing code base easily as Ganesha provides just simple interface and [Guzzle Middleware](https://github.com/ackintosh/ganesha#ganesha-heart-guzzle) behaves transparency.
 
-If you have an idea about enhancement, bugfix, etc..., please let me know it via [Issues](https://github.com/ackintosh/ganesha/issues). :sparkles:
+If you have an idea about enhancement, bugfix..., please let me know via [Issues](https://github.com/ackintosh/ganesha/issues). :sparkles:
 
 ## Are you interested?
 

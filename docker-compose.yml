@@ -16,6 +16,7 @@ services:
       GANESHA_EXAMPLE_SERVER: "server"
       GANESHA_EXAMPLE_MEMCACHED: "memcached"
       GANESHA_EXAMPLE_REDIS: "redis"
+      GANESHA_EXAMPLE_MONGO: "mongo"
       RUN_IN_DOCKER_COMPOSE: 1
   memcached:
     image: memcached:1.5.4
@@ -23,3 +24,6 @@ services:
   redis:
     image: redis:4.0.6
     container_name: redis
+  mongo:
+    image: mongo:4.0.6
+    container_name: mongo

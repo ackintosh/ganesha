@@ -22,6 +22,22 @@ It's one of the [Circuit Breaker](https://martinfowler.com/bliki/CircuitBreaker.
 
 If you have an idea about enhancement, bugfix..., please let me know via [Issues](https://github.com/ackintosh/ganesha/issues). :sparkles:
 
+## Table of contents
+
+- [Ganesha](#ganesha)
+- [Table of contents](#table-of-contents)
+- [Are you interested?](#are-you-interested)
+- [Unveil Ganesha](#unveil-ganesha)
+- [Usage](#usage)
+- [Strategies](#strategies)
+- [Ganesha :heart: Guzzle](#ganesha-heart-guzzle)
+- [Ganesha :heart: OpenAPI Generator](#ganesha-heart-openapi-generator)
+- [Run tests](#run-tests)
+- [Companies using Ganesha :rocket:](#companies-using-ganesha-rocket)
+- [Build promotion site with Soushi](#build-promotion-site-with-soushi)
+- [Requirements](#requirements)
+- [Author](#author)
+
 ## Are you interested?
 
 [Here](./examples) is an example which shows you how Ganesha behaves when a failure occurs.  
@@ -351,7 +367,7 @@ $ docker-compose up
 $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 ```
 
-## Companies using Ganesha
+## Companies using Ganesha :rocket:
 
 Here are some companies using Ganesha in production. To add your company to the list, please visit [README.md](https://github.com/ackintosh/ganesha/blob/master/README.md) and click on the icon to edit the page.
 

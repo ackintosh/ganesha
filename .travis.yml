@@ -18,6 +18,7 @@ matrix:
 services:
   - memcached
   - redis
+  - mongodb
 
 before_install:
   - phpenv config-add .travis.php.ini

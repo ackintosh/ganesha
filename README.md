@@ -351,6 +351,12 @@ $ docker-compose up
 $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 ```
 
+## Companies using Ganesha
+
+Here are some companies using Ganesha in production. To add your company to the list, please visit [README.md](https://github.com/ackintosh/ganesha/blob/master/README.md) and click on the icon to edit the page.
+
+- [APISHIP LLC](https://apiship.ru)
+
 ## Build promotion site with [Soushi](https://github.com/kentaro/soushi)
 
 https://ackintosh.github.io/ganesha/

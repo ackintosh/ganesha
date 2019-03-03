@@ -18,14 +18,14 @@ Ganesha is PHP implementation of [Circuit Breaker pattern](http://martinfowler.c
 
 ---
 
-It is one of the very active Circuit Breaker in PHP and production ready: well-tested, well-documented. :muscle:  You can integrate Ganesha to your existing code base easily as Ganesha provides just simple interface and [Guzzle Middleware](https://github.com/ackintosh/ganesha#ganesha-heart-guzzle) behaves transparency.
+It's one of the [Circuit Breaker](https://martinfowler.com/bliki/CircuitBreaker.html) implementation in PHP which has been actively developed and production ready - well-tested and well-documented. :muscle:  You can integrate Ganesha to your existing code base easily as Ganesha provides just simple interfaces and [Guzzle Middleware](https://github.com/ackintosh/ganesha#ganesha-heart-guzzle) behaves transparency.
 
 If you have an idea about enhancement, bugfix..., please let me know via [Issues](https://github.com/ackintosh/ganesha/issues). :sparkles:
 
 ## Are you interested?
 
-[Here](./examples) is an example which is easily executable. All you need is Docker.  
-You can experience how Ganesha behaves when a failure occurs.
+[Here](./examples) is an example which shows you how Ganesha behaves when a failure occurs.  
+It is easily executable. All you need is Docker. 
 
 ## Unveil Ganesha
 
@@ -39,7 +39,7 @@ $ php composer.phar require ackintosh/ganesha
 
 ## Usage
 
-Ganesha provides following simple interface. Each method receives a string (named `$service` in example) to identify the service. `$service` will be the service name of the API, the endpoint name or etc. Please remember that Ganesha detects system failure for each `$service`.
+Ganesha provides following simple interfaces. Each method receives a string (named `$service` in example) to identify the service. `$service` will be the service name of the API, the endpoint name or etc. Please remember that Ganesha detects system failure for each `$service`.
 
 ```php
 $ganesha->isAvailable($service);
@@ -69,7 +69,17 @@ try {
 }
 ```
 
+#### Three states of circuit breaker
+
+![image](https://user-images.githubusercontent.com/1885716/53690408-4a7f3d00-3dad-11e9-852c-0e082b7b9636.png)  
+([martinfowler.com : CircuitBreaker](https://martinfowler.com/bliki/CircuitBreaker.html))
+
+Ganesha follows the states and transitions described in the article faithfully. `$ganesha->isAvailable()` returns `true` if the circuit states on `Closed`, otherwise it returns `false`.
+
 #### Subscribe to events in ganesha
+
+- When the circuit state transitions to `Open` the event `Ganesha::EVENT_TRIPPED` is triggered
+- When the state back to `Closed` the event `Ganesha::EVENT_CALMED_DOWN ` is triggered
 
 ```php
 $ganesha->subscribe(function ($event, $service, $message) {
@@ -95,7 +105,7 @@ $ganesha->subscribe(function ($event, $service, $message) {
 
 #### Disable
 
-Ganesha continue to record success/failure statistics, but Ganesha does not trip even if failure count reached to threshold.
+If disabled, Ganesha keeps to record success/failure statistics, but Ganesha doesn't trip even if the failures reached to a threshold. 
 
 ```php
 // Ganesha with Count strategy(threshold `3`).
@@ -116,6 +126,7 @@ var_dump($ganesha->isAvailable($service));
 
 #### Reset
 
+Resets the statistics saved in a storage.
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::build([

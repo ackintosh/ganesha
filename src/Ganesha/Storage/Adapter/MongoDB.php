@@ -210,11 +210,11 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     }
 
     /**
-     * @param string $command
      * @param $filter
      * @param array $options
+     * @param string $command
      */
-    private function bulkWrite($filter, array $options, string $command)
+    private function bulkWrite($filter, array $options, $command)
     {
         try {
             $bulk = new \MongoDB\Driver\BulkWrite();

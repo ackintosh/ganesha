@@ -184,6 +184,21 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 ]);
 ```
 
+### MongoDB
+
+MongoDB adapter requires [mongodb](https://github.com/mongodb/mongo-php-library) extension.
+
+```php
+$manager = new \MongoDB\Driver\Manager('mongodb://localhost:27017/');
+$adapter = new Ackintosh\Ganesha\Storage\Adapter\MongoDB($manager);
+$configuration = new Configuration(['dbName' => 'ganesha', 'collectionName' => 'ganeshaCollection']);
+
+$adapter->setConfiguration($configuration);
+$ganesha = Ackintosh\Ganesha\Builder::build([
+    'adapter' => $adapter,
+]);
+```
+
 ## Ganesha :heart: Guzzle
 
 If you using [Guzzle](https://github.com/guzzle/guzzle) (v6 or higher), [Guzzle Middleware](http://docs.guzzlephp.org/en/stable/handlers-and-middleware.html) powered by Ganesha makes it easy to integrate Circuit Breaker to your existing code base.

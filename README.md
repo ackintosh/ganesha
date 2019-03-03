@@ -71,7 +71,8 @@ try {
 
 #### Three states of circuit breaker
 
-![image](https://user-images.githubusercontent.com/1885716/53690408-4a7f3d00-3dad-11e9-852c-0e082b7b9636.png)  
+<img src="https://user-images.githubusercontent.com/1885716/53690408-4a7f3d00-3dad-11e9-852c-0e082b7b9636.png" width="500">
+
 ([martinfowler.com : CircuitBreaker](https://martinfowler.com/bliki/CircuitBreaker.html))
 
 Ganesha follows the states and transitions described in the article faithfully. `$ganesha->isAvailable()` returns `true` if the circuit states on `Closed`, otherwise it returns `false`.

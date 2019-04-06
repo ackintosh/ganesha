@@ -14,7 +14,9 @@ Ganesha is PHP implementation of [Circuit Breaker pattern](http://martinfowler.c
 
 **If Ganesha is saving your service from system failures, please consider [donating](https://www.patreon.com/ackintosh) to this project's author, [Akihito Nakano](#author), to show your :heart: and support. Thanks you!**
 
-<a href="https://www.patreon.com/ackintosh" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+<a href="https://www.patreon.com/ackintosh" data-patreon-widget-type="become-patron-button">
+<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160" title="Become a Patron!">
+</a>
 
 </div>
 

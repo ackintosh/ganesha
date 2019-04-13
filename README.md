@@ -34,6 +34,7 @@ If you have an idea about enhancement, bugfix..., please let me know via [Issues
 - [Unveil Ganesha](#unveil-ganesha)
 - [Usage](#usage)
 - [Strategies](#strategies)
+- [Adapters](#adapters)
 - [Ganesha :heart: Guzzle](#ganesha-heart-guzzle)
 - [Ganesha :heart: OpenAPI Generator](#ganesha-heart-openapi-generator)
 - [Run tests](#run-tests)
@@ -186,7 +187,7 @@ $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
 ]);
 ```
 
-## Adapters
+## [Adapters](#table-of-contents)
 
 ### Redis
 
@@ -231,7 +232,7 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 ]);
 ```
 
-## Ganesha :heart: Guzzle
+## [Ganesha :heart: Guzzle](#table-of-contents)
 
 If you using [Guzzle](https://github.com/guzzle/guzzle) (v6 or higher), [Guzzle Middleware](http://docs.guzzlephp.org/en/stable/handlers-and-middleware.html) powered by Ganesha makes it easy to integrate Circuit Breaker to your existing code base.
 

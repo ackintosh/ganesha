@@ -191,7 +191,7 @@ $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
 
 ### Redis
 
-Redis adapter requires [phpredis](https://github.com/phpredis/phpredis). So if you don't have it, run `pecl install redis`.
+Redis adapter requires [phpredis](https://github.com/phpredis/phpredis) or [Predis](https://github.com/nrk/predis) client instance.
 
 ```php
 $redis = new \Redis();

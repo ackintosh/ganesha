@@ -12,22 +12,43 @@ Ganesha is PHP implementation of [Circuit Breaker pattern](http://martinfowler.c
 
 <div align="center">
 
-**Please consider [donating](https://www.patreon.com/ackintosh) to this project's author, [Akihito Nakano](#author), to show your :heart: and support.**
+**If Ganesha is saving your service from system failures, please consider [donating](https://www.patreon.com/ackintosh) to this project's author, [Akihito Nakano](#author), to show your :heart: and support. Thanks you!**
+
+<a href="https://www.patreon.com/ackintosh" data-patreon-widget-type="become-patron-button">
+<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160" title="Become a Patron!">
+</a>
 
 </div>
 
 ---
 
-It is one of the very active Circuit Breaker in PHP and production ready: well-tested, well-documented. :muscle:  You can integrate Ganesha to your existing code base easily as Ganesha provides just simple interface and [Guzzle Middleware](https://github.com/ackintosh/ganesha#ganesha-heart-guzzle) behaves transparency.
+This is one of the [Circuit Breaker](https://martinfowler.com/bliki/CircuitBreaker.html) implementation in PHP which has been actively developed and production ready - well-tested and well-documented. :muscle:  You can integrate Ganesha to your existing code base easily as Ganesha provides just simple interfaces and [Guzzle Middleware](https://github.com/ackintosh/ganesha#ganesha-heart-guzzle) behaves transparency.
 
-If you have an idea about enhancement, bugfix, etc..., please let me know it via [Issues](https://github.com/ackintosh/ganesha/issues). :sparkles:
+If you have an idea about enhancement, bugfix..., please let me know via [Issues](https://github.com/ackintosh/ganesha/issues). :sparkles:
 
-## Are you interested?
+## Table of contents
 
-[Here](./examples) is an example which is easily executable. All you need is Docker.  
-You can experience how Ganesha behaves when a failure occurs.
+- [Ganesha](#ganesha)
+- [Table of contents](#table-of-contents)
+- [Are you interested?](#are-you-interested)
+- [Unveil Ganesha](#unveil-ganesha)
+- [Usage](#usage)
+- [Strategies](#strategies)
+- [Adapters](#adapters)
+- [Ganesha :heart: Guzzle](#ganesha-heart-guzzle)
+- [Ganesha :heart: OpenAPI Generator](#ganesha-heart-openapi-generator)
+- [Run tests](#run-tests)
+- [Companies using Ganesha :rocket:](#companies-using-ganesha-rocket)
+- [Build promotion site with Soushi](#build-promotion-site-with-soushi)
+- [Requirements](#requirements)
+- [Author](#author)
 
-## Unveil Ganesha
+## [Are you interested?](#table-of-contents)
+
+[Here](./examples) is an example which shows you how Ganesha behaves when a failure occurs.  
+It is easily executable. All you need is Docker. 
+
+## [Unveil Ganesha](#table-of-contents)
 
 ```bash
 # Install Composer
@@ -37,9 +58,9 @@ $ curl -sS https://getcomposer.org/installer | php
 $ php composer.phar require ackintosh/ganesha
 ```
 
-## Usage
+## [Usage](#table-of-contents)
 
-Ganesha provides following simple interface. Each method receives a string (named `$service` in example) to identify the service. `$service` will be the service name of the API, the endpoint name or etc. Please remember that Ganesha detects system failure for each `$service`.
+Ganesha provides following simple interfaces. Each method receives a string (named `$service` in example) to identify the service. `$service` will be the service name of the API, the endpoint name or etc. Please remember that Ganesha detects system failure for each `$service`.
 
 ```php
 $ganesha->isAvailable($service);
@@ -69,7 +90,18 @@ try {
 }
 ```
 
+#### Three states of circuit breaker
+
+<img src="https://user-images.githubusercontent.com/1885716/53690408-4a7f3d00-3dad-11e9-852c-0e082b7b9636.png" width="500">
+
+([martinfowler.com : CircuitBreaker](https://martinfowler.com/bliki/CircuitBreaker.html))
+
+Ganesha follows the states and transitions described in the article faithfully. `$ganesha->isAvailable()` returns `true` if the circuit states on `Closed`, otherwise it returns `false`.
+
 #### Subscribe to events in ganesha
+
+- When the circuit state transitions to `Open` the event `Ganesha::EVENT_TRIPPED` is triggered
+- When the state back to `Closed` the event `Ganesha::EVENT_CALMED_DOWN ` is triggered
 
 ```php
 $ganesha->subscribe(function ($event, $service, $message) {
@@ -95,7 +127,7 @@ $ganesha->subscribe(function ($event, $service, $message) {
 
 #### Disable
 
-Ganesha continue to record success/failure statistics, but Ganesha does not trip even if failure count reached to threshold.
+If disabled, Ganesha keeps to record success/failure statistics, but Ganesha doesn't trip even if the failures reached to a threshold. 
 
 ```php
 // Ganesha with Count strategy(threshold `3`).
@@ -116,6 +148,7 @@ var_dump($ganesha->isAvailable($service));
 
 #### Reset
 
+Resets the statistics saved in a storage.
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::build([
@@ -126,7 +159,7 @@ $ganesha->reset();
 
 ```
 
-## Strategies
+## [Strategies](#table-of-contents)
 
 Ganesha has two strategies which avoids cascading failures.
 
@@ -154,7 +187,7 @@ $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
 ]);
 ```
 
-## Adapters
+## [Adapters](#table-of-contents)
 
 ### Redis
 
@@ -184,7 +217,22 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 ]);
 ```
 
-## Ganesha :heart: Guzzle
+### MongoDB
+
+MongoDB adapter requires [mongodb](https://github.com/mongodb/mongo-php-library) extension.
+
+```php
+$manager = new \MongoDB\Driver\Manager('mongodb://localhost:27017/');
+$adapter = new Ackintosh\Ganesha\Storage\Adapter\MongoDB($manager);
+$configuration = new Configuration(['dbName' => 'ganesha', 'collectionName' => 'ganeshaCollection']);
+
+$adapter->setConfiguration($configuration);
+$ganesha = Ackintosh\Ganesha\Builder::build([
+    'adapter' => $adapter,
+]);
+```
+
+## [Ganesha :heart: Guzzle](#table-of-contents)
 
 If you using [Guzzle](https://github.com/guzzle/guzzle) (v6 or higher), [Guzzle Middleware](http://docs.guzzlephp.org/en/stable/handlers-and-middleware.html) powered by Ganesha makes it easy to integrate Circuit Breaker to your existing code base.
 
@@ -288,7 +336,7 @@ $middleware = new GuzzleMiddleware(
 );
 ```
 
-## Ganesha :heart: OpenAPI Generator
+## [Ganesha :heart: OpenAPI Generator](#table-of-contents)
 
 PHP client generated by [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) is using Guzzle as HTTP client and as we mentioned as [Ganesha :heart: Guzzle](https://github.com/ackintosh/ganesha#ganesha-heart-guzzle), Guzzle Middleware powered by Ganesha is ready. So it is easily possible to integrate Ganesha and the PHP client generated by OpenAPI Generator in a smart way as below.
 
@@ -312,7 +360,7 @@ try {
 }
 ```
 
-## Run tests
+## [Run tests](#table-of-contents)
 
 We can run unit tests on Docker container, so it is not necessary to install dependencies in your machine.
 
@@ -324,9 +372,17 @@ $ docker-compose up
 $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 ```
 
-## Build promotion site with [Soushi](https://github.com/kentaro/soushi)
+## [Companies using Ganesha :rocket:](#table-of-contents)
 
-https://ackintosh.github.io/ganesha/
+Here are some companies using Ganesha in production. To add your company to the list, please visit [README.md](https://github.com/ackintosh/ganesha/blob/master/README.md) and click on the icon to edit the page.
+
+- [APISHIP LLC](https://apiship.ru)
+
+## [Build promotion site with Soushi](#table-of-contents)
+
+https://ackintosh.github.io/ganesha/  
+
+The promotion site is built with [Soushi](https://github.com/kentaro/soushi), which is the site generator powered by PHP.
 
 ```bash
 $ docker-compose run --rm client soushi build docs
@@ -335,11 +391,11 @@ $ docker-compose run --rm client soushi build docs
 $ open docs/index.html
 ```
 
-## Requirements
+## [Requirements](#table-of-contents)
 
 Ganesha supports PHP 5.6 or higher.
 
-## Author
+## [Author](#table-of-contents)
 
 **Ganesha** &copy; ackintosh, Released under the [MIT](./LICENSE) License.  
 Authored and maintained by ackintosh

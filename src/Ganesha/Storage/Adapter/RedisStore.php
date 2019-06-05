@@ -142,14 +142,14 @@ class RedisStore
      *
      * @param   string $key
      *
-     * @return  string|bool  If key didn't exist, FALSE is returned. Otherwise, the value related to this key is returned.
+     * @return  string|false  If key didn't exist, FALSE is returned. Otherwise, the value related to this key is returned.
      *
      * @throws \Ackintosh\Ganesha\Exception\StorageException
      */
     public function get($key)
     {
         try {
-            return $this->redis->get($key);
+            return $this->redis->get($key) ?: false;
         } catch (Exception $exception) {
             throw new StorageException($exception->getMessage(), $exception->getCode(), $exception);
         }

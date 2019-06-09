@@ -1,54 +1,61 @@
 <?php
+
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Configuration;
+use Ackintosh\Ganesha\Exception\StorageException;
 
-class RedisTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractRedisTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var int
+     */
+    const TIME_WINDOW = 3;
     /**
      * @var Redis
      */
     private $redisAdapter;
-
     /**
      * @var string
      */
     private $service = 'testService';
 
-    /**
-     * @var int
-     */
-    const TIME_WINDOW = 3;
-
     public function setUp()
     {
         parent::setUp();
-        $r = new \Redis();
-        $r->connect(
-            getenv('GANESHA_EXAMPLE_REDIS') ? getenv('GANESHA_EXAMPLE_REDIS') : 'localhost'
-        );
-        $r->flushAll();
-        $this->redisAdapter = new Redis($r);
+
+        $this->redisAdapter = new Redis($this->getRedisConnection());
         $configuration = new Configuration(['timeWindow' => self::TIME_WINDOW]);
         $this->redisAdapter->setConfiguration($configuration);
     }
+
+    /**
+     * @return \Redis|\RedisArray|\RedisCluster|\Predis\Client
+     */
+    abstract protected function getRedisConnection();
 
     /**
      * @test
      */
     public function incrementAndLoad()
     {
-        $this->redisAdapter->increment($this->service);
-        $this->redisAdapter->increment($this->service);
+        try {
+            $this->redisAdapter->increment($this->service);
+            $this->redisAdapter->increment($this->service);
 
-        sleep(self::TIME_WINDOW);
+            usleep(self::TIME_WINDOW * 1000000 + 100);
 
-        $this->redisAdapter->increment($this->service);
-        $this->redisAdapter->increment($this->service);
+            $this->redisAdapter->increment($this->service);
+            $this->redisAdapter->increment($this->service);
 
-        // Expired value will be remove
-        $this->assertSame(2, $this->redisAdapter->load($this->service));
+            // Expired values will be removed
+            $result = $this->redisAdapter->load($this->service);
+        } catch (StorageException $exception) {
+            $this->fail($exception->getMessage());
+        }
+
+        $this->assertSame(2, $result);
     }
 
     /**
@@ -126,19 +133,23 @@ class RedisTest extends \PHPUnit_Framework_TestCase
      */
     public function loadLastFailureTime()
     {
-        $this->redisAdapter->increment($this->service);
+        try {
+            $this->redisAdapter->increment($this->service);
 
-        sleep(3);
+            sleep(3);
 
-        $this->redisAdapter->increment($this->service);
-        $lastFailureTime = microtime(true);
+            $this->redisAdapter->increment($this->service);
+            $lastFailureTime = microtime(true);
 
-        $this->assertEquals(
-            (int)$lastFailureTime,
-            $this->redisAdapter->loadLastFailureTime($this->service),
-            null,
-            1
-        );
+            $this->assertEquals(
+                (int)$lastFailureTime,
+                $this->redisAdapter->loadLastFailureTime($this->service),
+                null,
+                1
+            );
+        } catch (StorageException $exception) {
+            $this->fail($exception->getMessage());
+        }
     }
 
     /**

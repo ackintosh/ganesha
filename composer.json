@@ -19,11 +19,17 @@
     "phpunit/phpunit": "^5.7.27",
     "php-vcr/php-vcr": "~1.0",
     "php-vcr/phpunit-testlistener-vcr": "~2.0",
-    "php-coveralls/php-coveralls": "~2.0"
+    "php-coveralls/php-coveralls": "~2.0",
+    "predis/predis": "^1.1"
   },
   "autoload": {
     "psr-4": {
       "Ackintosh\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Ackintosh\\": "tests/Ackintosh/"
     }
   }
 }

@@ -26,5 +26,10 @@
     "psr-4": {
       "Ackintosh\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Ackintosh\\": "tests/Ackintosh/"
+    }
   }
 }

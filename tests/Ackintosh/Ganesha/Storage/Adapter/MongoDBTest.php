@@ -34,6 +34,10 @@ class MongoDBTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
+        if (!\extension_loaded('mongodb')) {
+            self::markTestSkipped('No ext-mongodb present');
+        }
+
         $host = getenv('GANESHA_EXAMPLE_MONGO') ? getenv('GANESHA_EXAMPLE_MONGO') : 'localhost';
         $manager = new \MongoDB\Driver\Manager('mongodb://' . $host . ':27017/');
 

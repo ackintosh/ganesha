@@ -44,7 +44,7 @@ abstract class AbstractRedisTest extends \PHPUnit_Framework_TestCase
             $this->redisAdapter->increment($this->service);
             $this->redisAdapter->increment($this->service);
 
-            sleep(self::TIME_WINDOW);
+            usleep(self::TIME_WINDOW * 1000000 + 100);
 
             $this->redisAdapter->increment($this->service);
             $this->redisAdapter->increment($this->service);

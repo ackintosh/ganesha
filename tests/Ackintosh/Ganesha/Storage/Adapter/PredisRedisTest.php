@@ -9,9 +9,9 @@ class PredisRedisTest extends AbstractRedisTest
      */
     protected function getRedisConnection()
     {
-        $r = new \Predis\Client(getenv('GANESHA_EXAMPLE_REDIS') ?: 'localhost');
+        $r = new \Predis\Client('tcp://' . (getenv('GANESHA_EXAMPLE_REDIS') ?: 'localhost'));
         $r->connect();
-        $r->flushAll();
+        $r->flushall();
 
         return $r;
     }

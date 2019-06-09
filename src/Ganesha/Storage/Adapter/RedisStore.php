@@ -4,6 +4,7 @@ namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha\Exception\StorageException;
 use Exception;
+use Predis\Client;
 
 class RedisStore
 {
@@ -149,7 +150,11 @@ class RedisStore
     public function get($key)
     {
         try {
-            return $this->redis->get($key) ?: false;
+            $result = $this->redis->get($key);
+            if ($this->redis instanceof Client && $result === null) {
+                return false;
+            }
+            return $result;
         } catch (Exception $exception) {
             throw new StorageException($exception->getMessage(), $exception->getCode(), $exception);
         }

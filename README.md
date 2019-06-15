@@ -12,7 +12,7 @@ Ganesha is PHP implementation of [Circuit Breaker pattern](http://martinfowler.c
 
 <div align="center">
 
-**If Ganesha is saving your service from system failures, please consider [donating](https://www.patreon.com/ackintosh) to this project's author, [Akihito Nakano](#author), to show your :heart: and support. Thanks you!**
+**If Ganesha is saving your service from system failures, please consider [donating](https://www.patreon.com/ackintosh) to this project's author, [Akihito Nakano](#author), to show your :heart: and support. Thank you!**
 
 <a href="https://www.patreon.com/ackintosh" data-patreon-widget-type="become-patron-button">
 <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160" title="Become a Patron!">
@@ -127,7 +127,7 @@ $ganesha->subscribe(function ($event, $service, $message) {
 
 #### Disable
 
-If disabled, Ganesha keeps to record success/failure statistics, but Ganesha doesn't trip even if the failures reached to a threshold. 
+If disabled, Ganesha keeps to record success/failure statistics, but Ganesha doesn't trip even if the failure count reached to a threshold.
 
 ```php
 // Ganesha with Count strategy(threshold `3`).
@@ -177,7 +177,7 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 
 ### Count
 
-If you want use Count strategy, use `Builder::buildWithCountStrategy()`.
+If you want use the Count strategy use `Builder::buildWithCountStrategy()` to build an instance.
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
@@ -191,7 +191,7 @@ $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
 
 ### Redis
 
-Redis adapter requires [phpredis](https://github.com/phpredis/phpredis) or [Predis](https://github.com/nrk/predis) client instance.
+Redis adapter requires [phpredis](https://github.com/phpredis/phpredis) or [Predis](https://github.com/nrk/predis) client instance. The example below is using [phpredis](https://github.com/phpredis/phpredis).
 
 ```php
 $redis = new \Redis();
@@ -374,9 +374,14 @@ $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 
 ## [Companies using Ganesha :rocket:](#table-of-contents)
 
-Here are some companies using Ganesha in production. To add your company to the list, please visit [README.md](https://github.com/ackintosh/ganesha/blob/master/README.md) and click on the icon to edit the page.
+Here are some companies using Ganesha in production. To add your company to the list, please visit [README.md](https://github.com/ackintosh/ganesha/blob/master/README.md) and click on the icon to edit the page or let me know via [issues](https://github.com/ackintosh/ganesha/issues)/[twitter](https://twitter.com/NAKANO_Akihito). 
 
 - [APISHIP LLC](https://apiship.ru)
+
+## [Requirements](#table-of-contents)
+
+- Ganesha supports PHP 5.6 or higher.
+- An extension or client library which are used by [the storage adapter](https://github.com/ackintosh/ganesha#adapters) you've choice will be required. Please check the [Adapters](https://github.com/ackintosh/ganesha#adapters) section for details.
 
 ## [Build promotion site with Soushi](#table-of-contents)
 
@@ -390,10 +395,6 @@ $ docker-compose run --rm client soushi build docs
 # The site will be generate into `docs` directory and let's confirm your changes.
 $ open docs/index.html
 ```
-
-## [Requirements](#table-of-contents)
-
-Ganesha supports PHP 5.6 or higher.
 
 ## [Author](#table-of-contents)
 

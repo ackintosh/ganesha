@@ -381,7 +381,7 @@ Here are some companies using Ganesha in production. To add your company to the 
 ## [Requirements](#table-of-contents)
 
 - Ganesha supports PHP 5.6 or higher.
-- An extension or client library which are used by [the storage adapter](https://github.com/ackintosh/ganesha#adapters) you've choice will be required. Please check the [Adapters](https://github.com/ackintosh/ganesha#adapters) section for details.
+- An extension or client library which is used by [the storage adapter](https://github.com/ackintosh/ganesha#adapters) you've choice will be required. Please check the [Adapters](https://github.com/ackintosh/ganesha#adapters) section for details.
 
 ## [Build promotion site with Soushi](#table-of-contents)
 

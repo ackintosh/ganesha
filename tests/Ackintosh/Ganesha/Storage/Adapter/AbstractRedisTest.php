@@ -38,6 +38,22 @@ abstract class AbstractRedisTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function doesntSupportCountStrategy()
+    {
+        $this->assertFalse($this->redisAdapter->supportCountStrategy());
+    }
+
+    /**
+     * @test
+     */
+    public function supportsRateStrategy()
+    {
+        $this->assertTrue($this->redisAdapter->supportRateStrategy());
+    }
+
+    /**
+     * @test
+     */
     public function incrementAndLoad()
     {
         try {

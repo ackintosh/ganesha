@@ -52,7 +52,7 @@ class Rate implements StrategyInterface
         }
 
         if (!call_user_func([$params['adapter'], 'supportRateStrategy'])) {
-            throw new \InvalidArgumentException("{$params['strategyClass']} doesn't support Rate Strategy.");
+            throw new \InvalidArgumentException("{$params['adapter']} doesn't support Rate Strategy.");
         }
     }
 

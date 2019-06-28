@@ -6,6 +6,18 @@ use Ackintosh\Ganesha\Configuration;
 interface AdapterInterface
 {
     /**
+     * Returns returns whether the adapter supports counting strategy
+     * @return bool
+     */
+    public function supportCountStrategy();
+
+    /**
+     * Returns returns whether the adapter supports rating strategy
+     * @return bool
+     */
+    public function supportRateStrategy();
+
+    /**
      * @param Configuration $configuration
      * @return void
      */

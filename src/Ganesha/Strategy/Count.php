@@ -48,6 +48,10 @@ class Count implements StrategyInterface
                 throw new \LogicException($r . ' is required');
             }
         }
+
+        if (!call_user_func([$params['adapter'], 'supportCountStrategy'])) {
+            throw new \InvalidArgumentException("{$params['strategyClass']} doesn't support Count Strategy.");
+        }
     }
 
     /**

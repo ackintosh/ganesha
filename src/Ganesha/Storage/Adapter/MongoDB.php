@@ -40,6 +40,22 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     }
 
     /**
+     * @return bool
+     */
+    public function supportCountStrategy()
+    {
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function supportRateStrategy()
+    {
+        return true;
+    }
+
+    /**
      * @param Configuration $configuration
      * @return void
      * @throws \Exception

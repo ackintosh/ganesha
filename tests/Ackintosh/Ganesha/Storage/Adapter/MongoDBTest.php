@@ -48,6 +48,21 @@ class MongoDBTest extends \PHPUnit_Framework_TestCase
         $this->mongodbAdapter->setConfiguration($configuration);
     }
 
+    /**
+     * @test
+     */
+    public function supportsCountStrategy()
+    {
+        $this->assertTrue($this->mongodbAdapter->supportCountStrategy());
+    }
+
+    /**
+     * @test
+     */
+    public function supportsRateStrategy()
+    {
+        $this->assertTrue($this->mongodbAdapter->supportRateStrategy());
+    }
 
     /**
      * @test

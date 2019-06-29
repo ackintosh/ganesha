@@ -30,6 +30,22 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function supportsCountStrategy()
+    {
+        $this->assertTrue($this->memcachedAdaper->supportCountStrategy());
+    }
+
+    /**
+     * @test
+     */
+    public function supportsRateStrategy()
+    {
+        $this->assertTrue($this->memcachedAdaper->supportRateStrategy());
+    }
+
+    /**
+     * @test
+     */
     public function saveAndLoad()
     {
         $this->memcachedAdaper->save($this->service, 1);

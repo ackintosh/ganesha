@@ -23,6 +23,7 @@ services:
   - mongodb
 
 before_install:
+  - ./install_memcached.sh
   - phpenv config-add .travis.php.ini
 
 before_script:

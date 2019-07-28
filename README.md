@@ -182,6 +182,24 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 ]);
 ```
 
+Note about "time window": The Storage Adapter implements either SlidingTimeWindow or TumblingTimeWindow. The difference of the implementation comes from constraints of the storage functionalities.
+
+##### SlidingTimeWindow
+
+SlidingTimeWindow implements a time period that stretches back in time from the present. For instance, a SlidingTimeWindow of 30 seconds includes any events that have occurred in the past 30 seconds.
+
+Details are shown below, quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#sliding-window):
+
+[!slidingtimewindow](https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/sliding-window.png)
+
+##### TumblingTimeWindow
+
+SlidingTimeWindow implements time segments, which are divided by a value of `timeWindow`.
+
+Details are shown below, quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#tumbling-window):
+
+[!tumblingtimewindow](https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/tumbling-window.png)
+
 ### Count
 
 If you want use the Count strategy use `Builder::buildWithCountStrategy()` to build an instance.

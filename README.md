@@ -182,19 +182,19 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 ]);
 ```
 
-Note about "time window": The Storage Adapter implements either SlidingTimeWindow or TumblingTimeWindow. The difference of the implementation comes from constraints of the storage functionalities.
+Note about "time window": The Storage Adapter implements either [SlidingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/SlidingTimeWindowInterface.php) or [TumblingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/TumblingTimeWindowInterface.php). The difference of the implementation comes from constraints of the storage functionalities.
 
-##### SlidingTimeWindow
+##### [SlidingTimeWindow]
 
-SlidingTimeWindow implements a time period that stretches back in time from the present. For instance, a SlidingTimeWindow of 30 seconds includes any events that have occurred in the past 30 seconds.
+[SlidingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/SlidingTimeWindowInterface.php) implements a time period that stretches back in time from the present. For instance, a SlidingTimeWindow of 30 seconds includes any events that have occurred in the past 30 seconds.
 
 Details are shown below, quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#sliding-window):
 
 ![slidingtimewindow](https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/sliding-window.png)
 
-##### TumblingTimeWindow
+##### [TumblingTimeWindow]
 
-SlidingTimeWindow implements time segments, which are divided by a value of `timeWindow`.
+[TumblingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/TumblingTimeWindowInterface.php) implements time segments, which are divided by a value of `timeWindow`.
 
 Details are shown below, quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#tumbling-window):
 

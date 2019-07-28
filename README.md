@@ -190,7 +190,7 @@ SlidingTimeWindow implements a time period that stretches back in time from the 
 
 Details are shown below, quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#sliding-window):
 
-[!slidingtimewindow](https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/sliding-window.png)
+![slidingtimewindow](https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/sliding-window.png)
 
 ##### TumblingTimeWindow
 
@@ -198,7 +198,7 @@ SlidingTimeWindow implements time segments, which are divided by a value of `tim
 
 Details are shown below, quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#tumbling-window):
 
-[!tumblingtimewindow](https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/tumbling-window.png)
+![tumblingtimewindow](https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/tumbling-window.png)
 
 ### Count
 

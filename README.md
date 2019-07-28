@@ -192,7 +192,7 @@ Note about "time window": The Storage Adapter implements either [SlidingTimeWind
 
 Details are shown below, quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#sliding-window):
 
-![slidingtimewindow](https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/sliding-window.png)
+<img height="350" title="slidingtimewindow" src="https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/sliding-window.png">
 
 ##### [TumblingTimeWindow]
 
@@ -202,7 +202,7 @@ Details are shown below, quoted from [Introduction to Stream Analytics windowing
 
 Details are shown below, quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#tumbling-window):
 
-![tumblingtimewindow](https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/tumbling-window.png)
+<img height="350" title="tumblingtimewindow" src="https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/tumbling-window.png">
 
 ### Count
 

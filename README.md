@@ -167,10 +167,16 @@ Ganesha has two strategies which avoids cascading failures.
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::build([
+    // The interval in time (seconds) that evaluate the thresholds. 
     'timeWindow'            => 30,
+    // The failure rate threshold in percentage that changes CircuitBreaker's state to `OPEN`.
     'failureRateThreshold'  => 50,
+    // The minimum number of requests to detect failures.
+    // Even if `failureRateThreshold` exceeds the threshold, CircuitBreaker remains in `CLOSED` if `minimumRequests` is below this threshold.
     'minimumRequests'       => 10,
+    // The interval (seconds) to change CircuitBreaker's state from `OPEN` to `HALF_OPEN`.
     'intervalToHalfOpen'    => 5,
+    // The storage adapter instance to store various statistics to detect failures.
     'adapter'               => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
 ]);
 ```
@@ -181,8 +187,12 @@ If you want use the Count strategy use `Builder::buildWithCountStrategy()` to bu
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
+    // The failure count threshold that changes CircuitBreaker's state to `OPEN`.
+    // The count will be increased if `$ganesha->success()` is called, or will be decreased if `$ganesha->failure()` is called.
     'failureCountThreshold' => 100,
+    // The interval (seconds) to change CircuitBreaker's state from `OPEN` to `HALF_OPEN`.
     'intervalToHalfOpen'    => 5,
+    // The storage adapter instance to store various statistics to detect failures.
     'adapter'               => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
 ]);
 ```

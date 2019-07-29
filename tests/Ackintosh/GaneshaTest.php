@@ -158,6 +158,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @requires PHP 7.0
      */
     public function reset()
     {

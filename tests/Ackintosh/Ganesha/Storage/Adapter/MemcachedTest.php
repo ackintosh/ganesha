@@ -236,6 +236,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @requires PHP 7.0
      */
     public function resetWillDoNothingIfNoDataExists()
     {
@@ -260,6 +261,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @requires PHP 7.0
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Couldn't connect to memcached.
      */
@@ -278,6 +280,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @requires PHP 7.0
      * @expectedException \RuntimeException
      * @expectedExceptionMessageRegExp /\Afailed to get memcached keys/
      */

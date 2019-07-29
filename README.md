@@ -167,13 +167,40 @@ Ganesha has two strategies which avoids cascading failures.
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::build([
+    // The interval in time (seconds) that evaluate the thresholds. 
     'timeWindow'            => 30,
+    // The failure rate threshold in percentage that changes CircuitBreaker's state to `OPEN`.
     'failureRateThreshold'  => 50,
+    // The minimum number of requests to detect failures.
+    // Even if `failureRateThreshold` exceeds the threshold,
+    // CircuitBreaker remains in `CLOSED` if `minimumRequests` is below this threshold.
     'minimumRequests'       => 10,
+    // The interval (seconds) to change CircuitBreaker's state from `OPEN` to `HALF_OPEN`.
     'intervalToHalfOpen'    => 5,
+    // The storage adapter instance to store various statistics to detect failures.
     'adapter'               => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
 ]);
 ```
+
+Note about "time window": The Storage Adapter implements either [SlidingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/SlidingTimeWindowInterface.php) or [TumblingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/TumblingTimeWindowInterface.php). The difference of the implementation comes from constraints of the storage functionalities.
+
+##### [SlidingTimeWindow]
+
+- [SlidingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/SlidingTimeWindowInterface.php) implements a time period that stretches back in time from the present. For instance, a SlidingTimeWindow of 30 seconds includes any events that have occurred in the past 30 seconds.
+- [Redis adapter](https://github.com/ackintosh/ganesha#redis) and [MongoDB adapter](https://github.com/ackintosh/ganesha#mongodb) implements SlidingTimeWindow.
+
+Details are shown below, quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#sliding-window):
+
+<img height="350" title="slidingtimewindow" src="https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/sliding-window.png">
+
+##### [TumblingTimeWindow]
+
+- [TumblingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/TumblingTimeWindowInterface.php) implements time segments, which are divided by a value of `timeWindow`.
+- [Memcached adapter](https://github.com/ackintosh/ganesha#memcached) implements TumblingTimeWindow.
+
+Details are shown below, quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#tumbling-window):
+
+<img height="350" title="tumblingtimewindow" src="https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/tumbling-window.png">
 
 ### Count
 
@@ -181,8 +208,13 @@ If you want use the Count strategy use `Builder::buildWithCountStrategy()` to bu
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
+    // The failure count threshold that changes CircuitBreaker's state to `OPEN`.
+    // The count will be increased if `$ganesha->success()` is called,
+    // or will be decreased if `$ganesha->failure()` is called.
     'failureCountThreshold' => 100,
+    // The interval (seconds) to change CircuitBreaker's state from `OPEN` to `HALF_OPEN`.
     'intervalToHalfOpen'    => 5,
+    // The storage adapter instance to store various statistics to detect failures.
     'adapter'               => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
 ]);
 ```

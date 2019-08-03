@@ -40,8 +40,8 @@ If you have an idea about enhancement, bugfix..., please let me know via [Issues
 - [Run tests](#run-tests)
 - [Companies using Ganesha :rocket:](#companies-using-ganesha-rocket)
 - [The articles that Ganesha loves :elephant: :sparkles:](#the-articles-that-ganesha-loves-elephant-sparkles)
-- [Build promotion site with Soushi](#build-promotion-site-with-soushi)
 - [Requirements](#requirements)
+- [Build promotion site with Soushi](#build-promotion-site-with-soushi)
 - [Author](#author)
 
 ## [Are you interested?](#table-of-contents)
@@ -411,11 +411,6 @@ Here are some companies using Ganesha in production. To add your company to the 
 
 - [APISHIP LLC](https://apiship.ru)
 
-## [Requirements](#table-of-contents)
-
-- Ganesha supports PHP 5.6 or higher.
-- An extension or client library which is used by [the storage adapter](https://github.com/ackintosh/ganesha#adapters) you've choice will be required. Please check the [Adapters](https://github.com/ackintosh/ganesha#adapters) section for details.
-
 ## [The articles that Ganesha loves :elephant: :sparkles:](#table-of-contents)
 
 ### Newsletters that introduces Ganesha
@@ -424,6 +419,11 @@ Here are some companies using Ganesha in production. To add your company to the 
 - [PHP Annotated – July 2019 | PhpStorm Blog](https://blog.jetbrains.com/phpstorm/2019/07/php-annotated-july-2019/)
 - [A Semana PHP - Edição Nº229 | Revue](https://www.getrevue.co/profile/asemanaphp/issues/a-semana-php-edicao-n-229-165581)
 - [PHP DIGEST #12: NEWS & TOOLS (JANUARY 1 - JANUARY 14, 2018)](https://www.zfort.com/blog/php-digest-january-14-2018)
+
+## [Requirements](#table-of-contents)
+
+- Ganesha supports PHP 5.6 or higher.
+- An extension or client library which is used by [the storage adapter](https://github.com/ackintosh/ganesha#adapters) you've choice will be required. Please check the [Adapters](https://github.com/ackintosh/ganesha#adapters) section for details.
 
 ## [Build promotion site with Soushi](#table-of-contents)
 

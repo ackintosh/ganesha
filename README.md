@@ -39,6 +39,7 @@ If you have an idea about enhancement, bugfix..., please let me know via [Issues
 - [Ganesha :heart: OpenAPI Generator](#ganesha-heart-openapi-generator)
 - [Run tests](#run-tests)
 - [Companies using Ganesha :rocket:](#companies-using-ganesha-rocket)
+- [The articles that Ganesha loves :elephant: :sparkles:](#the-articles-that-ganesha-loves-elephant-sparkles)
 - [Build promotion site with Soushi](#build-promotion-site-with-soushi)
 - [Requirements](#requirements)
 - [Author](#author)
@@ -415,13 +416,13 @@ Here are some companies using Ganesha in production. To add your company to the 
 - Ganesha supports PHP 5.6 or higher.
 - An extension or client library which is used by [the storage adapter](https://github.com/ackintosh/ganesha#adapters) you've choice will be required. Please check the [Adapters](https://github.com/ackintosh/ganesha#adapters) section for details.
 
-## The articles that Ganesha loves. :elephant: :sparkles:
+## [The articles that Ganesha loves :elephant: :sparkles:](#table-of-contents)
 
 ### Newsletters that introduces Ganesha
 
 - [PHP Weekly. Archive. August 1, 2019. News, Articles and more all about PHP](http://www.phpweekly.com/archive/2019-08-01.html)
-- [PHP Annotated $(Q#|(B July 2019 | PhpStorm Blog](https://blog.jetbrains.com/phpstorm/2019/07/php-annotated-july-2019/)
-- [A Semana PHP - Edi$(Q)])Y(Bo N$(Q)1(B229 | Revue](https://www.getrevue.co/profile/asemanaphp/issues/a-semana-php-edicao-n-229-165581)
+- [PHP Annotated – July 2019 | PhpStorm Blog](https://blog.jetbrains.com/phpstorm/2019/07/php-annotated-july-2019/)
+- [A Semana PHP - Edição Nº229 | Revue](https://www.getrevue.co/profile/asemanaphp/issues/a-semana-php-edicao-n-229-165581)
 - [PHP DIGEST #12: NEWS & TOOLS (JANUARY 1 - JANUARY 14, 2018)](https://www.zfort.com/blog/php-digest-january-14-2018)
 
 ## [Build promotion site with Soushi](#table-of-contents)

@@ -395,7 +395,7 @@ try {
 
 ## [Run tests](#table-of-contents)
 
-We can run unit tests on Docker container, so it is not necessary to install dependencies in your machine.
+We can run unit tests on a Docker container, so it is not necessary to install the dependencies in your machine.
 
 ```bash
 # Start redis, memcached server
@@ -413,7 +413,7 @@ Here are some companies using Ganesha in production. To add your company to the 
 
 ## [The articles that Ganesha loves :elephant: :sparkles:](#table-of-contents)
 
-### Newsletters that introduces Ganesha
+Here are some articles Ganesha has been introduced!
 
 - [PHP Weekly. Archive. August 1, 2019. News, Articles and more all about PHP](http://www.phpweekly.com/archive/2019-08-01.html)
 - [PHP Annotated – July 2019 | PhpStorm Blog](https://blog.jetbrains.com/phpstorm/2019/07/php-annotated-july-2019/)

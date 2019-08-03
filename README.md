@@ -39,8 +39,9 @@ If you have an idea about enhancement, bugfix..., please let me know via [Issues
 - [Ganesha :heart: OpenAPI Generator](#ganesha-heart-openapi-generator)
 - [Run tests](#run-tests)
 - [Companies using Ganesha :rocket:](#companies-using-ganesha-rocket)
-- [Build promotion site with Soushi](#build-promotion-site-with-soushi)
+- [The articles that Ganesha loves :elephant: :sparkles:](#the-articles-that-ganesha-loves-elephant-sparkles)
 - [Requirements](#requirements)
+- [Build promotion site with Soushi](#build-promotion-site-with-soushi)
 - [Author](#author)
 
 ## [Are you interested?](#table-of-contents)
@@ -394,7 +395,7 @@ try {
 
 ## [Run tests](#table-of-contents)
 
-We can run unit tests on Docker container, so it is not necessary to install dependencies in your machine.
+We can run unit tests on a Docker container, so it is not necessary to install the dependencies in your machine.
 
 ```bash
 # Start redis, memcached server
@@ -409,6 +410,15 @@ $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 Here are some companies using Ganesha in production. To add your company to the list, please visit [README.md](https://github.com/ackintosh/ganesha/blob/master/README.md) and click on the icon to edit the page or let me know via [issues](https://github.com/ackintosh/ganesha/issues)/[twitter](https://twitter.com/NAKANO_Akihito). 
 
 - [APISHIP LLC](https://apiship.ru)
+
+## [The articles that Ganesha loves :elephant: :sparkles:](#table-of-contents)
+
+Here are some articles Ganesha has been introduced!
+
+- [PHP Weekly. Archive. August 1, 2019. News, Articles and more all about PHP](http://www.phpweekly.com/archive/2019-08-01.html)
+- [PHP Annotated – July 2019 | PhpStorm Blog](https://blog.jetbrains.com/phpstorm/2019/07/php-annotated-july-2019/)
+- [A Semana PHP - Edição Nº229 | Revue](https://www.getrevue.co/profile/asemanaphp/issues/a-semana-php-edicao-n-229-165581)
+- [PHP DIGEST #12: NEWS & TOOLS (JANUARY 1 - JANUARY 14, 2018)](https://www.zfort.com/blog/php-digest-january-14-2018)
 
 ## [Requirements](#table-of-contents)
 

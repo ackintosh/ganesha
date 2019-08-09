@@ -190,7 +190,8 @@ Note about "time window": The Storage Adapter implements either [SlidingTimeWind
 - [SlidingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/SlidingTimeWindowInterface.php) implements a time period that stretches back in time from the present. For instance, a SlidingTimeWindow of 30 seconds includes any events that have occurred in the past 30 seconds.
 - [Redis adapter](https://github.com/ackintosh/ganesha#redis) and [MongoDB adapter](https://github.com/ackintosh/ganesha#mongodb) implements SlidingTimeWindow.
 
-Details are shown below, quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#sliding-window):
+The details to help us understand visually is shown below:  
+(quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#sliding-window))
 
 <img height="350" title="slidingtimewindow" src="https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/sliding-window.png">
 
@@ -199,7 +200,8 @@ Details are shown below, quoted from [Introduction to Stream Analytics windowing
 - [TumblingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/TumblingTimeWindowInterface.php) implements time segments, which are divided by a value of `timeWindow`.
 - [Memcached adapter](https://github.com/ackintosh/ganesha#memcached) implements TumblingTimeWindow.
 
-Details are shown below, quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#tumbling-window):
+The details to help us understand visually is shown below:  
+quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#tumbling-window)
 
 <img height="350" title="tumblingtimewindow" src="https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/tumbling-window.png">
 
@@ -423,6 +425,7 @@ Here are some articles Ganesha has been introduced!
 ## [Requirements](#table-of-contents)
 
 - Ganesha supports PHP 5.6 or higher.
+  - Note: We are planning to drop the support for PHP 5.6. Please see [here](https://github.com/ackintosh/ganesha/issues/43) to track the status of the issue.
 - An extension or client library which is used by [the storage adapter](https://github.com/ackintosh/ganesha#adapters) you've choice will be required. Please check the [Adapters](https://github.com/ackintosh/ganesha#adapters) section for details.
 
 ## [Build promotion site with Soushi](#table-of-contents)

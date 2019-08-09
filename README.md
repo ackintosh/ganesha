@@ -201,7 +201,7 @@ The details to help us understand visually is shown below:
 - [Memcached adapter](https://github.com/ackintosh/ganesha#memcached) implements TumblingTimeWindow.
 
 The details to help us understand visually is shown below:  
-quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#tumbling-window)
+(quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#tumbling-window))
 
 <img height="350" title="tumblingtimewindow" src="https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/tumbling-window.png">
 

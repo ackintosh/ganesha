@@ -419,6 +419,7 @@ Here are some articles Ganesha has been introduced!
 
 - [PHP Weekly. Archive. August 1, 2019. News, Articles and more all about PHP](http://www.phpweekly.com/archive/2019-08-01.html)
 - [PHP Annotated – July 2019 | PhpStorm Blog](https://blog.jetbrains.com/phpstorm/2019/07/php-annotated-july-2019/)
+- [Безопасное взаимодействие в распределенных системах / Блог компании Badoo / Хабр](https://habr.com/ru/company/badoo/blog/413555/)
 - [A Semana PHP - Edição Nº229 | Revue](https://www.getrevue.co/profile/asemanaphp/issues/a-semana-php-edicao-n-229-165581)
 - [PHP DIGEST #12: NEWS & TOOLS (JANUARY 1 - JANUARY 14, 2018)](https://www.zfort.com/blog/php-digest-january-14-2018)
 

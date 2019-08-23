@@ -35,3 +35,12 @@ script:
 
 after_success:
     - travis_retry php vendor/bin/php-coveralls -v
+
+jobs:
+  include:
+    - stage: Coding Standards
+      php: 7.3
+      install:
+        - travis_retry wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer
+      script:
+        - php php-cs-fixer fix --config=.php_cs.dist --dry-run --no-interaction

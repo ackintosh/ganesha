@@ -206,8 +206,7 @@ class GaneshaTest extends \PHPUnit_Framework_TestCase
     private function buildGanesha(
         $threshold,
         $intervalToHalfOpen = 10
-    )
-    {
+    ) {
         return Builder::buildWithCountStrategy([
             'failureCountThreshold' => $threshold,
             'adapter' => new Memcached($this->m),

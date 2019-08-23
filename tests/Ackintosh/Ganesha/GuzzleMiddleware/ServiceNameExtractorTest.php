@@ -3,10 +3,14 @@ namespace Ackintosh\Ganesha\GuzzleMiddleware;
 
 use GuzzleHttp\Psr7\Request;
 
+/**
+ * @coversDefaultClass \Ackintosh\Ganesha\GuzzleMiddleware\ServiceNameExtractor
+ */
 class ServiceNameExtractorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
+     * @covers ::extract
      */
     public function extractFromHeader()
     {
@@ -18,6 +22,7 @@ class ServiceNameExtractorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @covers ::extract
      */
     public function extractFromOptions()
     {
@@ -29,6 +34,7 @@ class ServiceNameExtractorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @covers ::extract
      */
     public function extractHostnameAsDefault()
     {

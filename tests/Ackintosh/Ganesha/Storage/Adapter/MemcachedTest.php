@@ -2,8 +2,15 @@
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha;
+use Ackintosh\Ganesha\Exception\StorageException;
+use PHPUnit_Framework_TestCase;
+use RuntimeException;
+use function extension_loaded;
 
-class MemcachedTest extends \PHPUnit_Framework_TestCase
+/**
+ * @coversDefaultClass \Ackintosh\Ganesha\Storage\Adapter\Memcached
+ */
+class MemcachedTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Memcached
@@ -17,7 +24,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (!\extension_loaded('memcached')) {
+        if (!extension_loaded('memcached')) {
             self::markTestSkipped('No ext-memcached present');
         }
 
@@ -32,6 +39,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @covers ::supportCountStrategy
      */
     public function supportsCountStrategy()
     {
@@ -40,6 +48,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @covers ::supportRateStrategy
      */
     public function supportsRateStrategy()
     {
@@ -48,6 +57,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @covers ::load
      */
     public function saveAndLoad()
     {
@@ -57,7 +67,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     * @covers ::load
      */
     public function loadThrowsException()
     {
@@ -69,12 +79,14 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
             ->willReturn(\Memcached::RES_FAILURE);
 
         $adapter = new Memcached($m);
+
+        $this->expectException(StorageException::class);
         $adapter->load($this->service);
     }
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     * @covers ::save
      */
     public function saveThrowsException()
     {
@@ -86,11 +98,15 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
 
         $adapter = new Memcached($m);
+
+        $this->expectException(StorageException::class);
         $adapter->save($this->service, 'test');
     }
 
     /**
      * @test
+     * @covers ::load
+     * @covers ::increment
      */
     public function increment()
     {
@@ -102,7 +118,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     * @covers ::increment
      */
     public function incrementThrowsException()
     {
@@ -114,11 +130,16 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
 
         $adapter = new Memcached($m);
+
+        $this->expectException(StorageException::class);
         $adapter->increment($this->service);
     }
 
     /**
      * @test
+     * @covers ::increment
+     * @covers ::decrement
+     * @covers ::load
      */
     public function decrement()
     {
@@ -134,7 +155,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     * @covers ::decrement
      */
     public function decrementThrowsException()
     {
@@ -146,11 +167,15 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
 
         $adapter = new Memcached($m);
+
+        $this->expectException(StorageException::class);
         $adapter->decrement($this->service);
     }
 
     /**
      * @test
+     * @covers ::saveLastFailureTime
+     * @covers ::loadLastFailureTime
      */
     public function saveAndLoadLastFailureTime()
     {
@@ -161,7 +186,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     * @covers ::saveLastFailureTime
      */
     public function saveLastFailureTimeThrowsException()
     {
@@ -173,12 +198,14 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
 
         $adapter = new Memcached($m);
+
+        $this->expectException(StorageException::class);
         $adapter->saveLastFailureTime($this->service, time());
     }
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     * @covers ::loadLastFailureTime
      */
     public function loadLastFailureTimeThrowsException()
     {
@@ -190,11 +217,15 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
             ->willReturn(\Memcached::RES_FAILURE);
 
         $adapter = new Memcached($m);
+
+        $this->expectException(StorageException::class);
         $adapter->loadLastFailureTime($this->service);
     }
 
     /**
      * @test
+     * @covers ::saveStatus
+     * @covers ::loadStatus
      */
     public function saveAndLoadStatus()
     {
@@ -205,7 +236,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     * @covers ::saveStatus
      */
     public function saveStatusThrowsException()
     {
@@ -217,12 +248,14 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
 
         $adapter = new Memcached($m);
+
+        $this->expectException(StorageException::class);
         $adapter->saveStatus($this->service, Ganesha::STATUS_TRIPPED);
     }
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     * @covers ::loadStatus
      */
     public function loadStatusThrowsException()
     {
@@ -234,12 +267,15 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
             ->willReturn(\Memcached::RES_FAILURE);
 
         $adapter = new Memcached($m);
+
+        $this->expectException(StorageException::class);
         $adapter->loadStatus($this->service);
     }
 
     /**
      * @test
      * @requires PHP 7.0
+     * @covers ::reset
      */
     public function resetWillDoNothingIfNoDataExists()
     {
@@ -265,8 +301,7 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @requires PHP 7.0
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Couldn't connect to memcached.
+     * @covers ::reset
      */
     public function resetThrowsExceptionWhenFailedToGetStats()
     {
@@ -278,14 +313,16 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
 
         $adapter = new Memcached($m);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Couldn\'t connect to memcached.');
         $adapter->reset();
     }
 
     /**
      * @test
      * @requires PHP 7.0
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessageRegExp /\Afailed to get memcached keys/
+     * @covers ::reset
      */
     public function resetThrowsExceptionWhenFailedToGetAllKeys()
     {
@@ -305,12 +342,16 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
             ->willReturn(\Memcached::RES_FAILURE);
 
         $adapter = new Memcached($m);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessageRegExp('/^failed to get memcached keys/');
         $adapter->reset();
     }
 
     /**
      * @test
      * @dataProvider isGaneshaDataProvider
+     * @covers ::isGaneshaData
      */
     public function isGaneshaData($key, $expected)
     {

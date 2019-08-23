@@ -17,10 +17,13 @@ class CountTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     public function validateThrowsExceptionWhenTheAdapterDoesntSupportCountStrategy()
     {
+        if (!\extension_loaded('memcached')) {
+            self::markTestSkipped('No ext-memcached present');
+        }
+
         $adapter = $this->getMockBuilder(Memcached::class)
             ->setConstructorArgs([new \Memcached()])
             ->getMock();
@@ -33,6 +36,7 @@ class CountTest extends \PHPUnit_Framework_TestCase
             'intervalToHalfOpen' => 10,
         ];
 
+        $this->expectException(\InvalidArgumentException::class);
         Count::validate($params);
     }
 }

@@ -12,6 +12,10 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     public function savesStatus()
     {
+        if (!\extension_loaded('memcached')) {
+            self::markTestSkipped('No ext-memcached present');
+        }
+
         $m = new \Memcached();
         $m->addServer(
             getenv('GANESHA_EXAMPLE_MEMCACHED') ? getenv('GANESHA_EXAMPLE_MEMCACHED') : 'localhost',
@@ -30,6 +34,10 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     public function getLastFailureTimeWithSlidingTimeWindow()
     {
+        if (!\extension_loaded('redis')) {
+            self::markTestSkipped('No ext-redis present');
+        }
+
         $r = new \Redis();
         $r->connect(
             getenv('GANESHA_EXAMPLE_REDIS') ? getenv('GANESHA_EXAMPLE_REDIS') : 'localhost'

@@ -17,7 +17,10 @@ class MemcachedTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        parent::setUp();
+        if (!\extension_loaded('memcached')) {
+            self::markTestSkipped('No ext-memcached present');
+        }
+
         $m = new \Memcached();
         $m->addServer(
             getenv('GANESHA_EXAMPLE_MEMCACHED') ? getenv('GANESHA_EXAMPLE_MEMCACHED') : 'localhost',

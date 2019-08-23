@@ -1,9 +1,12 @@
 <?php
 namespace Ackintosh\Ganesha;
 
-use Ackintosh\Ganesha\Storage\Adapter\Memcached;
+use Ackintosh\Ganesha\Storage\AdapterInterface;
 use Ackintosh\Ganesha\Strategy\Rate;
 
+/**
+ * @coversDefaultClass \Ackintosh\Ganesha\Strategy\Rate
+ */
 class RateTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -20,14 +23,9 @@ class RateTest extends \PHPUnit_Framework_TestCase
      */
     public function validateThrowsExceptionWhenTheAdapterDoesntSupportCountStrategy()
     {
-        if (!\extension_loaded('memcached')) {
-            self::markTestSkipped('No ext-memcached present');
-        }
-
-        $adapter = $this->getMockBuilder(Memcached::class)
-            ->setConstructorArgs([new \Memcached()])
-            ->getMock();
-        $adapter->method('supportRateStrategy')
+        $adapter = $this->createMock(AdapterInterface::class);
+        $adapter->expects(self::atLeastOnce())
+            ->method('supportRateStrategy')
             ->willReturn(false);
 
         $params = [

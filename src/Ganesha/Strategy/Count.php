@@ -116,11 +116,7 @@ class Count implements StrategyInterface
      */
     public function isAvailable($service)
     {
-        try {
-            return $this->isClosed($service) || $this->isHalfOpen($service);
-        } catch (StorageException $e) {
-            throw $e;
-        }
+        return $this->isClosed($service) || $this->isHalfOpen($service);
     }
 
     /**
@@ -129,11 +125,7 @@ class Count implements StrategyInterface
      */
     private function isClosed($service)
     {
-        try {
-            return $this->storage->getFailureCount($service) < $this->configuration['failureCountThreshold'];
-        } catch (StorageException $e) {
-            throw $e;
-        }
+        return $this->storage->getFailureCount($service) < $this->configuration['failureCountThreshold'];
     }
 
     /**

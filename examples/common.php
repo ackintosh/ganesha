@@ -23,7 +23,7 @@ function buildGanesha($storage)
             break;
         case 'memcached':
             $m = new \Memcached();
-            $m->addServer(getenv('GANESHA_EXAMPLE_MEMCACHED') ?: 'localhost' , 11211);
+            $m->addServer(getenv('GANESHA_EXAMPLE_MEMCACHED') ?: 'localhost', 11211);
             $adapter = new \Ackintosh\Ganesha\Storage\Adapter\Memcached($m);
             break;
         default:

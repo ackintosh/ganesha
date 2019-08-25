@@ -9,6 +9,10 @@ class RedisRedisTest extends AbstractRedisTest
      */
     protected function getRedisConnection()
     {
+        if (!\extension_loaded('redis')) {
+            self::markTestSkipped('No ext-redis present');
+        }
+
         $r = new \Redis();
         $r->connect(
             getenv('GANESHA_EXAMPLE_REDIS') ?: 'localhost'

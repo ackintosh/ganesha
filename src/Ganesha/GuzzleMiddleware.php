@@ -22,8 +22,7 @@ class GuzzleMiddleware
     public function __construct(
         Ganesha $ganesha,
         ServiceNameExtractorInterface $serviceNameExtractor = null
-    )
-    {
+    ) {
         $this->ganesha = $ganesha;
         $this->serviceNameExtractor = $serviceNameExtractor ?: new ServiceNameExtractor();
     }

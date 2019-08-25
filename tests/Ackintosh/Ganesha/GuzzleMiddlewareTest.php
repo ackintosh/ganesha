@@ -18,7 +18,9 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        parent::setUp();
+        if (!\extension_loaded('redis')) {
+            self::markTestSkipped('No ext-redis present');
+        }
 
         // Cleanup test statistics before run tests
         $redis = new \Redis();

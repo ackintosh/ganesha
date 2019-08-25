@@ -11,6 +11,10 @@ class RedisArrayTest extends AbstractRedisTest
      */
     protected function getRedisConnection()
     {
+        if (!\extension_loaded('redis')) {
+            self::markTestSkipped('No ext-redis present');
+        }
+
         $r = new RedisArray([getenv('GANESHA_EXAMPLE_REDIS') ?: 'localhost']);
         $r->flushAll();
 

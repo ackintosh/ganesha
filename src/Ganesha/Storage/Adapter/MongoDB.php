@@ -177,7 +177,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
 
     public function reset()
     {
-        $this->delete([],[]);
+        $this->delete([], []);
     }
 
     /**
@@ -236,7 +236,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
             $bulk = new \MongoDB\Driver\BulkWrite();
             switch ($command) {
                 case 'update':
-                    if(isset($options['newObj']['$set'])){
+                    if (isset($options['newObj']['$set'])) {
                         $options['newObj']['$set']['date'] = new \MongoDB\BSON\UTCDateTime();
                     }
                     $bulk->update($filter, $options['newObj'], $options['updateOptions']);

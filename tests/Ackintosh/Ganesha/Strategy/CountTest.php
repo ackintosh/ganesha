@@ -1,9 +1,12 @@
 <?php
 namespace Ackintosh\Ganesha;
 
-use Ackintosh\Ganesha\Storage\Adapter\Memcached;
+use Ackintosh\Ganesha\Storage\AdapterInterface;
 use Ackintosh\Ganesha\Strategy\Count;
 
+/**
+ * @coversDefaultClass \Ackintosh\Ganesha\Strategy\Count
+ */
 class CountTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -17,14 +20,12 @@ class CountTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     public function validateThrowsExceptionWhenTheAdapterDoesntSupportCountStrategy()
     {
-        $adapter = $this->getMockBuilder(Memcached::class)
-            ->setConstructorArgs([new \Memcached()])
-            ->getMock();
-        $adapter->method('supportCountStrategy')
+        $adapter = $this->createMock(AdapterInterface::class);
+        $adapter->expects(self::atLeastOnce())
+            ->method('supportCountStrategy')
             ->willReturn(false);
 
         $params = [
@@ -33,6 +34,7 @@ class CountTest extends \PHPUnit_Framework_TestCase
             'intervalToHalfOpen' => 10,
         ];
 
+        $this->expectException(\InvalidArgumentException::class);
         Count::validate($params);
     }
 }

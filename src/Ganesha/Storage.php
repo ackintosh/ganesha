@@ -5,6 +5,8 @@ use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage\Adapter\TumblingTimeWindowInterface;
 use Ackintosh\Ganesha\Storage\Adapter\SlidingTimeWindowInterface;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
+use Ackintosh\Ganesha\Storage\StorageKeys;
+use Ackintosh\Ganesha\Storage\StorageKeysInterface;
 
 class Storage
 {
@@ -14,50 +16,30 @@ class Storage
     private $adapter;
 
     /**
-     * @var callable
+     * @var callable|null
      */
     private $serviceNameDecorator;
 
     /**
-     * @var string
+     * @var StorageKeysInterface
      */
-    const KEY_PREFIX = 'ganesha_';
-
-    /**
-     * @var string
-     */
-    const KEY_SUFFIX_SUCCESS = '_success';
-
-    /**
-     * @var string
-     */
-    const KEY_SUFFIX_FAILURE = '_failure';
-
-    /**
-     * @var string
-     */
-    const KEY_SUFFIX_REJECTION = '_rejection';
-
-    /**
-     * @var string
-     */
-    const KEY_SUFFIX_LAST_FAILURE_TIME = '_last_failure_time';
-
-    /**
-     * @var string
-     */
-    const KEY_SUFFIX_STATUS = '_status';
+    private $storageKeys;
 
     /**
      * Storage constructor.
      *
      * @param AdapterInterface $adapter
-     * @param callable         $serviceNameDecorator
+     * @param callable $serviceNameDecorator
+     * @param StorageKeysInterface|null $storageKeys
      */
-    public function __construct(AdapterInterface $adapter, $serviceNameDecorator)
-    {
+    public function __construct(
+        AdapterInterface $adapter,
+        callable $serviceNameDecorator = null,
+        StorageKeysInterface $storageKeys = null
+    ) {
         $this->adapter = $adapter;
         $this->serviceNameDecorator = $serviceNameDecorator;
+        $this->storageKeys = $storageKeys ?: new StorageKeys();
     }
 
     /**
@@ -81,7 +63,7 @@ class Storage
      */
     public function getSuccessCountByCustomKey($key)
     {
-        return $this->getCount($this->prefix($key) . self::KEY_SUFFIX_SUCCESS);
+        return $this->getCount($this->prefix($key) . $this->storageKeys->success());
     }
 
     /**
@@ -93,7 +75,7 @@ class Storage
      */
     public function getFailureCountByCustomKey($key)
     {
-        return $this->getCount($this->prefix($key) . self::KEY_SUFFIX_FAILURE);
+        return $this->getCount($this->prefix($key) . $this->storageKeys->failure());
     }
 
     /**
@@ -105,7 +87,7 @@ class Storage
      */
     public function getRejectionCountByCustomKey($key)
     {
-        return $this->getCount($this->prefix($key) . self::KEY_SUFFIX_REJECTION);
+        return $this->getCount($this->prefix($key) . $this->storageKeys->rejection());
     }
 
     /**
@@ -297,7 +279,7 @@ class Storage
      */
     private function prefix($key)
     {
-        return self::KEY_PREFIX . $key;
+        return $this->storageKeys->prefix() . $key;
     }
 
     /**
@@ -306,7 +288,7 @@ class Storage
      */
     private function successKey($service)
     {
-        return $this->key($service) . self::KEY_SUFFIX_SUCCESS;
+        return $this->key($service) . $this->storageKeys->success();
     }
 
     /**
@@ -315,7 +297,7 @@ class Storage
      */
     private function failureKey($service)
     {
-        return $this->key($service) . self::KEY_SUFFIX_FAILURE;
+        return $this->key($service) . $this->storageKeys->failure();
     }
 
     /**
@@ -324,7 +306,7 @@ class Storage
      */
     private function rejectionKey($service)
     {
-        return $this->key($service) . self::KEY_SUFFIX_REJECTION;
+        return $this->key($service) . $this->storageKeys->rejection();
     }
 
     /**
@@ -338,7 +320,7 @@ class Storage
             // because Redis doesn't save lastFailureTime.
             // @see Ackintosh\Ganesha\Storage\Adapter\Redis#saveLastFailureTime()
             ? $this->failureKey($service)
-            : $this->prefix($service) . self::KEY_SUFFIX_LAST_FAILURE_TIME;
+            : $this->prefix($service) . $this->storageKeys->lastFailureKey();
     }
 
     /**
@@ -347,6 +329,6 @@ class Storage
      */
     private function statusKey($service)
     {
-        return $this->prefix($service) . self::KEY_SUFFIX_STATUS;
+        return $this->prefix($service) . $this->storageKeys->status();
     }
 }

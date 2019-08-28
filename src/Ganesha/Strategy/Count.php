@@ -6,6 +6,7 @@ use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\StrategyInterface;
+use Ackintosh\Ganesha\Storage\StorageKeysInterface;
 
 class Count implements StrategyInterface
 {
@@ -58,13 +59,14 @@ class Count implements StrategyInterface
      * @param Configuration $configuration
      * @return Count
      */
-    public static function create(Configuration $configuration)
+    public static function create(Configuration $configuration, StorageKeysInterface $keys = null)
     {
         $strategy = new self(
             $configuration,
             new Storage(
                 $configuration['adapter'],
-                null
+                null,
+                $keys
             )
         );
 

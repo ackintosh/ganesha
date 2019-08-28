@@ -1,6 +1,8 @@
 <?php
 namespace Ackintosh\Ganesha;
 
+use Ackintosh\Ganesha\Storage\StorageKeysInterface;
+
 interface StrategyInterface
 {
     /**
@@ -11,9 +13,10 @@ interface StrategyInterface
 
     /**
      * @param Configuration $configuration
-     * @return StrategyInterface
+     * @param StorageKeysInterface|null $keys
+     * @return mixed
      */
-    public static function create(Configuration $configuration);
+    public static function create(Configuration $configuration, StorageKeysInterface $keys = null);
 
     /**
      * @param string $service

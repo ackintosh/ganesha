@@ -195,12 +195,12 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     {
         $regex = sprintf(
             '#\A%s.+(%s|%s|%s|%s|%s)\z#',
-            Storage::KEY_PREFIX,
-            Storage::KEY_SUFFIX_SUCCESS,
-            Storage::KEY_SUFFIX_FAILURE,
-            Storage::KEY_SUFFIX_REJECTION,
-            Storage::KEY_SUFFIX_LAST_FAILURE_TIME,
-            Storage::KEY_SUFFIX_STATUS
+            Storage\StorageKeys::KEY_PREFIX,
+            Storage\StorageKeys::KEY_SUFFIX_SUCCESS,
+            Storage\StorageKeys::KEY_SUFFIX_FAILURE,
+            Storage\StorageKeys::KEY_SUFFIX_REJECTION,
+            Storage\StorageKeys::KEY_SUFFIX_LAST_FAILURE_TIME,
+            Storage\StorageKeys::KEY_SUFFIX_STATUS
         );
 
         return preg_match($regex, $key) === 1;

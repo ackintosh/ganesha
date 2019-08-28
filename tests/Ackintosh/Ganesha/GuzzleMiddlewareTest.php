@@ -44,7 +44,7 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame(
             1,
-            $this->adapter->load(Storage::KEY_PREFIX . 'api.example.com' . Storage::KEY_SUFFIX_SUCCESS)
+            $this->adapter->load(Storage\StorageKeys::KEY_PREFIX . 'api.example.com' . Storage\StorageKeys::KEY_SUFFIX_SUCCESS)
         );
     }
 
@@ -64,7 +64,9 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             1,
-            $this->adapter->load(Storage::KEY_PREFIX . 'api.example.com' . Storage::KEY_SUFFIX_SUCCESS)
+            $this->adapter->load(
+                Storage\StorageKeys::KEY_PREFIX . 'api.example.com' . Storage\StorageKeys::KEY_SUFFIX_SUCCESS
+            )
         );
     }
 
@@ -84,7 +86,9 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             1,
-            $this->adapter->load(Storage::KEY_PREFIX . 'api.example.com' . Storage::KEY_SUFFIX_SUCCESS)
+            $this->adapter->load(
+                Storage\StorageKeys::KEY_PREFIX . 'api.example.com' . Storage\StorageKeys::KEY_SUFFIX_SUCCESS
+            )
         );
     }
 
@@ -116,7 +120,7 @@ class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             1,
-            $this->adapter->load(Storage::KEY_PREFIX . 'server' . Storage::KEY_SUFFIX_FAILURE)
+            $this->adapter->load(Storage\StorageKeys::KEY_PREFIX . 'server' . Storage\StorageKeys::KEY_SUFFIX_FAILURE)
         );
     }
 

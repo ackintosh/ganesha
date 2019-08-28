@@ -6,6 +6,7 @@ use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\StrategyInterface;
+use Ackintosh\Ganesha\Storage\StorageKeysInterface;
 
 class Rate implements StrategyInterface
 {
@@ -60,7 +61,7 @@ class Rate implements StrategyInterface
      * @param Configuration $configuration
      * @return Rate
      */
-    public static function create(Configuration $configuration)
+    public static function create(Configuration $configuration, StorageKeysInterface $keys = null)
     {
         $serviceNameDecorator = $configuration['adapter'] instanceof Storage\Adapter\TumblingTimeWindowInterface ? self::serviceNameDecorator($configuration['timeWindow']) : null;
         $adapter = $configuration['adapter'];
@@ -68,7 +69,7 @@ class Rate implements StrategyInterface
 
         return new self(
             $configuration,
-            new Storage($adapter, $serviceNameDecorator)
+            new Storage($adapter, $serviceNameDecorator, $keys)
         );
     }
 

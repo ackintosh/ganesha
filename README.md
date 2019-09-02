@@ -37,9 +37,9 @@ If you have an idea about enhancement, bugfix..., please let me know via [Issues
 - [Adapters](#adapters)
 - [Ganesha :heart: Guzzle](#ganesha-heart-guzzle)
 - [Ganesha :heart: OpenAPI Generator](#ganesha-heart-openapi-generator)
-- [Run tests](#run-tests)
 - [Companies using Ganesha :rocket:](#companies-using-ganesha-rocket)
 - [The articles/videos Ganesha loves :sparkles: :elephant: :sparkles:](#the-articlesvideos-ganesha-loves-sparkles-elephant-sparkles)
+- [Run tests](#run-tests)
 - [Requirements](#requirements)
 - [Build promotion site with Soushi](#build-promotion-site-with-soushi)
 - [Author](#author)
@@ -395,18 +395,6 @@ try {
 }
 ```
 
-## [Run tests](#table-of-contents)
-
-We can run unit tests on a Docker container, so it is not necessary to install the dependencies in your machine.
-
-```bash
-# Start redis, memcached server
-$ docker-compose up 
-
-# Run tests in container
-$ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
-```
-
 ## [Companies using Ganesha :rocket:](#table-of-contents)
 
 Here are some companies using Ganesha in production! We are proud of them. :elephant:
@@ -430,6 +418,18 @@ Here are some articles/videos introduce Ganesha! All of them are really shining 
 #### Videos
 
 - [«Безопасное взаимодействие в распределенных системах» — Алексей Солодкий, Badoo - YouTube](https://youtu.be/1k_0ax9DNGI?t=906)
+
+## [Run tests](#table-of-contents)
+
+We can run unit tests on a Docker container, so it is not necessary to install the dependencies in your machine.
+
+```bash
+# Start redis, memcached server
+$ docker-compose up 
+
+# Run tests in container
+$ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
+```
 
 ## [Requirements](#table-of-contents)
 

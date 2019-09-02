@@ -39,7 +39,7 @@ If you have an idea about enhancement, bugfix..., please let me know via [Issues
 - [Ganesha :heart: OpenAPI Generator](#ganesha-heart-openapi-generator)
 - [Run tests](#run-tests)
 - [Companies using Ganesha :rocket:](#companies-using-ganesha-rocket)
-- [The articles/videos that Ganesha loves :sparkles: :elephant: :sparkles:](#the-articlesvideos-that-ganesha-loves-sparkles-elephant-sparkles)
+- [The articles/videos Ganesha loves :sparkles: :elephant: :sparkles:](#the-articlesvideos-ganesha-loves-sparkles-elephant-sparkles)
 - [Requirements](#requirements)
 - [Build promotion site with Soushi](#build-promotion-site-with-soushi)
 - [Author](#author)
@@ -415,7 +415,7 @@ To add your company to the list, please visit [README.md](https://github.com/ack
 
 - [APISHIP LLC](https://apiship.ru)
 
-## [The articles/videos that Ganesha loves :sparkles: :elephant: :sparkles:](#table-of-contents)
+## [The articles/videos Ganesha loves :sparkles: :elephant: :sparkles:](#table-of-contents)
 
 Here are some articles/videos introduce Ganesha! All of them are really shining like a jewel for us. :sparkles:
 

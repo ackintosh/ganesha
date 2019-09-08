@@ -319,28 +319,6 @@
 	}
 
 /*********************************************************************************/
-/* Logo                                                                          */
-/*********************************************************************************/
-
-	#logo
-	{
-		position: absolute;
-		top: 1em;
-		left: 0;
-	}
-	
-	#logo h1
-	{
-		color: #2B3F48;
-	}
-	
-	#logo a
-	{
-		text-decoration: none;
-		color: #2B3F48;
-	}
-
-/*********************************************************************************/
 /* Menu                                                                          */
 /*********************************************************************************/
 
@@ -388,39 +366,45 @@
 	}
 
 /*********************************************************************************/
-/* Banner                                                                        */
+/* Content                                                                       */
 /*********************************************************************************/
 
-	#banner
+	#content
 	{
 		overflow: hidden;
 		padding: 4em 0em 5em 0em;
 		background: #070258;
 		background-size: cover;
-		text-align: center;
+		text-align: left;
 		color: rgba(255,255,255,.8);
 	}
 
-	#banner .title
+	#content .title
 	{
+		text-align: center;
 	}
 
-	#banner .title h1
-	{
-		color: #FFF;
-	}
-
-	#banner .title h2
+	#content .title h1
 	{
 		color: #FFF;
 	}
 
-	#banner .title .byline
+	#content .title h2
+	{
+		color: #FFF;
+	}
+
+	#content .title .byline
 	{
 		color: rgba(255,255,255,.6);
 	}
+
+	#content #logo
+	{
+		text-align: center;
+	}
 	
-	#banner .button
+	#content .button
 	{
 		margin-top: 3em;
 		background: #2B3F48 !important;
@@ -441,14 +425,6 @@
 		margin-top: 2em;
 		display: inline-block;
 		text-align: center;
-	}
-
-/*********************************************************************************/
-/* Content                                                                       */
-/*********************************************************************************/
-
-	#content
-	{
 	}
 
 /*********************************************************************************/

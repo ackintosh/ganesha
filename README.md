@@ -438,19 +438,6 @@ $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
   - Note: We are planning to drop the support for PHP 5.6. Please see [here](https://github.com/ackintosh/ganesha/issues/43) to track the status of the issue.
 - An extension or client library which is used by [the storage adapter](https://github.com/ackintosh/ganesha#adapters) you've choice will be required. Please check the [Adapters](https://github.com/ackintosh/ganesha#adapters) section for details.
 
-## [Build promotion site with Soushi](#table-of-contents)
-
-https://ackintosh.github.io/ganesha/  
-
-The promotion site is built with [Soushi](https://github.com/kentaro/soushi), which is the site generator powered by PHP.
-
-```bash
-$ docker-compose run --rm client soushi build docs
-
-# The site will be generate into `docs` directory and let's confirm your changes.
-$ open docs/index.html
-```
-
 ## [Author](#table-of-contents)
 
 **Ganesha** &copy; ackintosh, Released under the [MIT](./LICENSE) License.  

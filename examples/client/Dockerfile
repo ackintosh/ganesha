@@ -14,11 +14,3 @@ RUN apt-get update \
  && echo 'extension=mongodb.so' >> /usr/local/etc/php/php.ini \
  && useradd -m ganesha
 
-# soushi
-USER ganesha
-WORKDIR /home/ganesha
-RUN mkdir .composer \
- && curl -Ss https://getcomposer.org/installer | php
-COPY soushi.composer.json .composer/composer.json
-RUN php composer.phar global install
-ENV PATH $PATH:/home/ganesha/.composer/vendor/bin

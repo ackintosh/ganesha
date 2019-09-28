@@ -35,6 +35,7 @@ If you have an idea about enhancement, bugfix..., please let me know via [Issues
 - [Usage](#usage)
 - [Strategies](#strategies)
 - [Adapters](#adapters)
+- [Customizing storage keys](#customizing-storage-keys)
 - [Ganesha :heart: Guzzle](#ganesha-heart-guzzle)
 - [Ganesha :heart: OpenAPI Generator](#ganesha-heart-openapi-generator)
 - [Companies using Ganesha :rocket:](#companies-using-ganesha-rocket)

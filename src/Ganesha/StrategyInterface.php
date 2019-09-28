@@ -13,10 +13,9 @@ interface StrategyInterface
 
     /**
      * @param Configuration $configuration
-     * @param StorageKeysInterface|null $keys
      * @return mixed
      */
-    public static function create(Configuration $configuration, StorageKeysInterface $keys = null);
+    public static function create(Configuration $configuration);
 
     /**
      * @param string $service

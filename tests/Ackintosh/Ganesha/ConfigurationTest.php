@@ -1,6 +1,8 @@
 <?php
 namespace Ackintosh\Ganesha;
 
+use Ackintosh\Ganesha\Storage\StorageKeys;
+
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -51,4 +53,27 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('bar', $this->configuration['foo']);
         $this->assertNull($this->configuration['xxx']);
     }
+
+    /**
+     * @test
+     */
+    public function setStorageKeysAsDefaults()
+    {
+        $this->assertInstanceOf(StorageKeys::class, $this->configuration['storageKeys']);
+    }
+
+    /**
+     * @test
+     */
+    public function dontOverrideTheSpecifiedParameter()
+    {
+        $c = new Configuration([
+            'storageKeys' => new TestStorageKey()
+        ]);
+        $this->assertInstanceOf(TestStorageKey::class, $c['storageKeys']);
+    }
+}
+
+class TestStorageKey extends StorageKeys
+{
 }

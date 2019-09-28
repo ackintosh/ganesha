@@ -35,6 +35,7 @@ If you have an idea about enhancement, bugfix..., please let me know via [Issues
 - [Usage](#usage)
 - [Strategies](#strategies)
 - [Adapters](#adapters)
+- [Customizing storage keys](#customizing-storage-keys)
 - [Ganesha :heart: Guzzle](#ganesha-heart-guzzle)
 - [Ganesha :heart: OpenAPI Generator](#ganesha-heart-openapi-generator)
 - [Companies using Ganesha :rocket:](#companies-using-ganesha-rocket)
@@ -264,6 +265,28 @@ $configuration = new Configuration(['dbName' => 'ganesha', 'collectionName' => '
 $adapter->setConfiguration($configuration);
 $ganesha = Ackintosh\Ganesha\Builder::build([
     'adapter' => $adapter,
+]);
+```
+
+## Customizing storage keys
+
+If you want customize the keys to be used when storing circuit breaker information, set an instance which implements [StorageKeysInterface](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/StorageKeysInterface.php).
+
+```php
+class YourStorageKeys implements StorageKeysInterface
+{
+    public function prefix()
+    {
+        return 'your_prefix_';
+    }
+    
+    // (ommitted)
+}
+
+$ganesha = Ackintosh\Ganesha\Builder::build([
+    // The keys which will stored by Ganesha to the storage you specified via `adapter`
+    // will be prefixed with `your_prefix_`.
+    'storageKeys' => new YourStorageKeys(),
 ]);
 ```
 

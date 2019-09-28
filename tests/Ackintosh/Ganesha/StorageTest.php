@@ -21,7 +21,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             getenv('GANESHA_EXAMPLE_MEMCACHED') ? getenv('GANESHA_EXAMPLE_MEMCACHED') : 'localhost',
             11211
         );
-        $storage = new Storage(new Memcached($m), null);
+        $storage = new Storage(new Memcached($m), new Ganesha\Storage\StorageKeys(), null);
 
         $service = 'test';
         $this->assertSame($storage->getStatus($service), Ganesha::STATUS_CALMED_DOWN);
@@ -43,7 +43,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             getenv('GANESHA_EXAMPLE_REDIS') ? getenv('GANESHA_EXAMPLE_REDIS') : 'localhost'
         );
         $r->flushAll();
-        $storage = new Storage(new Redis(($r)), null);
+        $storage = new Storage(new Redis(($r)), new Ganesha\Storage\StorageKeys(), null);
 
         $service = 'test';
         $storage->incrementFailureCount($service);

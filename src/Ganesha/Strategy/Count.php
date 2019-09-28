@@ -59,14 +59,14 @@ class Count implements StrategyInterface
      * @param Configuration $configuration
      * @return Count
      */
-    public static function create(Configuration $configuration, StorageKeysInterface $keys = null)
+    public static function create(Configuration $configuration)
     {
         $strategy = new self(
             $configuration,
             new Storage(
                 $configuration['adapter'],
-                null,
-                $keys
+                $configuration['storageKeys'],
+                null
             )
         );
 

@@ -29,17 +29,17 @@ class Storage
      * Storage constructor.
      *
      * @param AdapterInterface $adapter
-     * @param callable $serviceNameDecorator
-     * @param StorageKeysInterface|null $storageKeys
+     * @param StorageKeysInterface $storageKeys
+     * @param callable|null $serviceNameDecorator
      */
     public function __construct(
         AdapterInterface $adapter,
-        callable $serviceNameDecorator = null,
-        StorageKeysInterface $storageKeys = null
+        StorageKeysInterface $storageKeys,
+        callable $serviceNameDecorator = null
     ) {
         $this->adapter = $adapter;
         $this->serviceNameDecorator = $serviceNameDecorator;
-        $this->storageKeys = $storageKeys ?: new StorageKeys();
+        $this->storageKeys = $storageKeys;
     }
 
     /**

@@ -67,7 +67,6 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     public function dontOverrideTheSpecifiedParameter()
     {
-
         $c = new Configuration([
             'storageKeys' => new TestStorageKey()
         ]);

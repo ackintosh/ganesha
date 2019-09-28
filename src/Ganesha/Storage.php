@@ -320,7 +320,7 @@ class Storage
             // because Redis doesn't save lastFailureTime.
             // @see Ackintosh\Ganesha\Storage\Adapter\Redis#saveLastFailureTime()
             ? $this->failureKey($service)
-            : $this->prefix($service) . $this->storageKeys->lastFailureKey();
+            : $this->prefix($service) . $this->storageKeys->lastFailureTime();
     }
 
     /**

@@ -69,7 +69,7 @@ class StorageKeys implements StorageKeysInterface
     /**
      * @return string
      */
-    public function lastFailureKey()
+    public function lastFailureTime()
     {
         return self::KEY_SUFFIX_LAST_FAILURE_TIME;
     }

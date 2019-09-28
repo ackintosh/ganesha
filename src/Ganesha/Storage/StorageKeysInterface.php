@@ -27,7 +27,7 @@ interface StorageKeysInterface
     /**
      * @return string
      */
-    public function lastFailureKey();
+    public function lastFailureTime();
 
     /**
      * @return string

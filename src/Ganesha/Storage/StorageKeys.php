@@ -1,7 +1,6 @@
 <?php
 namespace Ackintosh\Ganesha\Storage;
 
-
 class StorageKeys implements StorageKeysInterface
 {
     /**

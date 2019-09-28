@@ -61,7 +61,7 @@ class Rate implements StrategyInterface
      * @param Configuration $configuration
      * @return Rate
      */
-    public static function create(Configuration $configuration, StorageKeysInterface $keys = null)
+    public static function create(Configuration $configuration)
     {
         $serviceNameDecorator = $configuration['adapter'] instanceof Storage\Adapter\TumblingTimeWindowInterface ? self::serviceNameDecorator($configuration['timeWindow']) : null;
         $adapter = $configuration['adapter'];
@@ -69,7 +69,11 @@ class Rate implements StrategyInterface
 
         return new self(
             $configuration,
-            new Storage($adapter, $serviceNameDecorator, $keys)
+            new Storage(
+                $adapter,
+                $configuration['storageKeys'],
+                $serviceNameDecorator
+            )
         );
     }
 

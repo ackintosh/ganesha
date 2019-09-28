@@ -267,6 +267,28 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 ]);
 ```
 
+## Customizing storage keys
+
+If you want customize the keys to be used when storing circuit breaker information, set an instance which implements [StorageKeysInterface](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/StorageKeysInterface.php).
+
+```php
+class YourStorageKeys implements StorageKeysInterface
+{
+    public function prefix()
+    {
+        return 'your_prefix_';
+    }
+    
+    // (ommitted)
+}
+
+$ganesha = Ackintosh\Ganesha\Builder::build([
+    // The keys which will stored by Ganesha to the storage you specified via `adapter`
+    // will be prefixed with `your_prefix_`.
+    'storageKeys' => new YourStorageKeys(),
+]);
+```
+
 ## [Ganesha :heart: Guzzle](#table-of-contents)
 
 If you using [Guzzle](https://github.com/guzzle/guzzle) (v6 or higher), [Guzzle Middleware](http://docs.guzzlephp.org/en/stable/handlers-and-middleware.html) powered by Ganesha makes it easy to integrate Circuit Breaker to your existing code base.

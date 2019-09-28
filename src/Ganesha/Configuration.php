@@ -1,6 +1,8 @@
 <?php
 namespace Ackintosh\Ganesha;
 
+use Ackintosh\Ganesha\Storage\StorageKeys;
+
 class Configuration implements \ArrayAccess
 {
     /**
@@ -10,8 +12,10 @@ class Configuration implements \ArrayAccess
 
     public function __construct($params)
     {
-        $default = [];
-        $this->params = array_merge($default, $params);
+        if (!isset($params['storageKeys'])) {
+            $params['storageKeys'] = new StorageKeys();
+        }
+        $this->params = $params;
     }
 
     public function offsetSet($offset, $value)

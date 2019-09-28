@@ -268,7 +268,7 @@ $ganesha = Ackintosh\Ganesha\Builder::build([
 ]);
 ```
 
-## Customizing storage keys
+## [Customizing storage keys](#table-of-contents)
 
 If you want customize the keys to be used when storing circuit breaker information, set an instance which implements [StorageKeysInterface](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/StorageKeysInterface.php).
 

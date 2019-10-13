@@ -425,6 +425,7 @@ Here are some companies using Ganesha in production! We are proud of them. :elep
 To add your company to the list, please visit [README.md](https://github.com/ackintosh/ganesha/blob/master/README.md) and click on the icon to edit the page or let me know via [issues](https://github.com/ackintosh/ganesha/issues)/[twitter](https://twitter.com/NAKANO_Akihito). 
 
 - [APISHIP LLC](https://apiship.ru)
+- [Wikia, Inc.](https://www.fandom.com)
 
 ## [The articles/videos Ganesha loves :sparkles: :elephant: :sparkles:](#table-of-contents)
 

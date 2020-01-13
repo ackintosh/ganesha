@@ -77,7 +77,7 @@ abstract class AbstractRedisTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @expectedException \Ackintosh\Ganesha\Exception\StorageException
-     * @expectedExceptionMessageRegExp /\AFailed to add sorted set/
+     * @expectedExceptionMessageRegExp /\AFailed to execute zAdd command/
      */
     public function incrementThrowsExceptionWhenFailedToRunzAdd()
     {
@@ -119,7 +119,7 @@ abstract class AbstractRedisTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @expectedException \Ackintosh\Ganesha\Exception\StorageException
-     * @expectedExceptionMessageRegExp /\AFailed to load cardinality/
+     * @expectedExceptionMessageRegExp /\AFailed to execute zCard command/
      */
     public function loadThrowsExceptionWhenFailedToRunzCard()
     {
@@ -173,6 +173,7 @@ abstract class AbstractRedisTest extends \PHPUnit_Framework_TestCase
      */
     public function loadLastFailureTimeReturnsNullIfNoData()
     {
+        // TODO: replace the mock with a real object
         $mock = $this->getMockBuilder(\Redis::class)->getMock();
         $mock->method('zRange')
             ->willReturn(false);

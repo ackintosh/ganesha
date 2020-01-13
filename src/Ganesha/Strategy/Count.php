@@ -42,7 +42,7 @@ class Count implements StrategyInterface
      * @param array $params
      * @throws \LogicException
      */
-    public static function validate($params)
+    public static function validate($params): void
     {
         foreach (self::$requirements as $r) {
             if (!isset($params[$r])) {
@@ -59,7 +59,7 @@ class Count implements StrategyInterface
      * @param Configuration $configuration
      * @return Count
      */
-    public static function create(Configuration $configuration)
+    public static function create(Configuration $configuration): StrategyInterface
     {
         $strategy = new self(
             $configuration,
@@ -74,9 +74,10 @@ class Count implements StrategyInterface
     }
 
     /**
+     * @param string $service
      * @return int
      */
-    public function recordFailure($service)
+    public function recordFailure(string $service): int
     {
         $this->storage->setLastFailureTime($service, time());
         $this->storage->incrementFailureCount($service);
@@ -92,49 +93,57 @@ class Count implements StrategyInterface
     }
 
     /**
-     * @return void
+     * @param string $service
+     * @return int
      */
-    public function recordSuccess($service)
+    public function recordSuccess(string $service): int
     {
         $this->storage->decrementFailureCount($service);
 
+        $status = $this->storage->getStatus($service);
         if ($this->storage->getFailureCount($service) === 0
-            && $this->storage->getStatus($service) === Ganesha::STATUS_TRIPPED
+            && $status === Ganesha::STATUS_TRIPPED
         ) {
             $this->storage->setStatus($service, Ganesha::STATUS_CALMED_DOWN);
+            return Ganesha::STATUS_CALMED_DOWN;
         }
+
+        return $status;
     }
 
     /**
      * @return void
      */
-    public function reset()
+    public function reset(): void
     {
         $this->storage->reset();
     }
 
     /**
+     * @param string $service
      * @return bool
      */
-    public function isAvailable($service)
+    public function isAvailable(string $service): bool
     {
         return $this->isClosed($service) || $this->isHalfOpen($service);
     }
 
     /**
+     * @param string $service
      * @return bool
      * @throws StorageException
      */
-    private function isClosed($service)
+    private function isClosed(string $service): bool
     {
         return $this->storage->getFailureCount($service) < $this->configuration['failureCountThreshold'];
     }
 
     /**
+     * @param string $service
      * @return bool
      * @throws StorageException
      */
-    private function isHalfOpen($service)
+    private function isHalfOpen(string $service): bool
     {
         if (is_null($lastFailureTime = $this->storage->getLastFailureTime($service))) {
             return false;

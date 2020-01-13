@@ -49,7 +49,7 @@ class Storage
      * @return int
      * @throws StorageException
      */
-    private function getCount($key)
+    private function getCount(string $key): int
     {
         return $this->adapter->load($key);
     }
@@ -61,7 +61,7 @@ class Storage
      * @return int
      * @throws StorageException
      */
-    public function getSuccessCountByCustomKey($key)
+    public function getSuccessCountByCustomKey(string $key): int
     {
         return $this->getCount($this->prefix($key) . $this->storageKeys->success());
     }
@@ -73,7 +73,7 @@ class Storage
      * @return int
      * @throws StorageException
      */
-    public function getFailureCountByCustomKey($key)
+    public function getFailureCountByCustomKey(string $key): int
     {
         return $this->getCount($this->prefix($key) . $this->storageKeys->failure());
     }
@@ -85,7 +85,7 @@ class Storage
      * @return int
      * @throws StorageException
      */
-    public function getRejectionCountByCustomKey($key)
+    public function getRejectionCountByCustomKey(string $key): int
     {
         return $this->getCount($this->prefix($key) . $this->storageKeys->rejection());
     }
@@ -97,7 +97,7 @@ class Storage
      * @return int
      * @throws StorageException
      */
-    public function getFailureCount($service)
+    public function getFailureCount(string $service): int
     {
         return $this->getCount($this->failureKey($service));
     }
@@ -109,7 +109,7 @@ class Storage
      * @return int
      * @throws StorageException
      */
-    public function getSuccessCount($service)
+    public function getSuccessCount(string $service): int
     {
         return $this->getCount($this->successKey($service));
     }
@@ -121,7 +121,7 @@ class Storage
      * @return void
      * @throws StorageException
      */
-    public function incrementFailureCount($service)
+    public function incrementFailureCount(string $service): void
     {
         $this->adapter->increment($this->failureKey($service));
     }
@@ -133,7 +133,7 @@ class Storage
      * @return void
      * @throws StorageException
      */
-    public function decrementFailureCount($service)
+    public function decrementFailureCount(string $service): void
     {
         $this->adapter->decrement($this->failureKey($service));
     }
@@ -145,7 +145,7 @@ class Storage
      * @return void
      * @throws StorageException
      */
-    public function incrementSuccessCount($service)
+    public function incrementSuccessCount(string $service): void
     {
         $this->adapter->increment($this->successKey($service));
     }
@@ -157,7 +157,7 @@ class Storage
      * @return int
      * @throws StorageException
      */
-    public function getRejectionCount($service)
+    public function getRejectionCount(string $service): int
     {
         return $this->getCount($this->rejectionKey($service));
     }
@@ -169,7 +169,7 @@ class Storage
      * @return void
      * @throws StorageException
      */
-    public function incrementRejectionCount($service)
+    public function incrementRejectionCount(string $service): void
     {
         $this->adapter->increment($this->rejectionKey($service));
     }
@@ -181,7 +181,7 @@ class Storage
      * @param $failureCount
      * @throws StorageException
      */
-    public function setFailureCount($service, $failureCount)
+    public function setFailureCount(string $service, int $failureCount): void
     {
         $this->adapter->save($this->failureKey($service), $failureCount);
     }
@@ -194,7 +194,7 @@ class Storage
      * @return void
      * @throws StorageException
      */
-    public function setLastFailureTime($service, $lastFailureTime)
+    public function setLastFailureTime(string $service, int $lastFailureTime): void
     {
         $this->adapter->saveLastFailureTime($this->lastFailureKey($service), $lastFailureTime);
     }
@@ -206,7 +206,7 @@ class Storage
      * @return int | null
      * @throws StorageException
      */
-    public function getLastFailureTime($service)
+    public function getLastFailureTime(string $service)
     {
         return $this->adapter->loadLastFailureTime($this->lastFailureKey($service));
     }
@@ -219,7 +219,7 @@ class Storage
      * @return void
      * @throws StorageException
      */
-    public function setStatus($service, $status)
+    public function setStatus(string $service, int $status): void
     {
         $this->adapter->saveStatus($this->statusKey($service), $status);
     }
@@ -231,7 +231,7 @@ class Storage
      * @return int
      * @throws StorageException
      */
-    public function getStatus($service)
+    public function getStatus(string $service): int
     {
         return $this->adapter->loadStatus($this->statusKey($service));
     }
@@ -239,7 +239,7 @@ class Storage
     /**
      * @return void
      */
-    public function reset()
+    public function reset(): void
     {
         $this->adapter->reset();
     }
@@ -247,7 +247,7 @@ class Storage
     /**
      * @return bool
      */
-    public function supportTumblingTimeWindow()
+    public function supportTumblingTimeWindow(): bool
     {
         return $this->adapter instanceof TumblingTimeWindowInterface;
     }
@@ -255,7 +255,7 @@ class Storage
     /**
      * @return bool
      */
-    public function supportSlidingTimeWindow()
+    public function supportSlidingTimeWindow(): bool
     {
         return $this->adapter instanceof SlidingTimeWindowInterface;
     }
@@ -264,7 +264,7 @@ class Storage
      * @param  string $service
      * @return string
      */
-    private function key($service)
+    private function key(string $service): string
     {
         if ($this->serviceNameDecorator) {
             $service = call_user_func($this->serviceNameDecorator, $service);
@@ -277,7 +277,7 @@ class Storage
      * @param  string $key
      * @return string
      */
-    private function prefix($key)
+    private function prefix(string $key): string
     {
         return $this->storageKeys->prefix() . $key;
     }
@@ -286,7 +286,7 @@ class Storage
      * @param  string $service
      * @return string
      */
-    private function successKey($service)
+    private function successKey(string $service): string
     {
         return $this->key($service) . $this->storageKeys->success();
     }
@@ -295,7 +295,7 @@ class Storage
      * @param  string $service
      * @return string
      */
-    private function failureKey($service)
+    private function failureKey(string $service): string
     {
         return $this->key($service) . $this->storageKeys->failure();
     }
@@ -304,7 +304,7 @@ class Storage
      * @param  string $service
      * @return string
      */
-    private function rejectionKey($service)
+    private function rejectionKey(string $service): string
     {
         return $this->key($service) . $this->storageKeys->rejection();
     }
@@ -313,7 +313,7 @@ class Storage
      * @param  string $service
      * @return string
      */
-    private function lastFailureKey($service)
+    private function lastFailureKey(string $service): string
     {
         return $this->supportSlidingTimeWindow()
             // If the adapter supports SlidingTimeWindow use failureKey() instead,
@@ -327,7 +327,7 @@ class Storage
      * @param  string $service
      * @return string
      */
-    private function statusKey($service)
+    private function statusKey(string $service): string
     {
         return $this->prefix($service) . $this->storageKeys->status();
     }

@@ -47,7 +47,7 @@ class RedisStore
      *
      * @throws \Ackintosh\Ganesha\Exception\StorageException
      */
-    public function zRemRangeByScore($key, $start, $end)
+    public function zRemRangeByScore(string $key, $start, $end)
     {
         try {
             return $this->redis->zRemRangeByScore($key, $start, $end);
@@ -65,13 +65,22 @@ class RedisStore
      *
      * @throws \Ackintosh\Ganesha\Exception\StorageException
      */
-    public function zCard($key)
+    public function zCard(string $key): int
     {
         try {
-            return $this->redis->zCard($key);
+            $r = $this->redis->zCard($key);
         } catch (Exception $exception) {
             throw new StorageException($exception->getMessage(), $exception->getCode(), $exception);
         }
+
+        if ($r === false) {
+            throw new StorageException(sprintf(
+                "Failed to execute zCard command. key: %s",
+                $key
+            ));
+        }
+
+        return $r;
     }
 
     /**
@@ -85,13 +94,24 @@ class RedisStore
      *
      * @throws \Ackintosh\Ganesha\Exception\StorageException
      */
-    public function zAdd($key, $score1, $value1)
+    public function zAdd(string $key, float $score1, string $value1): int
     {
         try {
-            return $this->redis->zAdd($key, $score1, $value1);
+            $r = $this->redis->zAdd($key, $score1, $value1);
         } catch (Exception $exception) {
             throw new StorageException($exception->getMessage(), $exception->getCode(), $exception);
         }
+
+        if ($r === false) {
+            throw new StorageException(sprintf(
+                "Failed to execute zAdd command. key: %s, score1: %s, value1: %s",
+                $key,
+                $score1,
+                $value1
+            ));
+        }
+
+        return $r;
     }
 
     /**
@@ -110,10 +130,11 @@ class RedisStore
      *
      * @throws \Ackintosh\Ganesha\Exception\StorageException
      */
-    public function zRange($key, $start, $end)
+    public function zRange(string $key, int $start, int $end): array
     {
         try {
-            return $this->redis->zRange($key, $start, $end);
+            $elements = $this->redis->zRange($key, $start, $end);
+            return !$elements ? [] : $elements;
         } catch (Exception $exception) {
             throw new StorageException($exception->getMessage(), $exception->getCode(), $exception);
         }
@@ -129,10 +150,17 @@ class RedisStore
      *
      * @throws \Ackintosh\Ganesha\Exception\StorageException
      */
-    public function set($key, $value)
+    public function set(string $key, string $value): bool
     {
         try {
-            return $this->redis->set($key, $value);
+            $r = $this->redis->set($key, $value);
+            if (is_bool($r)) {
+                return $r;
+            } elseif ($r instanceof \Predis\Response\Status) {
+                return $r->getPayload() === 'OK';
+            } else {
+                throw new \LogicException("Could not handle the response: " . serialize($r));
+            }
         } catch (Exception $exception) {
             throw new StorageException($exception->getMessage(), $exception->getCode(), $exception);
         }
@@ -147,7 +175,7 @@ class RedisStore
      *
      * @throws \Ackintosh\Ganesha\Exception\StorageException
      */
-    public function get($key)
+    public function get(string $key)
     {
         try {
             $result = $this->redis->get($key);

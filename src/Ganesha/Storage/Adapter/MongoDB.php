@@ -7,6 +7,7 @@ use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
+use MongoDB\Driver\Cursor;
 
 class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingTimeWindowInterface
 {
@@ -42,7 +43,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     /**
      * @return bool
      */
-    public function supportCountStrategy()
+    public function supportCountStrategy(): bool
     {
         return true;
     }
@@ -50,7 +51,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     /**
      * @return bool
      */
-    public function supportRateStrategy()
+    public function supportRateStrategy(): bool
     {
         return true;
     }
@@ -60,7 +61,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
      * @return void
      * @throws \Exception
      */
-    public function setConfiguration(Configuration $configuration)
+    public function setConfiguration(Configuration $configuration): void
     {
         $this->configuration = $configuration;
         $this->dbName = $this->configuration->offsetGet('dbName');
@@ -72,7 +73,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
      * @return int
      * @throws StorageException
      */
-    public function load($service)
+    public function load(string $service): int
     {
         $cursor = $this->read(['service' => $service]);
         $result = $cursor->toArray();
@@ -93,7 +94,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
      * @return void
      * @throws StorageException
      */
-    public function save($service, $count)
+    public function save(string $service, int $count): void
     {
         $this->update(['service' => $service], ['$set' => ['count' => $count]]);
     }
@@ -103,7 +104,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
      * @return void
      * @throws StorageException
      */
-    public function increment($service)
+    public function increment(string $service): void
     {
         $this->update(['service' => $service], ['$inc' => ['count' => 1]], ['safe' => true]);
     }
@@ -113,7 +114,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
      * @return void
      * @throws StorageException
      */
-    public function decrement($service)
+    public function decrement(string $service): void
     {
         $this->update(['service' => $service], ['$inc' => ['count' => -1]], ['safe' => true]);
     }
@@ -123,7 +124,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
      * @param int $lastFailureTime
      * @throws StorageException
      */
-    public function saveLastFailureTime($service, $lastFailureTime)
+    public function saveLastFailureTime(string $service, int $lastFailureTime): void
     {
         $this->update(['service' => $service], ['$set' => ['lastFailureTime' => $lastFailureTime]]);
     }
@@ -133,7 +134,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
      * @return int
      * @throws StorageException
      */
-    public function loadLastFailureTime($service)
+    public function loadLastFailureTime(string $service): int
     {
         $cursor = $this->read(['service' => $service]);
         $result = $cursor->toArray();
@@ -152,7 +153,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
      * @param int $status
      * @throws StorageException
      */
-    public function saveStatus($service, $status)
+    public function saveStatus(string $service, int $status): void
     {
         $this->update(['service' => $service], ['$set' => ['status' => $status]]);
     }
@@ -162,7 +163,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
      * @return int
      * @throws StorageException
      */
-    public function loadStatus($service)
+    public function loadStatus(string $service): int
     {
         $cursor = $this->read(['service' => $service]);
         $result = $cursor->toArray();
@@ -175,7 +176,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
         return $result[0]['status'];
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->delete([], []);
     }
@@ -183,7 +184,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     /**
      * @return string "db.collectionName"
      */
-    private function getNamespace()
+    private function getNamespace(): string
     {
         return $this->dbName . '.' . $this->collectionName;
     }
@@ -193,7 +194,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
      * @param array $queryOptions
      * @return \MongoDB\Driver\Cursor
      */
-    private function read($filter, array $queryOptions = [])
+    private function read(array $filter, array $queryOptions = []): Cursor
     {
         try {
             $query = new \MongoDB\Driver\Query($filter, $queryOptions);
@@ -210,7 +211,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
      * @param array $deleteOptions
      * @return void
      */
-    private function delete($filter, array $deleteOptions = [])
+    private function delete(array $filter, array $deleteOptions = []): void
     {
         $this->bulkWrite($filter, $options = ['deleteOptions' => $deleteOptions], 'delete');
     }
@@ -220,7 +221,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
      * @param $newObj
      * @param array $updateOptions
      */
-    private function update($filter, $newObj, array $updateOptions = ['multi' => false, 'upsert' => true])
+    private function update(array $filter, array $newObj, array $updateOptions = ['multi' => false, 'upsert' => true]): void
     {
         $this->bulkWrite($filter, $options = ['newObj' => $newObj, 'updateOptions' => $updateOptions], 'update');
     }
@@ -230,7 +231,7 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
      * @param array $options
      * @param string $command
      */
-    private function bulkWrite($filter, array $options, $command)
+    private function bulkWrite(array $filter, array $options, string $command): void
     {
         try {
             $bulk = new \MongoDB\Driver\BulkWrite();

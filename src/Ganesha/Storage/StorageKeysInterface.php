@@ -6,30 +6,30 @@ interface StorageKeysInterface
     /**
      * @return string
      */
-    public function prefix();
+    public function prefix(): string;
 
     /**
      * @return string
      */
-    public function success();
+    public function success(): string;
 
     /**
      * @return string
      */
-    public function failure();
+    public function failure(): string;
 
     /**
      * @return string
      */
-    public function rejection();
+    public function rejection(): string;
 
     /**
      * @return string
      */
-    public function lastFailureTime();
+    public function lastFailureTime(): string;
 
     /**
      * @return string
      */
-    public function status();
+    public function status(): string;
 }

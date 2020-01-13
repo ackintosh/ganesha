@@ -44,7 +44,7 @@ class Rate implements StrategyInterface
      * @param array $params
      * @throws \LogicException
      */
-    public static function validate($params)
+    public static function validate($params): void
     {
         foreach (self::$requirements as $r) {
             if (!isset($params[$r])) {
@@ -61,7 +61,7 @@ class Rate implements StrategyInterface
      * @param Configuration $configuration
      * @return Rate
      */
-    public static function create(Configuration $configuration)
+    public static function create(Configuration $configuration): StrategyInterface
     {
         $serviceNameDecorator = $configuration['adapter'] instanceof Storage\Adapter\TumblingTimeWindowInterface ? self::serviceNameDecorator($configuration['timeWindow']) : null;
         $adapter = $configuration['adapter'];
@@ -81,7 +81,7 @@ class Rate implements StrategyInterface
      * @param  string $service
      * @return int
      */
-    public function recordFailure($service)
+    public function recordFailure(string $service): int
     {
         $this->storage->setLastFailureTime($service, time());
         $this->storage->incrementFailureCount($service);
@@ -98,24 +98,27 @@ class Rate implements StrategyInterface
 
     /**
      * @param  string $service
-     * @return null | int
+     * @return int
      */
-    public function recordSuccess($service)
+    public function recordSuccess(string $service): int
     {
         $this->storage->incrementSuccessCount($service);
+        $status = $this->storage->getStatus($service);
         if (
-            $this->storage->getStatus($service) === Ganesha::STATUS_TRIPPED
+            $status === Ganesha::STATUS_TRIPPED
             && $this->isClosedInPreviousTimeWindow($service)
         ) {
             $this->storage->setStatus($service, Ganesha::STATUS_CALMED_DOWN);
             return Ganesha::STATUS_CALMED_DOWN;
         }
+
+        return $status;
     }
 
     /**
      * @return void
      */
-    public function reset()
+    public function reset(): void
     {
         $this->storage->reset();
     }
@@ -124,7 +127,7 @@ class Rate implements StrategyInterface
      * @param  string $service
      * @return bool
      */
-    public function isAvailable($service)
+    public function isAvailable(string $service): bool
     {
         if ($this->isClosed($service) || $this->isHalfOpen($service)) {
             return true;
@@ -135,10 +138,11 @@ class Rate implements StrategyInterface
     }
 
     /**
+     * @param  string $service
      * @return bool
      * @throws StorageException, \LogicException
      */
-    private function isClosed($service)
+    private function isClosed(string $service): bool
     {
         switch (true) {
             case $this->storage->supportSlidingTimeWindow():
@@ -161,7 +165,7 @@ class Rate implements StrategyInterface
      * @param  string $service
      * @return bool
      */
-    private function isClosedInCurrentTimeWindow($service)
+    private function isClosedInCurrentTimeWindow(string $service): bool
     {
         $failure = $this->storage->getFailureCount($service);
         if (
@@ -181,7 +185,7 @@ class Rate implements StrategyInterface
      * @param  string $service
      * @return bool
      */
-    private function isClosedInPreviousTimeWindow($service)
+    private function isClosedInPreviousTimeWindow(string $service): bool
     {
         $failure = $this->storage->getFailureCountByCustomKey(self::keyForPreviousTimeWindow($service, $this->configuration['timeWindow']));
         if (
@@ -203,7 +207,7 @@ class Rate implements StrategyInterface
      * @param  int $rejection
      * @return bool
      */
-    private function isClosedInTimeWindow($failure, $success, $rejection)
+    private function isClosedInTimeWindow(int $failure, int $success, int $rejection): bool
     {
         if (($failure + $success + $rejection) < $this->configuration['minimumRequests']) {
             return true;
@@ -217,10 +221,11 @@ class Rate implements StrategyInterface
     }
 
     /**
+     * @param  string $service
      * @return bool
      * @throws StorageException
      */
-    private function isHalfOpen($service)
+    private function isHalfOpen(string $service): bool
     {
         if (is_null($lastFailureTime = $this->storage->getLastFailureTime($service))) {
             return false;
@@ -234,7 +239,7 @@ class Rate implements StrategyInterface
         return false;
     }
 
-    private static function serviceNameDecorator($timeWindow, $current = true)
+    private static function serviceNameDecorator(int $timeWindow, $current = true)
     {
         return function ($service) use ($timeWindow, $current) {
             return sprintf(
@@ -245,7 +250,7 @@ class Rate implements StrategyInterface
         };
     }
 
-    private static function keyForPreviousTimeWindow($service, $timeWindow)
+    private static function keyForPreviousTimeWindow(string $service, int $timeWindow)
     {
         $f = self::serviceNameDecorator($timeWindow, false);
         return $f($service);

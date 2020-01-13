@@ -34,7 +34,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
     /**
      * @return bool
      */
-    public function supportCountStrategy()
+    public function supportCountStrategy(): bool
     {
         return false;
     }
@@ -42,7 +42,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
     /**
      * @return bool
      */
-    public function supportRateStrategy()
+    public function supportRateStrategy(): bool
     {
         return true;
     }
@@ -52,7 +52,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
      *
      * @return void
      */
-    public function setConfiguration(Configuration $configuration)
+    public function setConfiguration(Configuration $configuration): void
     {
         $this->configuration = $configuration;
     }
@@ -63,7 +63,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
      * @return int
      * @throws StorageException
      */
-    public function load($service)
+    public function load($service): int
     {
         $expires = microtime(true) - $this->configuration['timeWindow'];
 
@@ -80,7 +80,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
         return $r;
     }
 
-    public function save($resouce, $count)
+    public function save($resouce, $count): void
     {
         // Redis adapter does not support Count strategy
     }
@@ -90,22 +90,18 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
      *
      * @throws StorageException
      */
-    public function increment($service)
+    public function increment(string $service): void
     {
         $t = microtime(true);
-        $r = $this->redis->zAdd($service, $t, $t);
-
-        if ($r === false) {
-            throw new StorageException('Failed to add sorted set. service: ' . $service . ', returned: ' . print_r($r, true));
-        }
+        $this->redis->zAdd($service, $t, $t);
     }
 
-    public function decrement($service)
+    public function decrement(string $service): void
     {
         // Redis adapter does not support Count strategy
     }
 
-    public function saveLastFailureTime($service, $lastFailureTime)
+    public function saveLastFailureTime(string $service, int $lastFailureTime): void
     {
         // nop
     }
@@ -113,15 +109,15 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
     /**
      * @param $service
      *
-     * @return int|void
+     * @return int|null
      * @throws StorageException
      */
-    public function loadLastFailureTime($service)
+    public function loadLastFailureTime(string $service)
     {
         $lastFailure = $this->redis->zRange($service, -1, -1);
 
         if (!$lastFailure) {
-            return;
+            return null;
         }
 
         return (int)$lastFailure[0];
@@ -133,7 +129,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
      *
      * @throws StorageException
      */
-    public function saveStatus($service, $status)
+    public function saveStatus(string $service, int $status): void
     {
         $r = $this->redis->set($service, $status);
 
@@ -152,7 +148,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
      * @return int
      * @throws StorageException
      */
-    public function loadStatus($service)
+    public function loadStatus(string $service): int
     {
         $r = $this->redis->get($service);
 
@@ -166,7 +162,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
         return (int)$r;
     }
 
-    public function reset()
+    public function reset(): void
     {
         // TODO: Implement reset() method.
     }

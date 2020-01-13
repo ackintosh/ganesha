@@ -9,7 +9,7 @@ class Builder
      * @param  array $params
      * @return Ganesha
      */
-    public static function build(array $params)
+    public static function build(array $params): Ganesha
     {
         $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Rate';
         return self::perform($params);
@@ -19,7 +19,7 @@ class Builder
      * @param  array $params
      * @return Ganesha
      */
-    public static function buildWithCountStrategy(array $params)
+    public static function buildWithCountStrategy(array $params): Ganesha
     {
         $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Count';
         return self::perform($params);
@@ -29,7 +29,7 @@ class Builder
      * @return Ganesha
      * @throws \Exception
      */
-    private static function perform($params)
+    private static function perform($params): Ganesha
     {
         call_user_func([$params['strategyClass'], 'validate'], $params);
 

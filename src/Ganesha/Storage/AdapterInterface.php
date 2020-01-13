@@ -9,38 +9,38 @@ interface AdapterInterface
      * Returns returns whether the adapter supports counting strategy
      * @return bool
      */
-    public function supportCountStrategy();
+    public function supportCountStrategy(): bool ;
 
     /**
      * Returns returns whether the adapter supports rating strategy
      * @return bool
      */
-    public function supportRateStrategy();
+    public function supportRateStrategy(): bool ;
 
     /**
      * @param Configuration $configuration
      * @return void
      */
-    public function setConfiguration(Configuration $configuration);
+    public function setConfiguration(Configuration $configuration): void;
 
     /**
      * @param  string $service
      * @return int
      */
-    public function load($service);
+    public function load(string $service): int;
 
     /**
      * @param  string $service
      * @param  int    $count
      * @return void
      */
-    public function save($service, $count);
+    public function save(string $service, int $count): void;
 
     /**
      * @param  string $service
      * @return void
      */
-    public function increment($service);
+    public function increment(string $service): void;
 
     /**
      * decrement failure count
@@ -50,7 +50,7 @@ interface AdapterInterface
      * @param  string $service
      * @return void
      */
-    public function decrement($service);
+    public function decrement(string $service): void;
 
     /**
      * sets last failure time
@@ -59,14 +59,15 @@ interface AdapterInterface
      * @param  int    $lastFailureTime
      * @return void
      */
-    public function saveLastFailureTime($service, $lastFailureTime);
+    public function saveLastFailureTime(string $service, int $lastFailureTime): void;
 
     /**
      * returns last failure time
      *
+     * @param  string $service
      * @return int | null
      */
-    public function loadLastFailureTime($service);
+    public function loadLastFailureTime(string $service);
 
     /**
      * sets status
@@ -75,7 +76,7 @@ interface AdapterInterface
      * @param  int    $status
      * @return void
      */
-    public function saveStatus($service, $status);
+    public function saveStatus(string $service, int $status): void;
 
     /**
      * returns status
@@ -83,12 +84,12 @@ interface AdapterInterface
      * @param  string $service
      * @return int
      */
-    public function loadStatus($service);
+    public function loadStatus(string $service): int;
 
     /**
      * resets all counts
      *
      * @return void
      */
-    public function reset();
+    public function reset(): void;
 }

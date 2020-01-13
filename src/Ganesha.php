@@ -2,6 +2,7 @@
 namespace Ackintosh;
 
 use Ackintosh\Ganesha\Exception\StorageException;
+use Ackintosh\Ganesha\StrategyInterface;
 
 class Ganesha
 {
@@ -33,7 +34,7 @@ class Ganesha
     const STATUS_TRIPPED  = 2;
 
     /**
-     * @var \Ackintosh\Ganesha\StrategyInterface
+     * @var StrategyInterface
      */
     private $strategy;
 
@@ -50,7 +51,7 @@ class Ganesha
     /**
      * Ganesha constructor.
      *
-     * @param \Ackintosh\Ganesha\StrategyInterface $strategy
+     * @param StrategyInterface $strategy
      */
     public function __construct($strategy)
     {

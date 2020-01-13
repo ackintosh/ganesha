@@ -4,7 +4,6 @@ namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha\Exception\StorageException;
 use Exception;
-use Predis\Client;
 
 class RedisStore
 {
@@ -45,7 +44,7 @@ class RedisStore
      *
      * @return  int|false             The number of values deleted from the sorted set
      *
-     * @throws \Ackintosh\Ganesha\Exception\StorageException
+     * @throws StorageException
      */
     public function zRemRangeByScore(string $key, $start, $end)
     {
@@ -63,7 +62,7 @@ class RedisStore
      *
      * @return  int     the set's cardinality
      *
-     * @throws \Ackintosh\Ganesha\Exception\StorageException
+     * @throws StorageException
      */
     public function zCard(string $key): int
     {
@@ -92,7 +91,7 @@ class RedisStore
      *
      * @return  int     Number of values added
      *
-     * @throws \Ackintosh\Ganesha\Exception\StorageException
+     * @throws StorageException
      */
     public function zAdd(string $key, float $score1, string $value1): int
     {
@@ -128,7 +127,7 @@ class RedisStore
      *
      * @return  array   Array containing the values in specified range.
      *
-     * @throws \Ackintosh\Ganesha\Exception\StorageException
+     * @throws StorageException
      */
     public function zRange(string $key, int $start, int $end): array
     {
@@ -148,7 +147,7 @@ class RedisStore
      *
      * @return  bool    TRUE if the command is successful.
      *
-     * @throws \Ackintosh\Ganesha\Exception\StorageException
+     * @throws StorageException
      */
     public function set(string $key, string $value): bool
     {
@@ -173,13 +172,13 @@ class RedisStore
      *
      * @return  string|false  If key didn't exist, FALSE is returned. Otherwise, the value related to this key is returned.
      *
-     * @throws \Ackintosh\Ganesha\Exception\StorageException
+     * @throws StorageException
      */
     public function get(string $key)
     {
         try {
             $result = $this->redis->get($key);
-            if ($this->redis instanceof Client && $result === null) {
+            if ($this->redis instanceof \Predis\Client && $result === null) {
                 return false;
             }
             return $result;

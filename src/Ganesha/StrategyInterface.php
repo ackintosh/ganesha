@@ -1,13 +1,13 @@
 <?php
 namespace Ackintosh\Ganesha;
 
-use Ackintosh\Ganesha\Storage\StorageKeysInterface;
+use LogicException;
 
 interface StrategyInterface
 {
     /**
      * @param array $params
-     * @throws \LogicException
+     * @throws LogicException
      */
     public static function validate(array $params): void;
 
@@ -30,6 +30,7 @@ interface StrategyInterface
     public function recordFailure(string $service): int;
 
     /**
+     * @param string $service
      * @return bool
      */
     public function isAvailable(string $service): bool;

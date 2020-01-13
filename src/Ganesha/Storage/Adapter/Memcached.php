@@ -6,6 +6,7 @@ use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
+use RuntimeException;
 
 class Memcached implements AdapterInterface, TumblingTimeWindowInterface
 {
@@ -162,7 +163,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     public function reset(): void
     {
         if (!$this->memcached->getStats()) {
-            throw new \RuntimeException('Couldn\'t connect to memcached.');
+            throw new RuntimeException("Couldn't connect to memcached.");
         }
 
         // getAllKeys() with OPT_BINARY_PROTOCOL is not suppoted.
@@ -181,7 +182,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
                 $resultCode,
                 $this->memcached->getResultMessage()
             );
-            throw new \RuntimeException($message);
+            throw new RuntimeException($message);
         }
 
         foreach ($keys as $k) {

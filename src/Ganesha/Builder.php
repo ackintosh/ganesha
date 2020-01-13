@@ -2,6 +2,7 @@
 namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha;
+use InvalidArgumentException;
 
 class Builder
 {
@@ -26,10 +27,11 @@ class Builder
     }
 
     /**
+     * @param array $params
      * @return Ganesha
-     * @throws \Exception
+     * @throws InvalidArgumentException
      */
-    private static function perform($params): Ganesha
+    private static function perform(array $params): Ganesha
     {
         call_user_func([$params['strategyClass'], 'validate'], $params);
 

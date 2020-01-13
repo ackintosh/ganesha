@@ -6,7 +6,8 @@ use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\StrategyInterface;
-use Ackintosh\Ganesha\Storage\StorageKeysInterface;
+use InvalidArgumentException;
+use LogicException;
 
 class Rate implements StrategyInterface
 {
@@ -16,7 +17,7 @@ class Rate implements StrategyInterface
     private $configuration;
 
     /**
-     * @var \Ackintosh\Ganesha\Storage
+     * @var Storage
      */
     private $storage;
 
@@ -42,18 +43,18 @@ class Rate implements StrategyInterface
 
     /**
      * @param array $params
-     * @throws \LogicException
+     * @throws LogicException
      */
-    public static function validate($params): void
+    public static function validate(array $params): void
     {
         foreach (self::$requirements as $r) {
             if (!isset($params[$r])) {
-                throw new \LogicException($r . ' is required');
+                throw new LogicException($r . ' is required');
             }
         }
 
         if (!call_user_func([$params['adapter'], 'supportRateStrategy'])) {
-            throw new \InvalidArgumentException(get_class($params['adapter']) . " doesn't support Rate Strategy.");
+            throw new InvalidArgumentException(get_class($params['adapter']) . " doesn't support Rate Strategy.");
         }
     }
 
@@ -152,7 +153,7 @@ class Rate implements StrategyInterface
                 return $this->isClosedInCurrentTimeWindow($service) && $this->isClosedInPreviousTimeWindow($service);
                 break;
             default:
-                throw new \LogicException(sprintf(
+                throw new LogicException(sprintf(
                     'storage adapter should implement %s and/or %s.',
                     Storage\Adapter\SlidingTimeWindowInterface::class,
                     Storage\Adapter\TumblingTimeWindowInterface::class

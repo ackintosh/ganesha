@@ -23,6 +23,7 @@ services:
 
 before_install:
   - ./install_memcached.sh
+  - yes '' | pecl install redis-5.1.0
   - phpenv config-add .travis.php.ini
 
 before_script:

@@ -63,7 +63,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
      * @return int
      * @throws StorageException
      */
-    public function load($service): int
+    public function load(string $service): int
     {
         $expires = microtime(true) - $this->configuration['timeWindow'];
 
@@ -80,7 +80,12 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
         return $r;
     }
 
-    public function save($resouce, $count): void
+    /**
+     * @param  string $service
+     * @param  int    $count
+     * @return void
+     */
+    public function save(string $service, int $count): void
     {
         // Redis adapter does not support Count strategy
     }

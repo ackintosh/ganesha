@@ -22,10 +22,7 @@ services:
   - mongodb
 
 before_install:
-  - ./install_memcached.sh
-  - yes '' | pecl install redis-5.1.0
-  - yes '' | pecl install mongodb-1.6.0
-  - phpenv config-add .travis.php.ini
+  - ./ci/install_dependencies.sh
 
 before_script:
   - travis_retry composer self-update

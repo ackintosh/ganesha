@@ -3,7 +3,10 @@ FROM php:7.4-cli
 RUN apt-get update \
  && apt-get install -y libmemcached-dev \
  && apt-get install -y zlib1g-dev \
+ && apt-get install -y libzip-dev \
  && apt-get install -y git \
+ && yes '' | pecl install zip \
+ && echo 'extension=zip.so' >> /usr/local/etc/php/php.ini \
  && yes '' | pecl install memcached \
  && echo 'extension=memcached.so' >> /usr/local/etc/php/php.ini \
  && yes '' | pecl install redis \

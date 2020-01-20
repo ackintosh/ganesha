@@ -3,6 +3,7 @@ FROM php:7.4-cli
 RUN apt-get update \
  && apt-get install -y libmemcached-dev \
  && apt-get install -y zlib1g-dev \
+ && apt-get install -y unzip \
  && apt-get install -y libzip-dev \
  && apt-get install -y git \
  && yes '' | pecl install zip \

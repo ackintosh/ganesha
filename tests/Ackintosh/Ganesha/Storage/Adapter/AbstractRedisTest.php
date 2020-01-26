@@ -161,7 +161,7 @@ abstract class AbstractRedisTest extends TestCase
             $this->assertEquals(
                 (int)$lastFailureTime,
                 $this->redisAdapter->loadLastFailureTime($this->service),
-                null,
+                '',
                 1
             );
         } catch (StorageException $exception) {

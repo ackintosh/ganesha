@@ -5,8 +5,9 @@ namespace Ackintosh\Ganesha\Storage\Adapter;
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Exception\StorageException;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractRedisTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractRedisTest extends TestCase
 {
     /**
      * @var int

@@ -4,8 +4,9 @@ namespace Ackintosh\Ganesha;
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Storage\Adapter\Memcached;
 use Ackintosh\Ganesha\Storage\Adapter\Redis;
+use PHPUnit\Framework\TestCase;
 
-class StorageTest extends \PHPUnit_Framework_TestCase
+class StorageTest extends TestCase
 {
     /**
      * @test

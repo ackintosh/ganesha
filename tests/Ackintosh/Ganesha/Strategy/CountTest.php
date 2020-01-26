@@ -3,11 +3,12 @@ namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 use Ackintosh\Ganesha\Strategy\Count;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Ackintosh\Ganesha\Strategy\Count
  */
-class CountTest extends \PHPUnit_Framework_TestCase
+class CountTest extends TestCase
 {
     /**
      * @test

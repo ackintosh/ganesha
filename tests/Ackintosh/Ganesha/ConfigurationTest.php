@@ -2,8 +2,9 @@
 namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha\Storage\StorageKeys;
+use PHPUnit\Framework\TestCase;
 
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends TestCase
 {
     /**
      * @var Configuration

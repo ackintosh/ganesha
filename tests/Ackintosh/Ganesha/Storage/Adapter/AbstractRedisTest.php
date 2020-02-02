@@ -5,6 +5,7 @@ namespace Ackintosh\Ganesha\Storage\Adapter;
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Exception\StorageException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractRedisTest extends TestCase
@@ -22,19 +23,30 @@ abstract class AbstractRedisTest extends TestCase
      */
     private $service = 'testService';
 
+    /**
+     * @var Configuration
+     */
+    private $configuration;
+
     public function setUp()
     {
         parent::setUp();
 
         $this->redisAdapter = new Redis($this->getRedisConnection());
-        $configuration = new Configuration(['timeWindow' => self::TIME_WINDOW]);
-        $this->redisAdapter->setConfiguration($configuration);
+        $this->configuration = new Configuration(['timeWindow' => self::TIME_WINDOW]);
+        $this->redisAdapter->setConfiguration($this->configuration);
     }
 
     /**
      * @return \Redis|\RedisArray|\RedisCluster|\Predis\Client
      */
     abstract protected function getRedisConnection();
+
+    private function createAdapterWithMock(MockObject $mock): Redis {
+        $adapter = new Redis($mock);
+        $adapter->setConfiguration($this->configuration);
+        return $adapter;
+    }
 
     /**
      * @test
@@ -86,7 +98,7 @@ abstract class AbstractRedisTest extends TestCase
         $mock->method('zAdd')
             ->willReturn(false);
 
-        (new Redis($mock))->increment($this->service);
+        $this->createAdapterWithMock($mock)->increment($this->service);
     }
 
     /**
@@ -100,7 +112,7 @@ abstract class AbstractRedisTest extends TestCase
         $mock->method('zAdd')
             ->willThrowException(new \RedisException('exception test'));
 
-        (new Redis($mock))->increment($this->service);
+        $this->createAdapterWithMock($mock)->increment($this->service);
     }
 
     /**
@@ -114,7 +126,7 @@ abstract class AbstractRedisTest extends TestCase
         $mock->method('zRemRangeByScore')
             ->willReturn(false);
 
-        (new Redis($mock))->load($this->service);
+        $this->createAdapterWithMock($mock)->load($this->service);
     }
 
     /**
@@ -128,7 +140,7 @@ abstract class AbstractRedisTest extends TestCase
         $mock->method('zCard')
             ->willReturn(false);
 
-        (new Redis($mock))->load($this->service);
+        $this->createAdapterWithMock($mock)->load($this->service);
     }
 
     /**
@@ -142,7 +154,7 @@ abstract class AbstractRedisTest extends TestCase
         $mock->method('zRemRangeByScore')
             ->willThrowException(new \RedisException('exception test'));
 
-        (new Redis($mock))->load($this->service);
+        $this->createAdapterWithMock($mock)->load($this->service);
     }
 
     /**
@@ -179,7 +191,7 @@ abstract class AbstractRedisTest extends TestCase
         $mock->method('zRange')
             ->willReturn(false);
 
-        $this->assertNull((new Redis($mock))->loadLastFailureTime($this->service));
+        $this->assertNull($this->createAdapterWithMock($mock)->loadLastFailureTime($this->service));
     }
 
     /**
@@ -193,7 +205,7 @@ abstract class AbstractRedisTest extends TestCase
         $mock->method('zRange')
             ->willThrowException(new \RedisException('exception test'));
 
-        (new Redis($mock))->loadLastFailureTime($this->service);
+        $this->createAdapterWithMock($mock)->loadLastFailureTime($this->service);
     }
 
     /**
@@ -224,7 +236,7 @@ abstract class AbstractRedisTest extends TestCase
         $mock->method('set')
             ->willReturn(false);
 
-        $this->assertNull((new Redis($mock))->saveStatus($this->service, Ganesha::STATUS_TRIPPED));
+        $this->assertNull($this->createAdapterWithMock($mock)->saveStatus($this->service, Ganesha::STATUS_TRIPPED));
     }
 
     /**
@@ -238,7 +250,7 @@ abstract class AbstractRedisTest extends TestCase
         $mock->method('set')
             ->willThrowException(new \RedisException('exception test'));
 
-        (new Redis($mock))->saveStatus($this->service, Ganesha::STATUS_TRIPPED);
+        $this->createAdapterWithMock($mock)->saveStatus($this->service, Ganesha::STATUS_TRIPPED);
     }
 
     /**
@@ -252,6 +264,6 @@ abstract class AbstractRedisTest extends TestCase
         $mock->method('get')
             ->willThrowException(new \RedisException('exception test'));
 
-        (new Redis($mock))->loadStatus($this->service);
+        $this->createAdapterWithMock($mock)->loadStatus($this->service);
     }
 }

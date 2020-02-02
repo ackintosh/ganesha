@@ -32,7 +32,7 @@
     "php-vcr/phpunit-testlistener-vcr": "~3.2.1",
     "php-coveralls/php-coveralls": "~2.0",
     "predis/predis": "^1.1",
-    "guzzlehttp/guzzle": "~6.3",
+    "guzzlehttp/guzzle": "~6.5",
     "ext-redis": "~5.1",
     "ext-memcached": "~3.1",
     "ext-mongodb": "~1.6"

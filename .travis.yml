@@ -1,11 +1,10 @@
 language: php
 
 php:
-  - 5.6
-  - 7.0
   - 7.1
   - 7.2
   - 7.3
+  - 7.4
   - nightly
 
 env:
@@ -23,8 +22,7 @@ services:
   - mongodb
 
 before_install:
-  - ./install_memcached.sh
-  - phpenv config-add .travis.php.ini
+  - ./ci/install_dependencies.sh
 
 before_script:
   - travis_retry composer self-update

@@ -3,14 +3,13 @@ namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Exception\StorageException;
-use PHPUnit_Framework_TestCase;
-use RuntimeException;
+use PHPUnit\Framework\TestCase;
 use function extension_loaded;
 
 /**
  * @coversDefaultClass \Ackintosh\Ganesha\Storage\Adapter\Memcached
  */
-class MemcachedTest extends PHPUnit_Framework_TestCase
+class MemcachedTest extends TestCase
 {
     /**
      * @var Memcached
@@ -100,7 +99,7 @@ class MemcachedTest extends PHPUnit_Framework_TestCase
         $adapter = new Memcached($m);
 
         $this->expectException(StorageException::class);
-        $adapter->save($this->service, 'test');
+        $adapter->save($this->service, 99);
     }
 
     /**

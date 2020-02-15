@@ -36,7 +36,7 @@ class StorageKeys implements StorageKeysInterface
     /**
      * @return string
      */
-    public function prefix()
+    public function prefix(): string
     {
         return self::KEY_PREFIX;
     }
@@ -44,7 +44,7 @@ class StorageKeys implements StorageKeysInterface
     /**
      * @return string
      */
-    public function success()
+    public function success(): string
     {
         return self::KEY_SUFFIX_SUCCESS;
     }
@@ -52,7 +52,7 @@ class StorageKeys implements StorageKeysInterface
     /**
      * @return string
      */
-    public function failure()
+    public function failure(): string
     {
         return self::KEY_SUFFIX_FAILURE;
     }
@@ -60,7 +60,7 @@ class StorageKeys implements StorageKeysInterface
     /**
      * @return string
      */
-    public function rejection()
+    public function rejection(): string
     {
         return self::KEY_SUFFIX_REJECTION;
     }
@@ -68,7 +68,7 @@ class StorageKeys implements StorageKeysInterface
     /**
      * @return string
      */
-    public function lastFailureTime()
+    public function lastFailureTime(): string
     {
         return self::KEY_SUFFIX_LAST_FAILURE_TIME;
     }
@@ -76,7 +76,7 @@ class StorageKeys implements StorageKeysInterface
     /**
      * @return string
      */
-    public function status()
+    public function status(): string
     {
         return self::KEY_SUFFIX_STATUS;
     }

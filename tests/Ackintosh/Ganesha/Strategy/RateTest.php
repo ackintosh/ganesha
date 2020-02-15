@@ -3,11 +3,12 @@ namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 use Ackintosh\Ganesha\Strategy\Rate;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Ackintosh\Ganesha\Strategy\Rate
  */
-class RateTest extends \PHPUnit_Framework_TestCase
+class RateTest extends TestCase
 {
     /**
      * @test

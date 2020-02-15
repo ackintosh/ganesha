@@ -2,11 +2,12 @@
 namespace Ackintosh\Ganesha\GuzzleMiddleware;
 
 use GuzzleHttp\Psr7\Request;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Ackintosh\Ganesha\GuzzleMiddleware\ServiceNameExtractor
  */
-class ServiceNameExtractorTest extends \PHPUnit_Framework_TestCase
+class ServiceNameExtractorTest extends TestCase
 {
     /**
      * @test

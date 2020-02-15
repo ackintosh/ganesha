@@ -6,6 +6,7 @@ use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
+use RuntimeException;
 
 class Memcached implements AdapterInterface, TumblingTimeWindowInterface
 {
@@ -33,7 +34,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     /**
      * @return bool
      */
-    public function supportCountStrategy()
+    public function supportCountStrategy(): bool
     {
         return true;
     }
@@ -41,7 +42,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     /**
      * @return bool
      */
-    public function supportRateStrategy()
+    public function supportRateStrategy(): bool
     {
         return true;
     }
@@ -50,7 +51,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
      * @param Configuration $configuration
      * @return void
      */
-    public function setConfiguration(Configuration $configuration)
+    public function setConfiguration(Configuration $configuration): void
     {
         $this->configuration = $configuration;
     }
@@ -60,7 +61,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
      * @return int
      * @throws StorageException
      */
-    public function load($service)
+    public function load(string $service): int
     {
         $r = (int)$this->memcached->get($service);
         $this->throwExceptionIfErrorOccurred();
@@ -73,7 +74,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
      * @return void
      * @throws StorageException
      */
-    public function save($service, $count)
+    public function save(string $service, int $count): void
     {
         if (!$this->memcached->set($service, $count)) {
             throw new StorageException('failed to set the value : ' . $this->memcached->getResultMessage());
@@ -85,7 +86,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
      * @return void
      * @throws StorageException
      */
-    public function increment($service)
+    public function increment(string $service): void
     {
         // requires \Memcached::OPT_BINARY_PROTOCOL
         if ($this->memcached->increment($service, 1, 1) === false) {
@@ -98,7 +99,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
      * @return void
      * @throws StorageException
      */
-    public function decrement($service)
+    public function decrement(string $service): void
     {
         // requires \Memcached::OPT_BINARY_PROTOCOL
         if ($this->memcached->decrement($service, 1, 0) === false) {
@@ -111,7 +112,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
      * @param int    $lastFailureTime
      * @throws StorageException
      */
-    public function saveLastFailureTime($service, $lastFailureTime)
+    public function saveLastFailureTime(string $service, int $lastFailureTime): void
     {
         if (!$this->memcached->set($service, $lastFailureTime)) {
             throw new StorageException('failed to set the last failure time : ' . $this->memcached->getResultMessage());
@@ -123,7 +124,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
      * @return int
      * @throws StorageException
      */
-    public function loadLastFailureTime($service)
+    public function loadLastFailureTime(string $service): int
     {
         $r = $this->memcached->get($service);
         $this->throwExceptionIfErrorOccurred();
@@ -135,7 +136,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
      * @param int    $status
      * @throws StorageException
      */
-    public function saveStatus($service, $status)
+    public function saveStatus(string $service, int $status): void
     {
         if (!$this->memcached->set($service, $status)) {
             throw new StorageException('failed to set the status : ' . $this->memcached->getResultMessage());
@@ -147,7 +148,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
      * @return int
      * @throws StorageException
      */
-    public function loadStatus($service)
+    public function loadStatus(string $service): int
     {
         $status = $this->memcached->get($service);
         $this->throwExceptionIfErrorOccurred();
@@ -159,10 +160,10 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
         return $status;
     }
 
-    public function reset()
+    public function reset(): void
     {
         if (!$this->memcached->getStats()) {
-            throw new \RuntimeException('Couldn\'t connect to memcached.');
+            throw new RuntimeException("Couldn't connect to memcached.");
         }
 
         // getAllKeys() with OPT_BINARY_PROTOCOL is not suppoted.
@@ -181,7 +182,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
                 $resultCode,
                 $this->memcached->getResultMessage()
             );
-            throw new \RuntimeException($message);
+            throw new RuntimeException($message);
         }
 
         foreach ($keys as $k) {
@@ -191,7 +192,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
         }
     }
 
-    public function isGaneshaData($key)
+    public function isGaneshaData(string $key): bool
     {
         $regex = sprintf(
             '#\A%s.+(%s|%s|%s|%s|%s)\z#',
@@ -212,7 +213,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
      * @return void
      * @throws StorageException
      */
-    private function throwExceptionIfErrorOccurred()
+    private function throwExceptionIfErrorOccurred(): void
     {
         $errorResultCodes = [
             \Memcached::RES_FAILURE,

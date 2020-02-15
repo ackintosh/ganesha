@@ -8,8 +8,9 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\HandlerStack;
+use PHPUnit\Framework\TestCase;
 
-class GuzzleMiddlewareTest extends \PHPUnit_Framework_TestCase
+class GuzzleMiddlewareTest extends TestCase
 {
     /**
      * @var Redis

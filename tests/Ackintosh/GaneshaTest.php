@@ -3,8 +3,9 @@ namespace Ackintosh;
 
 use Ackintosh\Ganesha\Builder;
 use Ackintosh\Ganesha\Storage\Adapter\Memcached;
+use PHPUnit\Framework\TestCase;
 
-class GaneshaTest extends \PHPUnit_Framework_TestCase
+class GaneshaTest extends TestCase
 {
     /**
      * @var string

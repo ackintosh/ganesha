@@ -2,9 +2,9 @@
 
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
-use Ackintosh\Ganesha\Exception\StorageException;
+use PHPUnit\Framework\TestCase;
 
-class RedisStoreTest extends \PHPUnit_Framework_TestCase
+class RedisStoreTest extends TestCase
 {
     /**
      * @test
@@ -17,7 +17,7 @@ class RedisStoreTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     * @expectedException Ackintosh\Ganesha\Exception\StorageException
      */
     public function zCardThrowsExceptionIfFailed()
     {

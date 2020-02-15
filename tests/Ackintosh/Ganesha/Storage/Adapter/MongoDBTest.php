@@ -4,8 +4,9 @@ namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Configuration;
+use PHPUnit\Framework\TestCase;
 
-class MongoDBTest extends \PHPUnit_Framework_TestCase
+class MongoDBTest extends TestCase
 {
     /**
      * @var MongoDB

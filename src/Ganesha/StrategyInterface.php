@@ -1,41 +1,42 @@
 <?php
 namespace Ackintosh\Ganesha;
 
-use Ackintosh\Ganesha\Storage\StorageKeysInterface;
+use LogicException;
 
 interface StrategyInterface
 {
     /**
      * @param array $params
-     * @throws \LogicException
+     * @throws LogicException
      */
-    public static function validate($params);
+    public static function validate(array $params): void;
 
     /**
      * @param Configuration $configuration
      * @return mixed
      */
-    public static function create(Configuration $configuration);
+    public static function create(Configuration $configuration): StrategyInterface;
 
     /**
      * @param string $service
-     * @return void
+     * @return int
      */
-    public function recordSuccess($service);
+    public function recordSuccess(string $service): int;
 
     /**
      * @param string $service
-     * @return void
+     * @return int
      */
-    public function recordFailure($service);
+    public function recordFailure(string $service): int;
 
     /**
+     * @param string $service
      * @return bool
      */
-    public function isAvailable($service);
+    public function isAvailable(string $service): bool;
 
     /**
      * @return void
      */
-    public function reset();
+    public function reset(): void;
 }

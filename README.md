@@ -211,8 +211,8 @@ If you want use the Count strategy use `Builder::buildWithCountStrategy()` to bu
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
     // The failure count threshold that changes CircuitBreaker's state to `OPEN`.
-    // The count will be increased if `$ganesha->success()` is called,
-    // or will be decreased if `$ganesha->failure()` is called.
+    // The count will be increased if `$ganesha->failure()` is called,
+    // or will be decreased if `$ganesha->success()` is called.
     'failureCountThreshold' => 100,
     // The interval (seconds) to change CircuitBreaker's state from `OPEN` to `HALF_OPEN`.
     'intervalToHalfOpen'    => 5,
@@ -456,8 +456,7 @@ $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 
 ## [Requirements](#table-of-contents)
 
-- Ganesha supports PHP 5.6 or higher.
-  - Note: We are planning to drop the support for PHP 5.6. Please see [here](https://github.com/ackintosh/ganesha/issues/43) to track the status of the issue.
+- Ganesha supports PHP 7.1 or higher.
 - An extension or client library which is used by [the storage adapter](https://github.com/ackintosh/ganesha#adapters) you've choice will be required. Please check the [Adapters](https://github.com/ackintosh/ganesha#adapters) section for details.
 
 ## [Author](#table-of-contents)

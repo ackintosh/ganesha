@@ -2,6 +2,7 @@
 namespace Ackintosh;
 
 use Ackintosh\Ganesha\Exception\StorageException;
+use Ackintosh\Ganesha\StrategyInterface;
 
 class Ganesha
 {
@@ -33,7 +34,7 @@ class Ganesha
     const STATUS_TRIPPED  = 2;
 
     /**
-     * @var \Ackintosh\Ganesha\StrategyInterface
+     * @var StrategyInterface
      */
     private $strategy;
 
@@ -50,7 +51,7 @@ class Ganesha
     /**
      * Ganesha constructor.
      *
-     * @param \Ackintosh\Ganesha\StrategyInterface $strategy
+     * @param StrategyInterface $strategy
      */
     public function __construct($strategy)
     {
@@ -63,7 +64,7 @@ class Ganesha
      * @param string $service
      * @return void
      */
-    public function failure($service)
+    public function failure($service): void
     {
         try {
             if ($this->strategy->recordFailure($service) === self::STATUS_TRIPPED) {
@@ -80,7 +81,7 @@ class Ganesha
      * @param string $service
      * @return void
      */
-    public function success($service)
+    public function success($service): void
     {
         try {
             if ($this->strategy->recordSuccess($service) === self::STATUS_CALMED_DOWN) {
@@ -95,7 +96,7 @@ class Ganesha
      * @param string $service
      * @return bool
      */
-    public function isAvailable($service)
+    public function isAvailable($service): bool
     {
         if (self::$disabled) {
             return true;
@@ -114,7 +115,7 @@ class Ganesha
      * @param callable $callable
      * @return void
      */
-    public function subscribe(callable $callable)
+    public function subscribe(callable $callable): void
     {
         $this->subscribers[] = $callable;
     }
@@ -125,7 +126,7 @@ class Ganesha
      * @param string $message
      * @return void
      */
-    private function notify($event, $service, $message)
+    private function notify(string $event, string $service, string $message): void
     {
         foreach ($this->subscribers as $s) {
             call_user_func_array($s, [$event, $service, $message]);
@@ -137,7 +138,7 @@ class Ganesha
      *
      * @return void
      */
-    public static function disable()
+    public static function disable(): void
     {
         self::$disabled = true;
     }
@@ -147,7 +148,7 @@ class Ganesha
      *
      * @return void
      */
-    public static function enable()
+    public static function enable(): void
     {
         self::$disabled = false;
     }
@@ -157,7 +158,7 @@ class Ganesha
      *
      * @return void
      */
-    public function reset()
+    public function reset(): void
     {
         $this->strategy->reset();
     }

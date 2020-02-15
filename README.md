@@ -457,7 +457,6 @@ $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 ## [Requirements](#table-of-contents)
 
 - Ganesha supports PHP 7.1 or higher.
-  - Note: We are planning to drop the support for PHP 5.6. Please see [here](https://github.com/ackintosh/ganesha/issues/43) to track the status of the issue.
 - An extension or client library which is used by [the storage adapter](https://github.com/ackintosh/ganesha#adapters) you've choice will be required. Please check the [Adapters](https://github.com/ackintosh/ganesha#adapters) section for details.
 
 ## [Author](#table-of-contents)

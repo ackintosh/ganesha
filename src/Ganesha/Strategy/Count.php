@@ -96,7 +96,7 @@ class Count implements StrategyInterface
      * @param string $service
      * @return int
      */
-    public function recordSuccess(string $service): int
+    public function recordSuccess(string $service): ?int
     {
         $this->storage->decrementFailureCount($service);
 
@@ -108,7 +108,7 @@ class Count implements StrategyInterface
             return Ganesha::STATUS_CALMED_DOWN;
         }
 
-        return $status;
+        return null;
     }
 
     /**

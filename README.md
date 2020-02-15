@@ -211,8 +211,8 @@ If you want use the Count strategy use `Builder::buildWithCountStrategy()` to bu
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
     // The failure count threshold that changes CircuitBreaker's state to `OPEN`.
-    // The count will be increased if `$ganesha->success()` is called,
-    // or will be decreased if `$ganesha->failure()` is called.
+    // The count will be increased if `$ganesha->failure()` is called,
+    // or will be decreased if `$ganesha->success()` is called.
     'failureCountThreshold' => 100,
     // The interval (seconds) to change CircuitBreaker's state from `OPEN` to `HALF_OPEN`.
     'intervalToHalfOpen'    => 5,

@@ -21,7 +21,7 @@ interface StrategyInterface
      * @param string $service
      * @return int
      */
-    public function recordSuccess(string $service): int;
+    public function recordSuccess(string $service): ?int;
 
     /**
      * @param string $service

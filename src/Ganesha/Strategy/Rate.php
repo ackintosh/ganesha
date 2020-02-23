@@ -101,7 +101,7 @@ class Rate implements StrategyInterface
      * @param  string $service
      * @return int
      */
-    public function recordSuccess(string $service): int
+    public function recordSuccess(string $service): ?int
     {
         $this->storage->incrementSuccessCount($service);
         $status = $this->storage->getStatus($service);
@@ -113,7 +113,7 @@ class Rate implements StrategyInterface
             return Ganesha::STATUS_CALMED_DOWN;
         }
 
-        return $status;
+        return null;
     }
 
     /**

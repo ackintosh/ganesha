@@ -36,6 +36,7 @@ class Builder
         call_user_func([$params['strategyClass'], 'validate'], $params);
 
         $configuration = new Configuration($params);
+        $configuration->validate();
         $ganesha = new Ganesha(
             call_user_func(
                 [$configuration['strategyClass'], 'create'],

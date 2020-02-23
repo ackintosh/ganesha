@@ -25,7 +25,7 @@ class Rate implements StrategyInterface
      * @var array
      */
     private static $requirements = [
-        'adapter',
+        Configuration::ADAPTER,
         'failureRateThreshold',
         'intervalToHalfOpen',
         'minimumRequests',

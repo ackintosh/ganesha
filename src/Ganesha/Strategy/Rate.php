@@ -64,15 +64,15 @@ class Rate implements StrategyInterface
      */
     public static function create(Configuration $configuration): StrategyInterface
     {
-        $serviceNameDecorator = $configuration['adapter'] instanceof Storage\Adapter\TumblingTimeWindowInterface ? self::serviceNameDecorator($configuration['timeWindow']) : null;
-        $adapter = $configuration['adapter'];
+        $adapter = $configuration->adapter();
         $adapter->setConfiguration($configuration);
+        $serviceNameDecorator = $adapter instanceof Storage\Adapter\TumblingTimeWindowInterface ? self::serviceNameDecorator($configuration['timeWindow']) : null;
 
         return new self(
             $configuration,
             new Storage(
                 $adapter,
-                $configuration['storageKeys'],
+                $configuration->storageKeys(),
                 $serviceNameDecorator
             )
         );
@@ -171,7 +171,7 @@ class Rate implements StrategyInterface
         $failure = $this->storage->getFailureCount($service);
         if (
             $failure === 0
-            || ($failure / $this->configuration['minimumRequests']) * 100 < $this->configuration['failureRateThreshold']
+            || ($failure / $this->configuration->minimumRequests()) * 100 < $this->configuration->failureRateThreshold()
         ) {
             return true;
         }
@@ -188,16 +188,16 @@ class Rate implements StrategyInterface
      */
     private function isClosedInPreviousTimeWindow(string $service): bool
     {
-        $failure = $this->storage->getFailureCountByCustomKey(self::keyForPreviousTimeWindow($service, $this->configuration['timeWindow']));
+        $failure = $this->storage->getFailureCountByCustomKey(self::keyForPreviousTimeWindow($service, $this->configuration->timeWindow()));
         if (
             $failure === 0
-            || ($failure / $this->configuration['minimumRequests']) * 100 < $this->configuration['failureRateThreshold']
+            || ($failure / $this->configuration->minimumRequests()) * 100 < $this->configuration->failureRateThreshold()
         ) {
             return true;
         }
 
-        $success = $this->storage->getSuccessCountByCustomKey(self::keyForPreviousTimeWindow($service, $this->configuration['timeWindow']));
-        $rejection = $this->storage->getRejectionCountByCustomKey(self::keyForPreviousTimeWindow($service, $this->configuration['timeWindow']));
+        $success = $this->storage->getSuccessCountByCustomKey(self::keyForPreviousTimeWindow($service, $this->configuration->timeWindow()));
+        $rejection = $this->storage->getRejectionCountByCustomKey(self::keyForPreviousTimeWindow($service, $this->configuration->timeWindow()));
 
         return $this->isClosedInTimeWindow($failure, $success, $rejection);
     }
@@ -210,11 +210,11 @@ class Rate implements StrategyInterface
      */
     private function isClosedInTimeWindow(int $failure, int $success, int $rejection): bool
     {
-        if (($failure + $success + $rejection) < $this->configuration['minimumRequests']) {
+        if (($failure + $success + $rejection) < $this->configuration->minimumRequests()) {
             return true;
         }
 
-        if (($failure / ($failure + $success)) * 100 < $this->configuration['failureRateThreshold']) {
+        if (($failure / ($failure + $success)) * 100 < $this->configuration->failureRateThreshold()) {
             return true;
         }
 
@@ -232,7 +232,7 @@ class Rate implements StrategyInterface
             return false;
         }
 
-        if ((time() - $lastFailureTime) > $this->configuration['intervalToHalfOpen']) {
+        if ((time() - $lastFailureTime) > $this->configuration->intervalToHalfOpen()) {
             $this->storage->setLastFailureTime($service, time());
             return true;
         }

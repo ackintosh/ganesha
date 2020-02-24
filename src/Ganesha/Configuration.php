@@ -49,6 +49,41 @@ class Configuration implements \ArrayAccess
         return isset($this->params[$offset]) ? $this->params[$offset] : null;
     }
 
+    public function adapter(): AdapterInterface
+    {
+        return $this->params[self::ADAPTER];
+    }
+
+    public function timeWindow(): int
+    {
+        return $this->params[self::TIME_WINDOW];
+    }
+
+    public function failureRateThreshold(): int
+    {
+        return $this->params[self::FAILURE_RATE_THRESHOLD];
+    }
+
+    public function failureCountThreshold(): int
+    {
+        return $this->params[self::FAILURE_COUNT_THRESHOLD];
+    }
+
+    public function minimumRequests(): int
+    {
+        return $this->params[self::MINIMUM_REQUESTS];
+    }
+
+    public function intervalToHalfOpen(): int
+    {
+        return $this->params[self::INTERVAL_TO_HALF_OPEN];
+    }
+
+    public function storageKeys(): StorageKeysInterface
+    {
+        return $this->params[self::STORAGE_KEYS];
+    }
+
     /**
      * @throws \InvalidArgumentException
      */
@@ -81,6 +116,4 @@ class Configuration implements \ArrayAccess
             throw new \InvalidArgumentException(self::FAILURE_RATE_THRESHOLD . ' should be equal or less than 100');
         }
     }
-
-
 }

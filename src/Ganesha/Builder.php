@@ -12,8 +12,7 @@ class Builder
      */
     public static function build(array $params): Ganesha
     {
-        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Rate';
-        return self::perform($params);
+        return self::perform('\Ackintosh\Ganesha\Strategy\Rate', $params);
     }
 
     /**
@@ -22,24 +21,24 @@ class Builder
      */
     public static function buildWithCountStrategy(array $params): Ganesha
     {
-        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Count';
-        return self::perform($params);
+        return self::perform('\Ackintosh\Ganesha\Strategy\Count', $params);
     }
 
     /**
+     * @param string $strategyClass
      * @param array $params
      * @return Ganesha
      * @throws InvalidArgumentException
      */
-    private static function perform(array $params): Ganesha
+    private static function perform(string $strategyClass, array $params): Ganesha
     {
-        call_user_func([$params['strategyClass'], 'validate'], $params);
+        call_user_func([$strategyClass, 'validate'], $params);
 
         $configuration = new Configuration($params);
         $configuration->validate();
         $ganesha = new Ganesha(
             call_user_func(
-                [$configuration['strategyClass'], 'create'],
+                [$strategyClass, 'create'],
                 $configuration
             )
         );

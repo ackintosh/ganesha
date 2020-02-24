@@ -25,9 +25,9 @@ class Count implements StrategyInterface
      * @var array
      */
     private static $requirements = [
-        'adapter',
-        'failureCountThreshold',
-        'intervalToHalfOpen',
+        Configuration::ADAPTER,
+        Configuration::FAILURE_COUNT_THRESHOLD,
+        Configuration::INTERVAL_TO_HALF_OPEN,
     ];
 
     /**

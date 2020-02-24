@@ -26,10 +26,10 @@ class Rate implements StrategyInterface
      */
     private static $requirements = [
         Configuration::ADAPTER,
-        'failureRateThreshold',
-        'intervalToHalfOpen',
-        'minimumRequests',
-        'timeWindow',
+        Configuration::FAILURE_RATE_THRESHOLD,
+        Configuration::INTERVAL_TO_HALF_OPEN,
+        Configuration::MINIMUM_REQUESTS,
+        Configuration::TIME_WINDOW,
     ];
 
     /**

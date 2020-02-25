@@ -60,7 +60,7 @@ $ php composer.phar require ackintosh/ganesha
 
 ## [Usage](#table-of-contents)
 
-Ganesha provides following simple interfaces. Each method receives a string (named `$service` in example) to identify the service. `$service` will be the service name of the API, the endpoint name or etc. Please remember that Ganesha detects system failure for each `$service`.
+Ganesha provides following simple interfaces. Each method receives a string (named `$service` in example) to identify the service. `$service` will be the service name of the API, the endpoint name, etc. Please remember that Ganesha detects system failure for each `$service`.
 
 ```php
 $ganesha->isAvailable($service);

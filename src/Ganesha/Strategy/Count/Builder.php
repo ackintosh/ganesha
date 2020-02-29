@@ -7,6 +7,8 @@ use Ackintosh\Ganesha\Storage\AdapterInterface;
 
 class Builder
 {
+    use Ganesha\Traits\BuildGanesha;
+
     /** @var array */
     private $params;
 
@@ -19,6 +21,9 @@ class Builder
 
     /** @var string */
     private static $strategyClass = '\Ackintosh\Ganesha\Strategy\Count';
+
+    /** @var string */
+    private static $adapterRequirement = 'supportCountStrategy';
 
     /**
      * @param AdapterInterface $adapter
@@ -58,41 +63,5 @@ class Builder
     {
         $this->params[Configuration::STORAGE_KEYS] = $storageKeys;
         return $this;
-    }
-
-    /**
-     * @throws \InvalidArgumentException
-     */
-    public function validate(): void
-    {
-        foreach (self::$requirements as $r) {
-            if (!isset($this->params[$r])) {
-                throw new \LogicException($r . ' is required');
-            }
-        }
-
-        if (!call_user_func([$this->params['adapter'], 'supportCountStrategy'])) {
-            throw new \InvalidArgumentException(get_class($this->params['adapter'])  . ' doesn\'t support Count Strategy.');
-        }
-    }
-
-    /**
-     * @return Ganesha
-     * @throws \InvalidArgumentException
-     */
-    public function build(): Ganesha
-    {
-        // Strategy specific validation
-        $this->validate();
-
-        $configuration = new Configuration($this->params);
-        $configuration->validate();
-
-        return new Ganesha(
-            call_user_func(
-                [self::$strategyClass, 'create'],
-                $configuration
-            )
-        );
     }
 }

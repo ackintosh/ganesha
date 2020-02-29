@@ -93,11 +93,11 @@ class GaneshaTest extends TestCase
      */
     public function withMemcached()
     {
-        $ganesha = Builder::buildWithCountStrategy([
-            'failureCountThreshold' => 1,
-            'adapter' => new Memcached($this->m),
-            'intervalToHalfOpen' => 10,
-        ]);
+        $ganesha = Builder::withCountStrategy()
+            ->failureCountThreshold(1)
+            ->adapter(new Memcached($this->m))
+            ->intervalToHalfOpen(10)
+            ->build();
 
         $this->assertTrue($ganesha->isAvailable($this->service));
         $ganesha->failure($this->service);
@@ -208,10 +208,10 @@ class GaneshaTest extends TestCase
         $threshold,
         $intervalToHalfOpen = 10
     ) {
-        return Builder::buildWithCountStrategy([
-            'failureCountThreshold' => $threshold,
-            'adapter' => new Memcached($this->m),
-            'intervalToHalfOpen' => $intervalToHalfOpen,
-        ]);
+        return Builder::withCountStrategy()
+            ->failureCountThreshold($threshold)
+            ->adapter(new Memcached($this->m))
+            ->intervalToHalfOpen($intervalToHalfOpen)
+            ->build();
     }
 }

@@ -138,11 +138,11 @@ class GuzzleMiddlewareTest extends TestCase
             11211
         );
         $m->flush();
-        $ganesha = Builder::buildWithCountStrategy([
-            'failureCountThreshold' => 3,
-            'adapter' => new Memcached($m),
-            'intervalToHalfOpen' => 10,
-        ]);
+        $ganesha = Builder::withCountStrategy()
+            ->failureCountThreshold(3)
+            ->adapter(new Memcached($m))
+            ->intervalToHalfOpen(10)
+            ->build();
         // Setup a client
         $middleware = new GuzzleMiddleware($ganesha);
         $handlers = HandlerStack::create();

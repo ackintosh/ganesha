@@ -6,8 +6,6 @@ use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\StrategyInterface;
-use InvalidArgumentException;
-use LogicException;
 
 class Count implements StrategyInterface
 {
@@ -22,15 +20,6 @@ class Count implements StrategyInterface
     private $storage;
 
     /**
-     * @var array
-     */
-    private static $requirements = [
-        Configuration::ADAPTER,
-        Configuration::FAILURE_COUNT_THRESHOLD,
-        Configuration::INTERVAL_TO_HALF_OPEN,
-    ];
-
-    /**
      * @param Configuration $configuration
      * @param Storage $storage
      */
@@ -38,23 +27,6 @@ class Count implements StrategyInterface
     {
         $this->configuration = $configuration;
         $this->storage = $storage;
-    }
-
-    /**
-     * @param array $params
-     * @throws LogicException
-     */
-    public static function validate(array $params): void
-    {
-        foreach (self::$requirements as $r) {
-            if (!isset($params[$r])) {
-                throw new LogicException($r . ' is required');
-            }
-        }
-
-        if (!call_user_func([$params['adapter'], 'supportCountStrategy'])) {
-            throw new InvalidArgumentException(get_class($params['adapter'])  . " doesn't support Count Strategy.");
-        }
     }
 
     /**

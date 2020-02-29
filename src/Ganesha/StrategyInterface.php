@@ -6,12 +6,6 @@ use LogicException;
 interface StrategyInterface
 {
     /**
-     * @param array $params
-     * @throws LogicException
-     */
-    public static function validate(array $params): void;
-
-    /**
      * @param Configuration $configuration
      * @return mixed
      */

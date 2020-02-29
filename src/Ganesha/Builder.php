@@ -16,12 +16,11 @@ class Builder
     }
 
     /**
-     * @param  array $params
-     * @return Ganesha
+     * @return Strategy\Count\Builder
      */
-    public static function buildWithCountStrategy(array $params): Ganesha
+    public static function withCountStrategy(): Ganesha\Strategy\Count\Builder
     {
-        return self::perform('\Ackintosh\Ganesha\Strategy\Count', $params);
+        return new Ganesha\Strategy\Count\Builder();
     }
 
     /**

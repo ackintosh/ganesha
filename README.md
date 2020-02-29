@@ -257,10 +257,8 @@ MongoDB adapter requires [mongodb](https://github.com/mongodb/mongo-php-library)
 
 ```php
 $manager = new \MongoDB\Driver\Manager('mongodb://localhost:27017/');
-$adapter = new Ackintosh\Ganesha\Storage\Adapter\MongoDB($manager);
-$configuration = new Configuration(['dbName' => 'ganesha', 'collectionName' => 'ganeshaCollection']);
+$adapter = new Ackintosh\Ganesha\Storage\Adapter\MongoDB($manager, 'dbName', 'collectionName');
 
-$adapter->setConfiguration($configuration);
 $ganesha = Ackintosh\Ganesha\Builder::build([
     'adapter' => $adapter,
 ]);

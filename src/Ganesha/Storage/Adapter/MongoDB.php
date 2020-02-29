@@ -16,9 +16,9 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     private $manager;
 
     /**
-     * @var Configuration
+     * @var string
      */
-    private $configuration;
+    private $dbName;
 
     /**
      * @var string
@@ -26,17 +26,21 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     private $collectionName;
 
     /**
-     * @var string
+     * @var Configuration
      */
-    private $dbName;
+    private $configuration;
 
     /**
      * MongoDB constructor.
      * @param \MongoDB\Driver\Manager $manager
+     * @param string $dbName
+     * @param string $collectionName
      */
-    public function __construct(\MongoDB\Driver\Manager $manager)
+    public function __construct(\MongoDB\Driver\Manager $manager, string $dbName, string $collectionName)
     {
         $this->manager = $manager;
+        $this->dbName = $dbName;
+        $this->collectionName = $collectionName;
     }
 
     /**
@@ -63,8 +67,6 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     public function setConfiguration(Configuration $configuration): void
     {
         $this->configuration = $configuration;
-        $this->dbName = $this->configuration->offsetGet('dbName');
-        $this->collectionName = $this->configuration->offsetGet('collectionName');
     }
 
     /**

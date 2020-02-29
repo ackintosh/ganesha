@@ -42,11 +42,7 @@ class MongoDBTest extends TestCase
         $host = getenv('GANESHA_EXAMPLE_MONGO') ? getenv('GANESHA_EXAMPLE_MONGO') : 'localhost';
         $manager = new \MongoDB\Driver\Manager('mongodb://' . $host . ':27017/');
 
-        $this->mongodbAdapter = new MongoDB($manager);
-
-        $configuration = new Configuration(['dbName' => $this->dbName, 'collectionName' => $this->collectionName]);
-
-        $this->mongodbAdapter->setConfiguration($configuration);
+        $this->mongodbAdapter = new MongoDB($manager, $this->dbName, $this->collectionName);
     }
 
     /**

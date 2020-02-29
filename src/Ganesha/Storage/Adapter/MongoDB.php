@@ -26,11 +26,6 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     private $collectionName;
 
     /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
      * MongoDB constructor.
      * @param \MongoDB\Driver\Manager $manager
      * @param string $dbName
@@ -63,10 +58,11 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
      * @param Configuration $configuration
      * @return void
      * @throws \Exception
+     * @codeCoverageIgnore
      */
     public function setConfiguration(Configuration $configuration): void
     {
-        $this->configuration = $configuration;
+        // This adapter doesn't use the configuration.
     }
 
     /**

@@ -5,7 +5,7 @@ use Ackintosh\Ganesha\Storage\AdapterInterface;
 use Ackintosh\Ganesha\Storage\StorageKeys;
 use Ackintosh\Ganesha\Storage\StorageKeysInterface;
 
-class Configuration implements \ArrayAccess
+class Configuration
 {
     // Configuration keys
     const ADAPTER = 'adapter';
@@ -27,26 +27,6 @@ class Configuration implements \ArrayAccess
             $params[self::STORAGE_KEYS] = new StorageKeys();
         }
         $this->params = $params;
-    }
-
-    public function offsetSet($offset, $value)
-    {
-        $this->params[$offset] = $value;
-    }
-
-    public function offsetExists($offset)
-    {
-        return isset($this->params[$offset]);
-    }
-
-    public function offsetUnset($offset)
-    {
-        unset($this->params[$offset]);
-    }
-
-    public function offsetGet($offset)
-    {
-        return isset($this->params[$offset]) ? $this->params[$offset] : null;
     }
 
     public function adapter(): AdapterInterface

@@ -66,7 +66,7 @@ class Rate implements StrategyInterface
     {
         $adapter = $configuration->adapter();
         $adapter->setConfiguration($configuration);
-        $serviceNameDecorator = $adapter instanceof Storage\Adapter\TumblingTimeWindowInterface ? self::serviceNameDecorator($configuration['timeWindow']) : null;
+        $serviceNameDecorator = $adapter instanceof Storage\Adapter\TumblingTimeWindowInterface ? self::serviceNameDecorator($configuration->timeWindow()) : null;
 
         return new self(
             $configuration,

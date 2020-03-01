@@ -3,6 +3,11 @@ namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha\Strategy;
 
+/**
+ * A front end of the strategy specific builders
+ *
+ * @package Ackintosh\Ganesha
+ */
 class Builder
 {
     /**

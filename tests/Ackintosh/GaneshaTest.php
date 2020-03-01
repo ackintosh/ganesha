@@ -185,13 +185,13 @@ class GaneshaTest extends TestCase
      */
     public function withRateStrategy()
     {
-        $ganesha = Builder::build([
-            'adapter' => new Memcached($this->m),
-            'timeWindow' => 3,
-            'failureRateThreshold' => 50,
-            'minimumRequests' => 1,
-            'intervalToHalfOpen' => 10,
-        ]);
+        $ganesha = Builder::withRateStrategy()
+            ->adapter(new Memcached($this->m))
+            ->timeWindow(3)
+            ->failureRateThreshold(50)
+            ->minimumRequests(1)
+            ->intervalToHalfOpen(10)
+            ->build();
 
         $this->assertTrue($ganesha->isAvailable('test'));
 

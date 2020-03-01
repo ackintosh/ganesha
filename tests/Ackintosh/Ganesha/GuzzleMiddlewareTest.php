@@ -162,13 +162,13 @@ class GuzzleMiddlewareTest extends TestCase
      */
     private function buildClient()
     {
-        $ganesha = Builder::build([
-            'timeWindow'           => 30,
-            'failureRateThreshold' => 50,
-            'minimumRequests'      => 10,
-            'intervalToHalfOpen'   => 5,
-            'adapter'              => $this->adapter,
-        ]);
+        $ganesha = Builder::withRateStrategy()
+            ->timeWindow(30)
+            ->failureRateThreshold(50)
+            ->minimumRequests(10)
+            ->intervalToHalfOpen(5)
+            ->adapter($this->adapter)
+            ->build();
 
         $middleware = new GuzzleMiddleware($ganesha);
         $handlers = HandlerStack::create();

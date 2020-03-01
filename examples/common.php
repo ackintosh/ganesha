@@ -31,13 +31,13 @@ function buildGanesha($storage)
             break;
     }
 
-    $ganesha =  Builder::build([
-        'adapter'               => $adapter,
-        'timeWindow'            => TIME_WINDOW,
-        'failureRateThreshold'  => FAILURE_RATE,
-        'minimumRequests'       => MINIMUM_REQUESTS,
-        'intervalToHalfOpen'    => INTERVAL_TO_HALF_OPEN,
-    ]);
+    $ganesha =  Builder::withRateStrategy()
+        ->adapter($adapter)
+        ->timeWindow(TIME_WINDOW)
+        ->failureRateThreshold(FAILURE_RATE)
+        ->minimumRequests(MINIMUM_REQUESTS)
+        ->intervalToHalfOpen(INTERVAL_TO_HALF_OPEN)
+        ->build();
 
     $messageOnTripped = <<<__EOS__
 !!!!!!!!!!!!!!!!!!!!!!!

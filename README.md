@@ -437,6 +437,7 @@ Here are some articles/videos introduce Ganesha! All of them are really shining 
 - [Безопасное взаимодействие в распределенных системах / Блог компании Badoo / Хабр](https://habr.com/ru/company/badoo/blog/413555/)
 - [A Semana PHP - Edição Nº229 | Revue](https://www.getrevue.co/profile/asemanaphp/issues/a-semana-php-edicao-n-229-165581)
 - [PHP DIGEST #12: NEWS & TOOLS (JANUARY 1 - JANUARY 14, 2018)](https://www.zfort.com/blog/php-digest-january-14-2018)
+- [Circuit Breaker - SarvenDev](https://sarvendev.com/en/2020/03/circuit-breaker/)
 
 #### Videos
 

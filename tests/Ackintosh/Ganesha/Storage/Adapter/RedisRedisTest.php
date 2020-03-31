@@ -7,7 +7,7 @@ class RedisRedisTest extends AbstractRedisTest
     /**
      * @return \Redis
      */
-    protected function getRedisConnection()
+    protected function getRedisConnection(): \Redis
     {
         if (!\extension_loaded('redis')) {
             self::markTestSkipped('No ext-redis present');

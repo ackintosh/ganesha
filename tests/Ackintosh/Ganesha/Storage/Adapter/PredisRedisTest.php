@@ -2,14 +2,16 @@
 
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
+use Predis\Client;
+
 class PredisRedisTest extends AbstractRedisTest
 {
     /**
-     * @return \Predis\Client
+     * @return Client
      */
-    protected function getRedisConnection()
+    protected function getRedisConnection(): Client
     {
-        $r = new \Predis\Client('tcp://' . (getenv('GANESHA_EXAMPLE_REDIS') ?: 'localhost'));
+        $r = new Client('tcp://' . (getenv('GANESHA_EXAMPLE_REDIS') ?: 'localhost'));
         $r->connect();
         $r->flushall();
 

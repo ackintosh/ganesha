@@ -138,11 +138,11 @@ class GuzzleMiddlewareTest extends TestCase
             11211
         );
         $m->flush();
-        $ganesha = Builder::buildWithCountStrategy([
-            'failureCountThreshold' => 3,
-            'adapter' => new Memcached($m),
-            'intervalToHalfOpen' => 10,
-        ]);
+        $ganesha = Builder::withCountStrategy()
+            ->failureCountThreshold(3)
+            ->adapter(new Memcached($m))
+            ->intervalToHalfOpen(10)
+            ->build();
         // Setup a client
         $middleware = new GuzzleMiddleware($ganesha);
         $handlers = HandlerStack::create();
@@ -162,13 +162,13 @@ class GuzzleMiddlewareTest extends TestCase
      */
     private function buildClient()
     {
-        $ganesha = Builder::build([
-            'timeWindow'           => 30,
-            'failureRateThreshold' => 50,
-            'minimumRequests'      => 10,
-            'intervalToHalfOpen'   => 5,
-            'adapter'              => $this->adapter,
-        ]);
+        $ganesha = Builder::withRateStrategy()
+            ->timeWindow(30)
+            ->failureRateThreshold(50)
+            ->minimumRequests(10)
+            ->intervalToHalfOpen(5)
+            ->adapter($this->adapter)
+            ->build();
 
         $middleware = new GuzzleMiddleware($ganesha);
         $handlers = HandlerStack::create();

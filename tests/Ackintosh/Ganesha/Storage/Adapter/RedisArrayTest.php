@@ -7,9 +7,9 @@ use RedisArray;
 class RedisArrayTest extends AbstractRedisTest
 {
     /**
-     * @return \RedisArray
+     * @return RedisArray
      */
-    protected function getRedisConnection()
+    protected function getRedisConnection(): RedisArray
     {
         if (!\extension_loaded('redis')) {
             self::markTestSkipped('No ext-redis present');

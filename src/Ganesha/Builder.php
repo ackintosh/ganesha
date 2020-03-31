@@ -1,48 +1,28 @@
 <?php
 namespace Ackintosh\Ganesha;
 
-use Ackintosh\Ganesha;
-use InvalidArgumentException;
+use Ackintosh\Ganesha\Strategy;
 
+/**
+ * A front end of the strategy specific builders
+ *
+ * @package Ackintosh\Ganesha
+ */
 class Builder
 {
     /**
-     * @param  array $params
-     * @return Ganesha
+     * @return Strategy\Rate\Builder
      */
-    public static function build(array $params): Ganesha
+    public static function withRateStrategy(): Strategy\Rate\Builder
     {
-        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Rate';
-        return self::perform($params);
+        return new Strategy\Rate\Builder();
     }
 
     /**
-     * @param  array $params
-     * @return Ganesha
+     * @return Strategy\Count\Builder
      */
-    public static function buildWithCountStrategy(array $params): Ganesha
+    public static function withCountStrategy(): Strategy\Count\Builder
     {
-        $params['strategyClass'] = '\Ackintosh\Ganesha\Strategy\Count';
-        return self::perform($params);
-    }
-
-    /**
-     * @param array $params
-     * @return Ganesha
-     * @throws InvalidArgumentException
-     */
-    private static function perform(array $params): Ganesha
-    {
-        call_user_func([$params['strategyClass'], 'validate'], $params);
-
-        $configuration = new Configuration($params);
-        $ganesha = new Ganesha(
-            call_user_func(
-                [$configuration['strategyClass'], 'create'],
-                $configuration
-            )
-        );
-
-        return $ganesha;
+        return new Strategy\Count\Builder();
     }
 }

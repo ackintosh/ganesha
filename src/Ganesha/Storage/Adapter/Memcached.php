@@ -16,11 +16,6 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     private $memcached;
 
     /**
-     * @var Configuration
-     */
-    private $configuration;
-
-    /**
      * Memcached constructor.
      * @param \Memcached $memcached
      */
@@ -50,10 +45,11 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     /**
      * @param Configuration $configuration
      * @return void
+     * @codeCoverageIgnore
      */
     public function setConfiguration(Configuration $configuration): void
     {
-        $this->configuration = $configuration;
+        // This adapter doesn't use the configuration.
     }
 
     /**

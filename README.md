@@ -69,10 +69,14 @@ $ganesha->failure($service);
 ```
 
 ```php
-$ganesha = Ackintosh\Ganesha\Builder::build([
-    'failureRateThreshold' => 50,
-    'adapter'              => new Ackintosh\Ganesha\Storage\Adapter\Redis($redis),
-]);
+// For further details about builder options, please see the `Strategy` section.
+$ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
+    ->adapter(new Ackintosh\Ganesha\Storage\Adapter\Redis($redis))
+    ->failureRateThreshold(50)
+    ->intervalToHalfOpen(10)
+    ->minimumRequests(10)
+    ->timeWindow(30)
+    ->build();
 
 $service = 'external_api';
 
@@ -131,7 +135,7 @@ If disabled, Ganesha keeps to record success/failure statistics, but Ganesha doe
 
 ```php
 // Ganesha with Count strategy(threshold `3`).
-// $ganesha = ...
+// $ganesha = Ackintosh\Ganesha\Builder::withCountStrategy() ...
 
 // Disable
 Ackintosh\Ganesha::disable();
@@ -151,9 +155,9 @@ var_dump($ganesha->isAvailable($service));
 Resets the statistics saved in a storage.
 
 ```php
-$ganesha = Ackintosh\Ganesha\Builder::build([
-	// ...
-]);
+$ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
+    // ...
+    ->build();
 
 $ganesha->reset();
 
@@ -163,23 +167,23 @@ $ganesha->reset();
 
 Ganesha has two strategies which avoids cascading failures.
 
-### Rate (default)
+### Rate
 
 ```php
-$ganesha = Ackintosh\Ganesha\Builder::build([
+$ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
     // The interval in time (seconds) that evaluate the thresholds. 
-    'timeWindow'            => 30,
+    ->timeWindow(30)
     // The failure rate threshold in percentage that changes CircuitBreaker's state to `OPEN`.
-    'failureRateThreshold'  => 50,
+    ->failureRateThreshold(50)
     // The minimum number of requests to detect failures.
     // Even if `failureRateThreshold` exceeds the threshold,
     // CircuitBreaker remains in `CLOSED` if `minimumRequests` is below this threshold.
-    'minimumRequests'       => 10,
+    ->minimumRequests(10)
     // The interval (seconds) to change CircuitBreaker's state from `OPEN` to `HALF_OPEN`.
-    'intervalToHalfOpen'    => 5,
+    ->intervalToHalfOpen(5)
     // The storage adapter instance to store various statistics to detect failures.
-    'adapter'               => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
-]);
+    ->adapter(new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached))
+    ->build();
 ```
 
 Note about "time window": The Storage Adapter implements either [SlidingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/SlidingTimeWindowInterface.php) or [TumblingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/TumblingTimeWindowInterface.php). The difference of the implementation comes from constraints of the storage functionalities.
@@ -209,16 +213,16 @@ The details to help us understand visually is shown below:
 If you want use the Count strategy use `Builder::buildWithCountStrategy()` to build an instance.
 
 ```php
-$ganesha = Ackintosh\Ganesha\Builder::buildWithCountStrategy([
+$ganesha = Ackintosh\Ganesha\Builder::withCountStrategy()
     // The failure count threshold that changes CircuitBreaker's state to `OPEN`.
     // The count will be increased if `$ganesha->failure()` is called,
     // or will be decreased if `$ganesha->success()` is called.
-    'failureCountThreshold' => 100,
+    ->failureCountThreshold(100)
     // The interval (seconds) to change CircuitBreaker's state from `OPEN` to `HALF_OPEN`.
-    'intervalToHalfOpen'    => 5,
+    ->intervalToHalfOpen(5)
     // The storage adapter instance to store various statistics to detect failures.
-    'adapter'               => new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached),
-]);
+    ->adapter(new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached))
+    ->build();
 ```
 
 ## [Adapters](#table-of-contents)
@@ -232,9 +236,10 @@ $redis = new \Redis();
 $redis->connect('localhost');
 $adapter = new Ackintosh\Ganesha\Storage\Adapter\Redis($redis);
 
-$ganesha = Ackintosh\Ganesha\Builder::build([
-    'adapter' => $adapter,
-]);
+$ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
+    ->adapter($adapter)
+    // ... (omitted) ...
+    ->build();
 ```
 
 ### Memcached
@@ -246,9 +251,10 @@ $memcached = new \Memcached();
 $memcached->addServer('localhost', 11211);
 $adapter = new Ackintosh\Ganesha\Storage\Adapter\Memcached($memcached);
 
-$ganesha = Ackintosh\Ganesha\Builder::build([
-    'adapter' => $adapter,
-]);
+$ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
+    ->adapter($adapter)
+    // ... (omitted) ...
+    ->build();
 ```
 
 ### MongoDB
@@ -257,13 +263,12 @@ MongoDB adapter requires [mongodb](https://github.com/mongodb/mongo-php-library)
 
 ```php
 $manager = new \MongoDB\Driver\Manager('mongodb://localhost:27017/');
-$adapter = new Ackintosh\Ganesha\Storage\Adapter\MongoDB($manager);
-$configuration = new Configuration(['dbName' => 'ganesha', 'collectionName' => 'ganeshaCollection']);
+$adapter = new Ackintosh\Ganesha\Storage\Adapter\MongoDB($manager, 'dbName', 'collectionName');
 
-$adapter->setConfiguration($configuration);
-$ganesha = Ackintosh\Ganesha\Builder::build([
-    'adapter' => $adapter,
-]);
+$ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
+    ->adapter($adapter)
+    // ... (omitted) ...
+    ->build();
 ```
 
 ## [Customizing storage keys](#table-of-contents)
@@ -278,14 +283,15 @@ class YourStorageKeys implements StorageKeysInterface
         return 'your_prefix_';
     }
     
-    // (ommitted)
+    // ... (omitted) ...
 }
 
-$ganesha = Ackintosh\Ganesha\Builder::build([
+$ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
     // The keys which will stored by Ganesha to the storage you specified via `adapter`
     // will be prefixed with `your_prefix_`.
-    'storageKeys' => new YourStorageKeys(),
-]);
+    ->storageKeys(new YourStorageKeys())
+    // ... (omitted) ...
+    ->build();
 ```
 
 ## [Ganesha :heart: Guzzle](#table-of-contents)
@@ -299,13 +305,14 @@ use Ackintosh\Ganesha\Exception\RejectedException;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 
-$ganesha = Builder::build([
-    'timeWindow'           => 30,
-    'failureRateThreshold' => 50,
-    'minimumRequests'      => 10,
-    'intervalToHalfOpen'   => 5,
-    'adapter'              => $adapter,
-]);
+$ganesha = Builder::withRateStrategy()
+    ->timeWindow(30)
+    ->failureRateThreshold(50)
+    ->minimumRequests(10)
+    ->intervalToHalfOpen(5)
+    ->adapter($adapter)
+    ->build();
+
 $middleware = new GuzzleMiddleware($ganesha);
 
 $handlers = HandlerStack::create();
@@ -382,9 +389,9 @@ class SampleExtractor implements ServiceNameExtractorInterface
 
 // ---
 
-$ganesha = Builder::build([
+$ganesha = Builder::withRateStrategy()
     // ...
-]);
+    ->build();
 $middleware = new GuzzleMiddleware(
     $ganesha,
     // Pass the extractor as an argument of GuzzleMiddleware constructor.

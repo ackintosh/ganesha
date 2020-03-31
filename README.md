@@ -69,10 +69,14 @@ $ganesha->failure($service);
 ```
 
 ```php
-$ganesha = Ackintosh\Ganesha\Builder::withRateStrategy([
-    'failureRateThreshold' => 50,
-    'adapter'              => new Ackintosh\Ganesha\Storage\Adapter\Redis($redis),
-]);
+// For further details about builder options, please see the `Strategy` section.
+$ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
+    ->adapter(new Ackintosh\Ganesha\Storage\Adapter\Redis($redis))
+    ->failureRateThreshold(50)
+    ->intervalToHalfOpen(10)
+    ->minimumRequests(10)
+    ->timeWindow(30)
+    ->build();
 
 $service = 'external_api';
 
@@ -151,9 +155,9 @@ var_dump($ganesha->isAvailable($service));
 Resets the statistics saved in a storage.
 
 ```php
-$ganesha = Ackintosh\Ganesha\Builder::withRateStrategy([
-	// ...
-]);
+$ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
+    // ...
+    ->build();
 
 $ganesha->reset();
 
@@ -385,9 +389,9 @@ class SampleExtractor implements ServiceNameExtractorInterface
 
 // ---
 
-$ganesha = Builder::withRateStrategy([
+$ganesha = Builder::withRateStrategy()
     // ...
-]);
+    ->build();
 $middleware = new GuzzleMiddleware(
     $ganesha,
     // Pass the extractor as an argument of GuzzleMiddleware constructor.

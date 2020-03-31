@@ -34,11 +34,6 @@ trait BuildGanesha
         $configuration = new Configuration($this->params);
         $configuration->validate();
 
-        return new Ganesha(
-            call_user_func(
-                [self::$strategyClass, 'create'],
-                $configuration
-            )
-        );
+        return new Ganesha(self::$strategyClass::create($configuration));
     }
 }

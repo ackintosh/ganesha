@@ -438,6 +438,7 @@ Here are some articles/videos introduce Ganesha! All of them are really shining 
 
 #### Articles
 
+- [PHP-Дайджест № 177 (23 марта – 6 апреля 2020) / Хабр](https://habr.com/ru/post/495838/)
 - [PHP Weekly. Archive. August 1, 2019. News, Articles and more all about PHP](http://www.phpweekly.com/archive/2019-08-01.html)
 - [PHP Annotated – July 2019 | PhpStorm Blog](https://blog.jetbrains.com/phpstorm/2019/07/php-annotated-july-2019/)
 - [PHP Weekly. Archive. April 25, 2019. News, Articles and more all about PHP](http://www.phpweekly.com/archive/2019-04-25.html)

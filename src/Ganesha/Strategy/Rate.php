@@ -141,7 +141,8 @@ class Rate implements StrategyInterface
     /**
      * @param  string $service
      * @return bool
-     * @throws StorageException, \LogicException
+     * @throws StorageException 
+     * @throws \LogicException
      */
     private function isClosed(string $service): bool
     {

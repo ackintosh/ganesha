@@ -16,6 +16,9 @@ define('SERVER_STATE_ABNORMAL', 'abnormal');
 function buildGanesha($storage)
 {
     switch ($storage) {
+        case 'apcu':
+            $adapter = new Ackintosh\Ganesha\Storage\Adapter\Apcu();
+            break;
         case 'redis':
             $redis = new \Redis();
             $redis->connect(getenv('GANESHA_EXAMPLE_REDIS') ?: 'localhost');

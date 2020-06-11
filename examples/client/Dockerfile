@@ -17,5 +17,8 @@ RUN apt-get update \
  && echo 'zend_extension=xdebug.so' >> /usr/local/etc/php/php.ini \
  && yes '' | pecl install mongodb \
  && echo 'extension=mongodb.so' >> /usr/local/etc/php/php.ini \
+ && yes '' | pecl install apcu \
+ && echo 'extension=apcu.so' >> /usr/local/etc/php/php.ini \
+ && echo 'apc.enable_cli=1' >> /usr/local/etc/php/php.ini \
  && useradd -m ganesha
 

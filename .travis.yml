@@ -25,6 +25,7 @@ before_install:
   - ./ci/install_dependencies.sh
 
 before_script:
+  - yes '' | pecl install apcu
   - travis_retry composer self-update
   - travis_retry composer update ${COMPOSER_OPTS} --no-interaction
 

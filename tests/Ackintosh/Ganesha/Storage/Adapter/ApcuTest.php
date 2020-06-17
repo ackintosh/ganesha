@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \Ackintosh\Ganesha\Storage\Adapter\Apcu
- * @requires extension apcu
  */
 class ApcuTest extends TestCase
 {

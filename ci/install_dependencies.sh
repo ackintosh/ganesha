@@ -10,6 +10,6 @@ if [ $RESULT = 0 ]; then
   yes '' | pecl install redis-5.1.0
   yes '' | pecl install mongodb-1.6.0
   yes '' | pecl install apcu
-else
-  phpenv config-add .travis.php.ini
 fi
+
+phpenv config-add .travis.php.ini

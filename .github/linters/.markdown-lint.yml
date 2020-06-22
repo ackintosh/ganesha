@@ -36,4 +36,4 @@ blank_lines: false  # Error on blank lines
 
 
 # the first line of our README starts with h1 tag.
-MD009: false # First line in file should be a top level heading
+MD041: false # First line in file should be a top level heading

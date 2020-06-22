@@ -46,7 +46,7 @@ If you have an idea about enhancement, bugfix..., please let me know via [Issues
 ## [Are you interested?](#table-of-contents)
 
 [Here](./examples) is an example which shows you how Ganesha behaves when a failure occurs.  
-It is easily executable. All you need is Docker. 
+It is easily executable. All you need is Docker.
 
 ## [Unveil Ganesha](#table-of-contents)
 
@@ -94,7 +94,7 @@ try {
 }
 ```
 
-#### Three states of circuit breaker
+### Three states of circuit breaker
 
 <img src="https://user-images.githubusercontent.com/1885716/53690408-4a7f3d00-3dad-11e9-852c-0e082b7b9636.png" width="500">
 
@@ -102,10 +102,10 @@ try {
 
 Ganesha follows the states and transitions described in the article faithfully. `$ganesha->isAvailable()` returns `true` if the circuit states on `Closed`, otherwise it returns `false`.
 
-#### Subscribe to events in ganesha
+### Subscribe to events in ganesha
 
 - When the circuit state transitions to `Open` the event `Ganesha::EVENT_TRIPPED` is triggered
-- When the state back to `Closed` the event `Ganesha::EVENT_CALMED_DOWN ` is triggered
+- When the state back to `Closed` the event `Ganesha::EVENT_CALMED_DOWN` is triggered
 
 ```php
 $ganesha->subscribe(function ($event, $service, $message) {
@@ -129,7 +129,7 @@ $ganesha->subscribe(function ($event, $service, $message) {
 });
 ```
 
-#### Disable
+### Disable
 
 If disabled, Ganesha keeps to record success/failure statistics, but Ganesha doesn't trip even if the failure count reached to a threshold.
 
@@ -150,7 +150,7 @@ var_dump($ganesha->isAvailable($service));
 // bool(true)
 ```
 
-#### Reset
+### Reset
 
 Resets the statistics saved in a storage.
 
@@ -171,7 +171,7 @@ Ganesha has two strategies which avoids cascading failures.
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
-    // The interval in time (seconds) that evaluate the thresholds. 
+    // The interval in time (seconds) that evaluate the thresholds.
     ->timeWindow(30)
     // The failure rate threshold in percentage that changes CircuitBreaker's state to `OPEN`.
     ->failureRateThreshold(50)
@@ -188,7 +188,7 @@ $ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
 
 Note about "time window": The Storage Adapter implements either [SlidingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/SlidingTimeWindowInterface.php) or [TumblingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/TumblingTimeWindowInterface.php). The difference of the implementation comes from constraints of the storage functionalities.
 
-##### [SlidingTimeWindow]
+#### [SlidingTimeWindow]
 
 - [SlidingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/SlidingTimeWindowInterface.php) implements a time period that stretches back in time from the present. For instance, a SlidingTimeWindow of 30 seconds includes any events that have occurred in the past 30 seconds.
 - [Redis adapter](https://github.com/ackintosh/ganesha#redis) and [MongoDB adapter](https://github.com/ackintosh/ganesha#mongodb) implements SlidingTimeWindow.
@@ -198,7 +198,7 @@ The details to help us understand visually is shown below:
 
 <img height="350" title="slidingtimewindow" src="https://s3-ap-northeast-1.amazonaws.com/ackintosh.github.io/timewindow/sliding-window.png">
 
-##### [TumblingTimeWindow]
+#### [TumblingTimeWindow]
 
 - [TumblingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/TumblingTimeWindowInterface.php) implements time segments, which are divided by a value of `timeWindow`.
 - [Memcached adapter](https://github.com/ackintosh/ganesha#memcached) implements TumblingTimeWindow.
@@ -282,7 +282,7 @@ class YourStorageKeys implements StorageKeysInterface
     {
         return 'your_prefix_';
     }
-    
+
     // ... (omitted) ...
 }
 
@@ -427,7 +427,7 @@ try {
 
 Here are some companies using Ganesha in production! We are proud of them. :elephant:
 
-To add your company to the list, please visit [README.md](https://github.com/ackintosh/ganesha/blob/master/README.md) and click on the icon to edit the page or let me know via [issues](https://github.com/ackintosh/ganesha/issues)/[twitter](https://twitter.com/NAKANO_Akihito). 
+To add your company to the list, please visit [README.md](https://github.com/ackintosh/ganesha/blob/master/README.md) and click on the icon to edit the page or let me know via [issues](https://github.com/ackintosh/ganesha/issues)/[twitter](https://twitter.com/NAKANO_Akihito).
 
 - [APISHIP LLC](https://apiship.ru)
 - [Wikia, Inc.](https://www.fandom.com)
@@ -436,7 +436,7 @@ To add your company to the list, please visit [README.md](https://github.com/ack
 
 Here are some articles/videos introduce Ganesha! All of them are really shining like a jewel for us. :sparkles:
 
-#### Articles
+### Articles
 
 - 2020/04/22 [PHP Annotated – April 2020 | PhpStorm Blog](https://blog.jetbrains.com/phpstorm/2020/04/php-annotated-april-2020/)
 - 2020/03/23 [Circuit Breaker - SarvenDev](https://sarvendev.com/en/2020/03/circuit-breaker/)
@@ -448,7 +448,7 @@ Here are some articles/videos introduce Ganesha! All of them are really shining 
 - 2018/06/08 [Безопасное взаимодействие в распределенных системах / Блог компании Badoo / Хабр](https://habr.com/ru/company/badoo/blog/413555/)
 - 2018/01/22 [PHP DIGEST #12: NEWS & TOOLS (JANUARY 1 - JANUARY 14, 2018)](https://www.zfort.com/blog/php-digest-january-14-2018)
 
-#### Videos
+### Videos
 
 - [«Безопасное взаимодействие в распределенных системах» — Алексей Солодкий, Badoo - YouTube](https://youtu.be/1k_0ax9DNGI?t=906)
 
@@ -458,7 +458,7 @@ We can run unit tests on a Docker container, so it is not necessary to install t
 
 ```bash
 # Start redis, memcached server
-$ docker-compose up 
+$ docker-compose up
 
 # Run tests in container
 $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit

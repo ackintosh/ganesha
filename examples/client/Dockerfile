@@ -1,12 +1,13 @@
 FROM php:7.4-cli
 
 RUN apt-get update \
- && apt-get install -y git \
- && apt-get install -y libmemcached-dev \
- && apt-get install -y zlib1g-dev \
- && apt-get install -y unzip \
- && apt-get install -y libzip-dev \
- && apt-get install -y git \
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-get install --no-install-recommends -y git \
+ && apt-get install --no-install-recommends -y libmemcached-dev \
+ && apt-get install --no-install-recommends -y zlib1g-dev \
+ && apt-get install --no-install-recommends -y unzip \
+ && apt-get install --no-install-recommends -y libzip-dev \
+ && apt-get install --no-install-recommends -y git \
  && yes '' | pecl install zip \
  && echo 'extension=zip.so' >> /usr/local/etc/php/php.ini \
  && yes '' | pecl install memcached \

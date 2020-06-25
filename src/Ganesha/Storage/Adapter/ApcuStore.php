@@ -2,7 +2,6 @@
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use APCuIterator;
-use Traversable;
 
 /**
  * A lightweight wrapper around the functions exposed by the APC user cache

@@ -4,12 +4,8 @@ namespace Ackintosh\Ganesha\Storage\Adapter;
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Exception\StorageException;
-use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 use Ackintosh\Ganesha\Storage\StorageKeys;
-use APCUIterator;
-use DomainException;
-use RuntimeException;
 
 class Apcu implements AdapterInterface, TumblingTimeWindowInterface
 {

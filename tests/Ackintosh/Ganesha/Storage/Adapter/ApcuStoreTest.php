@@ -1,12 +1,7 @@
 <?php
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
-use Ackintosh\Ganesha;
-use Ackintosh\Ganesha\Configuration;
-use Ackintosh\Ganesha\Exception\StorageException;
-use Ackintosh\Ganesha\Storage\StorageKeysInterface;
 use APCuIterator;
-use DateTime;
 use PHPUnit\Framework\TestCase;
 
 /**

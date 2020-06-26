@@ -201,7 +201,8 @@ The details to help us understand visually is shown below:
 #### [TumblingTimeWindow]
 
 - [TumblingTimeWindow](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/Adapter/TumblingTimeWindowInterface.php) implements time segments, which are divided by a value of `timeWindow`.
-- [Memcached adapter](https://github.com/ackintosh/ganesha#memcached) implements TumblingTimeWindow.
+- [APCu adapter](https://github.com/ackintosh/ganesha#apcu) and
+  [Memcached adapter](https://github.com/ackintosh/ganesha#memcached) implement TumblingTimeWindow.
 
 The details to help us understand visually is shown below:  
 (quoted from [Introduction to Stream Analytics windowing functions - Microsoft Azure](https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/stream-analytics/stream-analytics-window-functions.md#tumbling-window))
@@ -226,6 +227,23 @@ $ganesha = Ackintosh\Ganesha\Builder::withCountStrategy()
 ```
 
 ## [Adapters](#table-of-contents)
+
+### APCu
+
+The APCu adapter requires the [APCu](https://www.php.net/manual/en/book.apcu.php) extension.
+
+```php
+$adapter = new Ackintosh\Ganesha\Storage\Adapter\Apcu();
+
+$ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
+    ->adapter($adapter)
+    // ... (omitted) ...
+    ->build();
+```
+
+Note: APCu is internal to each server/instance, not pooled like most Memcache and Redis setups. Each
+worker's circuit breaker will activate or reset individually, and failure thresholds should be
+set lower to compensate.
 
 ### Redis
 

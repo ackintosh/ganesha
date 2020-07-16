@@ -314,7 +314,7 @@ $ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
 
 ## [Ganesha :heart: Guzzle](#table-of-contents)
 
-If you using [Guzzle](https://github.com/guzzle/guzzle) (v6 or higher), [Guzzle Middleware](http://docs.guzzlephp.org/en/stable/handlers-and-middleware.html) powered by Ganesha makes it easy to integrate Circuit Breaker to your existing code base.
+If you are using [Guzzle](https://github.com/guzzle/guzzle) (v6 or higher), [Guzzle Middleware](http://docs.guzzlephp.org/en/stable/handlers-and-middleware.html) powered by Ganesha makes it easy to integrate Circuit Breaker to your existing code base.
 
 ```php
 use Ackintosh\Ganesha\Builder;

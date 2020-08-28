@@ -21,7 +21,7 @@ class MemcachedTest extends TestCase
      */
     private $service = 'testService';
 
-    public function setUp()
+    protected function setUp()
     {
         if (!extension_loaded('memcached')) {
             self::markTestSkipped('No ext-memcached present');

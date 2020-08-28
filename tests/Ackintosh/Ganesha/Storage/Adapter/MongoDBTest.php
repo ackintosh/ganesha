@@ -31,7 +31,7 @@ class MongoDBTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

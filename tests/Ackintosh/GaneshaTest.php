@@ -17,7 +17,7 @@ class GaneshaTest extends TestCase
      */
     private $m;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

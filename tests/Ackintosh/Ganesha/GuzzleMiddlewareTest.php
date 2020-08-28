@@ -17,7 +17,7 @@ class GuzzleMiddlewareTest extends TestCase
      */
     private $adapter;
 
-    public function setUp()
+    protected function setUp()
     {
         if (!\extension_loaded('redis')) {
             self::markTestSkipped('No ext-redis present');

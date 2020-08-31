@@ -28,7 +28,7 @@ abstract class AbstractRedisTest extends TestCase
      */
     private $configuration;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -170,7 +170,7 @@ abstract class AbstractRedisTest extends TestCase
             $this->redisAdapter->increment($this->service);
             $lastFailureTime = microtime(true);
 
-            $this->assertEquals(
+            $this->assertSame(
                 (int)$lastFailureTime,
                 $this->redisAdapter->loadLastFailureTime($this->service),
                 '',

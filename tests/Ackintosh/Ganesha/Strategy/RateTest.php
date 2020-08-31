@@ -1,5 +1,5 @@
 <?php
-namespace Ackintosh\Ganesha;
+namespace Ackintosh\Ganesha\Strategy;
 
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 use Ackintosh\Ganesha\Strategy\Rate;

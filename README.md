@@ -36,6 +36,7 @@ If you have an idea about enhancement, bugfix..., please let me know via [Issues
 - [Customizing storage keys](#customizing-storage-keys)
 - [Ganesha :heart: Guzzle](#ganesha-heart-guzzle)
 - [Ganesha :heart: OpenAPI Generator](#ganesha-heart-openapi-generator)
+- [Ganesha :heart: Symfony HttpClient](#ganesha-heart-symfony-httpclient)
 - [Companies using Ganesha :rocket:](#companies-using-ganesha-rocket)
 - [The articles/videos Ganesha loves :sparkles: :elephant: :sparkles:](#the-articlesvideos-ganesha-loves-sparkles-elephant-sparkles)
 - [Run tests](#run-tests)
@@ -439,6 +440,103 @@ try {
 } catch (RejectedException $e) {
     awesomeErrorHandling($e);
 }
+```
+
+## [Ganesha :heart: Symfony HttpClient](#table-of-contents)
+
+If you are using [Symfony HttpClient](https://github.com/symfony/http-client), GaneshaHttpClient makes it easy to integrate Circuit Breaker to your existing code base.
+
+```php
+use Ackintosh\Ganesha\Builder;
+use Ackintosh\Ganesha\GaneshaHttpClient;
+use Ackintosh\Ganesha\Exception\RejectedException;
+
+$ganesha = Builder::withRateStrategy()
+    ->timeWindow(30)
+    ->failureRateThreshold(50)
+    ->minimumRequests(10)
+    ->intervalToHalfOpen(5)
+    ->adapter($adapter)
+    ->build();
+
+$client = HttpClient::create();
+$ganeshaClient = new GaneshaHttpClient($client, $ganesha);
+
+try {
+    $ganeshaClient->request('GET', 'http://api.example.com/awesome_resource');
+} catch (RejectedException $e) {
+    // If the circuit breaker is open, RejectedException will be thrown.
+}
+```
+
+### How does GaneshaHttpClient determine the `$service`?
+
+As documented in [Usage](https://github.com/ackintosh/ganesha#usage), Ganesha detects failures for each `$service`. Below, We will show you how GaneshaHttpClient determine `$service` and how we specify `$service` explicitly.
+
+By default, the host name is used as `$service`.
+
+
+```php
+// In the example above, `api.example.com` is used as `$service`.
+$ganeshaClient->request('GET', 'http://api.example.com/awesome_resource');
+```
+
+You can also specify `$service` via a option passed to client, or request header. If both are specified, the option value takes precedence.
+
+```php
+// via constructor argument
+$ganeshaClient = new GaneshaHttpClient($client, $ganesha, [
+    // 'ganesha.service_name' is defined as ServiceNameExtractor::OPTION_KEY
+    'ganesha.service_name' => 'specified_service_name',
+]);
+
+// via request method argument
+$ganeshaClient->request(
+    'GET',
+    'http://api.example.com/awesome_resource',
+    [
+        'ganesha.service_name' => 'specified_service_name',
+    ]
+);
+
+// via request header
+$ganeshaClient->request('GET', '', ['headers' => [
+     // 'X-Ganesha-Service-Name' is defined as ServiceNameExtractor::HEADER_NAME
+     'X-Ganesha-Service-Name' => 'specified_service_name'
+]]);
+```
+
+Alternatively, you can apply your own rules by implementing a class that implements the `ServiceNameExtractorInterface`.
+
+```php
+use Ackintosh\Ganesha\HttpClient\HostTrait;
+use Ackintosh\Ganesha\HttpClient\ServiceNameExtractorInterface;
+
+final class SampleExtractor implements ServiceNameExtractorInterface
+{
+    use HostTrait;
+
+    /**
+     * @override
+     */
+    public function extract(string $method, string $url, array $requestOptions): string
+    {
+        // We treat the combination of host name and HTTP method name as $service.
+        return self::extractHostFromUrl($url) . '_' . $method;
+    }
+}
+
+// ---
+
+$ganesha = Builder::withRateStrategy()
+    // ...
+    ->build();
+$ganeshaClient = new GaneshaHttpClient(
+    $client,
+    $ganesha,
+    // Pass the extractor as an argument of GaneshaHttpClient constructor.
+    new SampleExtractor()
+);
 ```
 
 ## [Companies using Ganesha :rocket:](#table-of-contents)

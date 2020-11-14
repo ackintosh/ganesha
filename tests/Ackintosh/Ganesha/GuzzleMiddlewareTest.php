@@ -35,7 +35,7 @@ class GuzzleMiddlewareTest extends TestCase
 
     /**
      * @test
-     * @vcr responses.yml
+     * @vcr guzzle_responses.yml
      */
     public function recordsSuccessOn200()
     {
@@ -51,7 +51,7 @@ class GuzzleMiddlewareTest extends TestCase
 
     /**
      * @test
-     * @vcr responses.yml
+     * @vcr guzzle_responses.yml
      */
     public function recordsSuccessOn400()
     {
@@ -73,7 +73,7 @@ class GuzzleMiddlewareTest extends TestCase
 
     /**
      * @test
-     * @vcr responses.yml
+     * @vcr guzzle_responses.yml
      */
     public function recordsSuccessOn500()
     {

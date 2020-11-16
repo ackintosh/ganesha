@@ -14,8 +14,8 @@ class GuzzleMiddleware
      */
     private $ganesha;
 
-    /*
-     * @var ResourceNameExtractorInterface
+    /**
+     * @var ServiceNameExtractorInterface
      */
     private $serviceNameExtractor;
 

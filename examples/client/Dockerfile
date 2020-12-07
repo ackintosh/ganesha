@@ -1,7 +1,6 @@
 FROM php:7.4-cli
 
 RUN apt-get update \
- && rm -rf /var/lib/apt/lists/* \
  && apt-get install --no-install-recommends -y git \
  && apt-get install --no-install-recommends -y libmemcached-dev \
  && apt-get install --no-install-recommends -y zlib1g-dev \
@@ -21,5 +20,7 @@ RUN apt-get update \
  && yes '' | pecl install apcu \
  && echo 'extension=apcu.so' >> /usr/local/etc/php/php.ini \
  && echo 'apc.enable_cli=1' >> /usr/local/etc/php/php.ini \
- && useradd -m ganesha
+ && useradd -m ganesha \
+ && rm -rf /var/lib/apt/lists/* \
+ && rm -rf /var/cache/apt/*
 

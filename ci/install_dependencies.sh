@@ -12,4 +12,6 @@ if [ $RESULT = 0 ]; then
   yes '' | pecl install apcu
 fi
 
+pecl upgrade xdebug
+
 phpenv config-add .travis.php.ini

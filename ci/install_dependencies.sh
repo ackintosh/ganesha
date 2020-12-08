@@ -10,8 +10,9 @@ if [ $RESULT = 0 ]; then
   yes '' | pecl install redis-5.1.0
   yes '' | pecl install mongodb-1.6.0
   yes '' | pecl install apcu
+else
+  # https://github.com/ackintosh/ganesha/pull/75
+  pecl upgrade xdebug
 fi
-
-pecl upgrade xdebug
 
 phpenv config-add .travis.php.ini

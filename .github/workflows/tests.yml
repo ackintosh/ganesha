@@ -44,7 +44,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           tools: composer
-          extensions: redis, memcached
+          extensions: apcu, redis, memcached, mongodb
         env:
           fail-fast: true
 

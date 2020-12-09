@@ -45,6 +45,7 @@ jobs:
           php-version: ${{ matrix.php-version }}
           tools: composer
           extensions: apcu, redis, memcached, mongodb
+          ini-values: apc.enable_cli=1
         env:
           fail-fast: true
 

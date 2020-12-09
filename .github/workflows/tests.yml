@@ -49,8 +49,8 @@ jobs:
         env:
           fail-fast: true
 
-      - name: Install dependencies with composer
-        run: composer install
+      - name: Update dependencies with composer
+        run: composer update
 
       - name: Run tests with PHPUnit
         run: vendor/bin/phpunit

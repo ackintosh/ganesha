@@ -20,6 +20,10 @@ jobs:
         image: memcached:1.6.5
         ports:
           - 11211:11211
+      mongodb:
+        image: mongo
+        ports:
+          - 27017:27017
     strategy:
       matrix:
         php-version:

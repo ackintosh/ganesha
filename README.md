@@ -6,7 +6,7 @@ Ganesha is PHP implementation of [Circuit Breaker pattern](http://martinfowler.c
 
 ![ganesha](https://ackintosh.github.io/assets/images/ganesha.png)
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/ackintosh/ganesha.svg?style=flat-square)](https://packagist.org/packages/ackintosh/ganesha) ![Tests](https://github.com/ackintosh/ganesha/workflows/Tests/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/ackintosh/ganesha/badge.svg?branch=master)](https://coveralls.io/github/ackintosh/ganesha?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ackintosh/ganesha/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ackintosh/ganesha/?branch=master) [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.1-8892BF.svg?style=flat-square)](https://php.net/)
+[![Latest Stable Version](https://img.shields.io/packagist/v/ackintosh/ganesha.svg?style=flat-square)](https://packagist.org/packages/ackintosh/ganesha) [![Tests](https://github.com/ackintosh/ganesha/workflows/Tests/badge.svg)](https://github.com/ackintosh/ganesha/actions) [![Coverage Status](https://coveralls.io/repos/github/ackintosh/ganesha/badge.svg?branch=master)](https://coveralls.io/github/ackintosh/ganesha?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ackintosh/ganesha/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ackintosh/ganesha/?branch=master) [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.1-8892BF.svg?style=flat-square)](https://php.net/)
 
 </div>
 

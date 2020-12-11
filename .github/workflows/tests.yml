@@ -1,0 +1,59 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  phpunit:
+    name: Tests
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:6
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+      memcached:
+        image: memcached:1.6.5
+        ports:
+          - 11211:11211
+      mongodb:
+        image: mongo
+        ports:
+          - 27017:27017
+    strategy:
+      matrix:
+        php-version:
+          - "7.1"
+          - "7.2"
+          - "7.3"
+          - "7.4"
+          # We'll enable "8.0" after that dropping PHP 7.1 support and bump up the PHPUnit version.
+          # - "8.0"
+    steps:
+      - uses: actions/checkout@v2
+
+      # Could not install memcached on PHP 8.0.0 · Issue #354 · shivammathur/setup-php
+      # https://github.com/shivammathur/setup-php/issues/354
+      - name: Install libmemcached
+        run: sudo apt-get install libmemcached-dev -y
+
+      # https://github.com/shivammathur/setup-php
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: composer
+          extensions: apcu, redis, memcached, mongodb
+          ini-values: apc.enable_cli=1
+        env:
+          fail-fast: true
+
+      - name: Update dependencies with composer
+        run: composer update
+
+      - name: Run tests with PHPUnit
+        run: vendor/bin/phpunit

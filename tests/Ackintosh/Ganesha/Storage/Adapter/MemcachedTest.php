@@ -17,6 +17,11 @@ class MemcachedTest extends TestCase
     private $memcachedAdaper;
 
     /**
+     * @var \Memcached
+     */
+    private $memcached;
+
+    /**
      * @var string
      */
     private $service = 'testService';
@@ -33,6 +38,7 @@ class MemcachedTest extends TestCase
             11211
         );
         $m->delete($this->service);
+        $this->memcached = $m;
         $this->memcachedAdaper = new Memcached($m);
     }
 
@@ -375,5 +381,50 @@ class MemcachedTest extends TestCase
             ['ganesha_test_last_failure_timee', false],
             ['ganesha_test_statuss', false],
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function outdatedCountsShouldBeEvictedInCaseOfRateStrategy(): void
+    {
+        $timeWindow = 3;
+
+        // Build an instance with `Rate` strategy
+        $ganesha = Ganesha\Builder::withRateStrategy()
+            ->adapter($this->memcachedAdaper)
+            ->timeWindow($timeWindow)
+            ->failureRateThreshold(50)
+            ->minimumRequests(1)
+            ->intervalToHalfOpen(10)
+            ->build();
+
+        // Record successes.
+        // Since Memcached adapter implements `TumblingTimeWindow`, the count is recorded into a key which based on timestamp.
+        $serviceName = 'outdatedCountsShouldBeEvicted';
+        $ganesha->success($serviceName);
+        $ganesha->success($serviceName);
+        $ganesha->success($serviceName);
+
+        $reflection = new \ReflectionMethod(Ganesha\Strategy\Rate::class, 'serviceNameDecorator');
+        $reflection->setAccessible(true);
+        $serviceNameDecorator = $reflection->invokeArgs(null, [$timeWindow]);
+        $storageKeys = new Ganesha\Storage\StorageKeys();
+        $keyForTheTumblingTimeWindow = $storageKeys->prefix() . $serviceNameDecorator($serviceName) . $storageKeys->success();
+
+        // The success count `3` could be obtained as the `TumblingTimeWindow` is still valid.
+        self::assertSame(
+            3,
+            (int)$this->memcached->get($keyForTheTumblingTimeWindow)
+        );
+
+        // Since sleeping 10 secs as below, the `TumblingTimeWindow` contains the success count recorded above is outdated.
+        sleep(10);
+
+        // The success count should be got cleared as the `TumblingTimeWindow` is outdated at this point.
+        self::assertSame(
+            0,
+            (int)$this->memcached->get($keyForTheTumblingTimeWindow)
+        );
     }
 }

@@ -30,15 +30,16 @@ class Count implements StrategyInterface
     }
 
     /**
+     * @param Storage\AdapterInterface $adapter
      * @param Configuration $configuration
      * @return Count
      */
-    public static function create(Configuration $configuration): StrategyInterface
+    public static function create(Storage\AdapterInterface $adapter, Configuration $configuration): StrategyInterface
     {
         return new self(
             $configuration,
             new Storage(
-                $configuration->adapter(),
+                $adapter,
                 $configuration->storageKeys(),
                 null
             )

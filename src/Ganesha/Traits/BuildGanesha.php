@@ -30,10 +30,16 @@ trait BuildGanesha
     {
         // Strategy specific validation
         $this->validate();
+        // Validate the params
+        Configuration::validate($this->params);
+
+        // Unset `adapter` key from configuration params to avoid circular reference.
+        $adapter = $this->params[Configuration::ADAPTER];
+        unset($this->params[Configuration::ADAPTER]);
 
         $configuration = new Configuration($this->params);
-        $configuration->validate();
+        $adapter->setConfiguration($configuration);
 
-        return new Ganesha(self::$strategyClass::create($configuration));
+        return new Ganesha(self::$strategyClass::create($adapter, $configuration));
     }
 }

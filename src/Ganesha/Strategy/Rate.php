@@ -59,13 +59,12 @@ class Rate implements StrategyInterface
     }
 
     /**
+     * @param Storage\AdapterInterface $adapter
      * @param Configuration $configuration
      * @return Rate
      */
-    public static function create(Configuration $configuration): StrategyInterface
+    public static function create(Storage\AdapterInterface $adapter, Configuration $configuration): StrategyInterface
     {
-        $adapter = $configuration->adapter();
-        $adapter->setConfiguration($configuration);
         $serviceNameDecorator = $adapter instanceof Storage\Adapter\TumblingTimeWindowInterface ? self::serviceNameDecorator($configuration->timeWindow()) : null;
 
         return new self(
@@ -141,7 +140,7 @@ class Rate implements StrategyInterface
     /**
      * @param  string $service
      * @return bool
-     * @throws StorageException 
+     * @throws StorageException
      * @throws \LogicException
      */
     private function isClosed(string $service): bool

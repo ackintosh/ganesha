@@ -62,16 +62,18 @@ class ApcuTest extends TestCase
 
     /**
      * @test
-     * @covers ::setConfiguration
+     * @covers ::setContext
      */
-    public function test_setConfiguration()
+    public function test_setContext()
     {
         $configuration = $this->createMock(Configuration::class);
         $configuration->expects($this->once())->method('storageKeys')
             ->willReturn($this->getStorageKeys());
-
         $apc = $this->getApcu();
-        $apc->setConfiguration($configuration);
+
+        $context = new Ganesha\Context(Ganesha\Strategy\Count::class, $apc, $configuration);
+
+        $apc->setContext($context);
     }
 
     public function provide_load()
@@ -668,9 +670,12 @@ class ApcuTest extends TestCase
         StorageKeysInterface $storageKeys = null
     ): Apcu {
         $apc = new Apcu($apcStore);
-        $apc->setConfiguration(
+        $context = new Ganesha\Context(
+            Ganesha\Strategy\Count::class,
+            $apc,
             $this->getConfiguration($storageKeys)
         );
+        $apc->setContext($context);
         return $apc;
     }
 

@@ -43,13 +43,13 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * @param Configuration $configuration
+     * @param Ganesha\Context $context
      * @return void
      * @codeCoverageIgnore
      */
-    public function setConfiguration(Configuration $configuration): void
+    public function setContext(Ganesha\Context $context): void
     {
-        // This adapter doesn't use the configuration.
+        // This adapter doesn't use the context.
     }
 
     /**

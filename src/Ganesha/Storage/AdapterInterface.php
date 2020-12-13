@@ -1,7 +1,7 @@
 <?php
 namespace Ackintosh\Ganesha\Storage;
 
-use Ackintosh\Ganesha\Configuration;
+use Ackintosh\Ganesha\Context;
 
 interface AdapterInterface
 {
@@ -18,10 +18,10 @@ interface AdapterInterface
     public function supportRateStrategy(): bool ;
 
     /**
-     * @param Configuration $configuration
+     * @param Context $context
      * @return void
      */
-    public function setConfiguration(Configuration $configuration): void;
+    public function setContext(Context $context): void;
 
     /**
      * @param  string $service

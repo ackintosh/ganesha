@@ -38,7 +38,8 @@ trait BuildGanesha
         unset($this->params[Configuration::ADAPTER]);
 
         $configuration = new Configuration($this->params);
-        $adapter->setConfiguration($configuration);
+        $context = new Ganesha\Context(self::$strategyClass, $adapter, $configuration);
+        $adapter->setContext($context);
 
         return new Ganesha(self::$strategyClass::create($adapter, $configuration));
     }

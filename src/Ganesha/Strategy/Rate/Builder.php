@@ -25,7 +25,7 @@ class Builder
     ];
 
     /** @var string */
-    private static $strategyClass = '\Ackintosh\Ganesha\Strategy\Rate';
+    private static $strategyClass = 'Ackintosh\Ganesha\Strategy\Rate';
 
     /** @var string */
     private static $adapterRequirement = 'supportRateStrategy';

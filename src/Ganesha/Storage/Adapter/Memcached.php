@@ -16,6 +16,11 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     private $memcached;
 
     /**
+     * @var Ganesha\Context
+     */
+    private $context;
+
+    /**
      * Memcached constructor.
      * @param \Memcached $memcached
      */
@@ -49,7 +54,7 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
      */
     public function setContext(Ganesha\Context $context): void
     {
-        // This adapter doesn't use the context.
+        $this->context = $context;
     }
 
     /**
@@ -84,8 +89,14 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
      */
     public function increment(string $service): void
     {
+        $expiry = 0;
+        if ($this->context->strategy() === Ganesha\Context::STRATEGY_RATE_TUMBLING_TIME_WINDOW) {
+            // Set the expiry time to make ensure outdated items of TumblingTimeWindow will be removed.
+            $expiry = $this->context->configuration()->timeWindow() * 10;
+        }
+
         // requires \Memcached::OPT_BINARY_PROTOCOL
-        if ($this->memcached->increment($service, 1, 1) === false) {
+        if ($this->memcached->increment($service, 1, 1, $expiry) === false) {
             throw new StorageException('failed to increment failure count : ' . $this->memcached->getResultMessage());
         }
     }

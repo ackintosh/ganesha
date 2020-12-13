@@ -440,8 +440,8 @@ class MemcachedTest extends TestCase
             (int)$this->memcached->get($failureKeyForTheTumblingTimeWindow)
         );
 
-        // Since sleeping 11 seconds as below, the `TumblingTimeWindow` contains the success count recorded above is outdated.
-        sleep(11);
+        // Since sleeping 15 seconds as below, the `TumblingTimeWindow` contains the success count recorded above is outdated.
+        sleep(15);
 
         // The count should be got cleared as the `TumblingTimeWindow` is outdated at this point.
         self::assertFalse($this->memcached->get($successKeyForTheTumblingTimeWindow));
@@ -455,5 +455,12 @@ class MemcachedTest extends TestCase
             \Memcached::RES_NOTFOUND,
             $this->memcached->getResultCode()
         );
+
+        // Other items that should be alive
+        $statusKey = $storageKeys->prefix() . $serviceName . $storageKeys->status();
+        self::assertSame(Ganesha::STATUS_CALMED_DOWN, (int)$this->memcached->get($statusKey));
+
+        $lastFailureTimeKey = $storageKeys->prefix() . $serviceName . $storageKeys->lastFailureTime();
+        self::assertTrue(1 < (int)$this->memcached->get($lastFailureTimeKey));
     }
 }

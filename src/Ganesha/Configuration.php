@@ -29,11 +29,6 @@ class Configuration
         $this->params = $params;
     }
 
-    public function adapter(): AdapterInterface
-    {
-        return $this->params[self::ADAPTER];
-    }
-
     public function timeWindow(): int
     {
         return $this->params[self::TIME_WINDOW];
@@ -65,16 +60,17 @@ class Configuration
     }
 
     /**
+     * @param array $params
      * @throws \InvalidArgumentException
      */
-    public function validate(): void
+    public static function validate(array $params): void
     {
-        if (isset($this->params[self::ADAPTER]) && !$this->params[self::ADAPTER] instanceof AdapterInterface) {
-            throw new \InvalidArgumentException(get_class($this->params[self::ADAPTER]) . ' should be an instance of AdapterInterface');
+        if (isset($params[self::ADAPTER]) && !$params[self::ADAPTER] instanceof AdapterInterface) {
+            throw new \InvalidArgumentException(get_class($params[self::ADAPTER]) . ' should be an instance of AdapterInterface');
         }
 
-        if (isset($this->params[self::STORAGE_KEYS]) && !$this->params[self::STORAGE_KEYS] instanceof StorageKeysInterface) {
-            throw new \InvalidArgumentException(get_class($this->params[self::STORAGE_KEYS]) . ' should be an instance of StorageKeysInterface');
+        if (isset($params[self::STORAGE_KEYS]) && !$params[self::STORAGE_KEYS] instanceof StorageKeysInterface) {
+            throw new \InvalidArgumentException(get_class($params[self::STORAGE_KEYS]) . ' should be an instance of StorageKeysInterface');
         }
 
         foreach ([
@@ -84,15 +80,15 @@ class Configuration
                 self::MINIMUM_REQUESTS,
                 self::INTERVAL_TO_HALF_OPEN
             ] as $name) {
-            if (isset($this->params[$name])) {
-                $v = $this->params[$name];
+            if (isset($params[$name])) {
+                $v = $params[$name];
                 if (!is_int($v) || $v < 1) {
                     throw new \InvalidArgumentException($name . ' should be an positive integer');
                 }
             }
         }
 
-        if (isset($this->params[self::FAILURE_RATE_THRESHOLD]) && $this->params[self::FAILURE_RATE_THRESHOLD] > 100) {
+        if (isset($params[self::FAILURE_RATE_THRESHOLD]) && $params[self::FAILURE_RATE_THRESHOLD] > 100) {
             throw new \InvalidArgumentException(self::FAILURE_RATE_THRESHOLD . ' should be equal or less than 100');
         }
     }

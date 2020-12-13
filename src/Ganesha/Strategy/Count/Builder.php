@@ -20,7 +20,7 @@ class Builder
     ];
 
     /** @var string */
-    private static $strategyClass = '\Ackintosh\Ganesha\Strategy\Count';
+    private static $strategyClass = 'Ackintosh\Ganesha\Strategy\Count';
 
     /** @var string */
     private static $adapterRequirement = 'supportCountStrategy';

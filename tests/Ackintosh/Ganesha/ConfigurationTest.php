@@ -32,7 +32,7 @@ class ConfigurationTest extends TestCase
      */
     public function validateAdapter()
     {
-        (new Configuration([Configuration::ADAPTER => new \DateTime]))->validate();
+        Configuration::validate([Configuration::ADAPTER => new \DateTime]);
     }
 
     /**
@@ -42,7 +42,7 @@ class ConfigurationTest extends TestCase
      */
     public function validateStorageKey()
     {
-        (new Configuration([Configuration::STORAGE_KEYS => new \DateTime()]))->validate();
+        Configuration::validate([Configuration::STORAGE_KEYS => new \DateTime()]);
     }
 
     /**
@@ -53,7 +53,7 @@ class ConfigurationTest extends TestCase
      */
     public function validateInteger(string $key)
     {
-        (new Configuration([$key => 0]))->validate();
+        Configuration::validate([$key => 0]);
     }
 
     public function validateIntegerProvider()
@@ -74,7 +74,7 @@ class ConfigurationTest extends TestCase
      */
     public function validateFailureRateThreshold()
     {
-        (new Configuration([Configuration::FAILURE_RATE_THRESHOLD => 101]))->validate();
+        Configuration::validate([Configuration::FAILURE_RATE_THRESHOLD => 101]);
     }
 }
 

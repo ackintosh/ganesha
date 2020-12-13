@@ -42,12 +42,12 @@ class Apcu implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * @param Configuration $configuration
+     * @param Ganesha\Context $context
      * @return void
      */
-    public function setConfiguration(Configuration $configuration): void
+    public function setContext(Ganesha\Context $context): void
     {
-        $this->storageKeys = $configuration->storageKeys();
+        $this->storageKeys = $context->configuration()->storageKeys();
     }
 
     /**

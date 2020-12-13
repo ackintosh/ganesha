@@ -1,15 +1,17 @@
 <?php
 namespace Ackintosh\Ganesha;
 
+use Ackintosh\Ganesha\Storage\AdapterInterface;
 use LogicException;
 
 interface StrategyInterface
 {
     /**
+     * @param AdapterInterface $adapter
      * @param Configuration $configuration
      * @return mixed
      */
-    public static function create(Configuration $configuration): StrategyInterface;
+    public static function create(AdapterInterface $adapter, Configuration $configuration): StrategyInterface;
 
     /**
      * @param string $service

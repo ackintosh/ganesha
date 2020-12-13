@@ -17,6 +17,11 @@ class MemcachedTest extends TestCase
     private $memcachedAdaper;
 
     /**
+     * @var \Memcached
+     */
+    private $memcached;
+
+    /**
      * @var string
      */
     private $service = 'testService';
@@ -33,7 +38,20 @@ class MemcachedTest extends TestCase
             11211
         );
         $m->delete($this->service);
+        $this->memcached = $m;
         $this->memcachedAdaper = new Memcached($m);
+        $this->memcachedAdaper->setContext($this->createContext($this->memcachedAdaper));
+    }
+
+    private function createContext(Memcached $memcachedAdaper): Ganesha\Context
+    {
+        return new Ganesha\Context(
+            Ganesha\Strategy\Rate::class,
+            $memcachedAdaper,
+            new Ganesha\Configuration([
+                Ganesha\Configuration::TIME_WINDOW => 1,
+            ])
+        );
     }
 
     /**
@@ -129,6 +147,7 @@ class MemcachedTest extends TestCase
             ->willReturn(false);
 
         $adapter = new Memcached($m);
+        $adapter->setContext($this->createContext($adapter));
 
         $this->expectException(StorageException::class);
         $adapter->increment($this->service);
@@ -375,5 +394,73 @@ class MemcachedTest extends TestCase
             ['ganesha_test_last_failure_timee', false],
             ['ganesha_test_statuss', false],
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function outdatedCountsShouldBeEvictedInCaseOfRateStrategy(): void
+    {
+        $timeWindow = 1;
+
+        // Build an instance with `Rate` strategy
+        $ganesha = Ganesha\Builder::withRateStrategy()
+            ->adapter($this->memcachedAdaper)
+            ->timeWindow($timeWindow)
+            ->failureRateThreshold(50)
+            ->minimumRequests(1)
+            ->intervalToHalfOpen(10)
+            ->build();
+
+        // Record successes.
+        // Since Memcached adapter implements `TumblingTimeWindow`, the count is recorded into a key which based on timestamp.
+        $serviceName = 'outdatedCountsShouldBeEvicted';
+        $ganesha->success($serviceName);
+        $ganesha->success($serviceName);
+        $ganesha->success($serviceName);
+        $ganesha->failure($serviceName);
+        $ganesha->failure($serviceName);
+
+        $reflection = new \ReflectionMethod(Ganesha\Strategy\Rate::class, 'serviceNameDecorator');
+        $reflection->setAccessible(true);
+        $serviceNameDecorator = $reflection->invokeArgs(null, [$timeWindow]);
+        $storageKeys = new Ganesha\Storage\StorageKeys();
+
+        $successKeyForTheTumblingTimeWindow = $storageKeys->prefix() . $serviceNameDecorator($serviceName) . $storageKeys->success();
+        $failureKeyForTheTumblingTimeWindow = $storageKeys->prefix() . $serviceNameDecorator($serviceName) . $storageKeys->failure();
+
+        // The success count `3` could be obtained as the `TumblingTimeWindow` is still valid.
+        self::assertSame(
+            3,
+            (int)$this->memcached->get($successKeyForTheTumblingTimeWindow)
+        );
+        // The failure count `2` could be obtained as the `TumblingTimeWindow` is still valid.
+        self::assertSame(
+            2,
+            (int)$this->memcached->get($failureKeyForTheTumblingTimeWindow)
+        );
+
+        // Since sleeping 15 seconds as below, the `TumblingTimeWindow` contains the success count recorded above is outdated.
+        sleep(15);
+
+        // The count should be got cleared as the `TumblingTimeWindow` is outdated at this point.
+        self::assertFalse($this->memcached->get($successKeyForTheTumblingTimeWindow));
+        self::assertSame(
+            \Memcached::RES_NOTFOUND,
+            $this->memcached->getResultCode()
+        );
+
+        self::assertFalse($this->memcached->get($failureKeyForTheTumblingTimeWindow));
+        self::assertSame(
+            \Memcached::RES_NOTFOUND,
+            $this->memcached->getResultCode()
+        );
+
+        // Other items that should be alive
+        $statusKey = $storageKeys->prefix() . $serviceName . $storageKeys->status();
+        self::assertSame(Ganesha::STATUS_CALMED_DOWN, (int)$this->memcached->get($statusKey));
+
+        $lastFailureTimeKey = $storageKeys->prefix() . $serviceName . $storageKeys->lastFailureTime();
+        self::assertTrue(1 < (int)$this->memcached->get($lastFailureTimeKey));
     }
 }

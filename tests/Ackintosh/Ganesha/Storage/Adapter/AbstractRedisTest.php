@@ -24,17 +24,22 @@ abstract class AbstractRedisTest extends TestCase
     private $service = 'testService';
 
     /**
-     * @var Configuration
+     * @var Ganesha\Context
      */
-    private $configuration;
+    private $context;
 
     protected function setUp()
     {
         parent::setUp();
 
         $this->redisAdapter = new Redis($this->getRedisConnection());
-        $this->configuration = new Configuration(['timeWindow' => self::TIME_WINDOW]);
-        $this->redisAdapter->setConfiguration($this->configuration);
+        $configuration = new Configuration(['timeWindow' => self::TIME_WINDOW]);
+        $this->context = new Ganesha\Context(
+            Ganesha\Strategy\Rate::class,
+            $this->redisAdapter,
+            $configuration
+        );
+        $this->redisAdapter->setContext($this->context);
     }
 
     /**
@@ -44,7 +49,7 @@ abstract class AbstractRedisTest extends TestCase
 
     private function createAdapterWithMock(MockObject $mock): Redis {
         $adapter = new Redis($mock);
-        $adapter->setConfiguration($this->configuration);
+        $adapter->setContext($this->context);
         return $adapter;
     }
 

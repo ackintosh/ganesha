@@ -51,6 +51,14 @@ class Apcu implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function setConfiguration(Configuration $configuration): void
+    {
+        // nop
+    }
+
+    /**
      * @param  string $key
      * @return int
      */

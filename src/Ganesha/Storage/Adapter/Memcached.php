@@ -58,6 +58,14 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function setConfiguration(Configuration $configuration): void
+    {
+        // nop
+    }
+
+    /**
      * @param string $service
      * @return int
      * @throws StorageException

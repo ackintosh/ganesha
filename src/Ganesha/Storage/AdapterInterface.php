@@ -1,6 +1,7 @@
 <?php
 namespace Ackintosh\Ganesha\Storage;
 
+use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Context;
 
 interface AdapterInterface
@@ -22,6 +23,13 @@ interface AdapterInterface
      * @return void
      */
     public function setContext(Context $context): void;
+
+    /**
+     * @deprecated This param will be removed in the next major release. Please use `setContext` instead.
+     * @param Configuration $configuration
+     * @return void
+     */
+    public function setConfiguration(Configuration $configuration): void;
 
     /**
      * @param  string $service

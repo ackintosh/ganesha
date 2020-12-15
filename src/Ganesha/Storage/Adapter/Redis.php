@@ -57,6 +57,14 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function setConfiguration(Configuration $configuration): void
+    {
+        // nop
+    }
+
+    /**
      * @param string $service
      *
      * @return int

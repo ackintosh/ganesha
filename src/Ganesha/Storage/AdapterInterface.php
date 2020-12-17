@@ -25,7 +25,7 @@ interface AdapterInterface
     public function setContext(Context $context): void;
 
     /**
-     * @deprecated This param will be removed in the next major release. Please use `setContext` instead.
+     * @deprecated This method will be removed in the next major release. Please use `setContext` instead.
      * @param Configuration $configuration
      * @return void
      */

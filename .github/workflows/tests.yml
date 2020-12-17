@@ -49,6 +49,7 @@ jobs:
           tools: composer
           extensions: apcu, redis, memcached, mongodb
           ini-values: apc.enable_cli=1
+          coverage: xdebug
         env:
           fail-fast: true
 

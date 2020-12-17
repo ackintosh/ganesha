@@ -39,6 +39,9 @@ trait BuildGanesha
 
         $configuration = new Configuration($this->params);
         $context = new Ganesha\Context(self::$strategyClass, $adapter, $configuration);
+
+        // AdapterInterface::setConfiguration() is deprecated since 1.2.2. This will be removed in the next major release.
+        $adapter->setConfiguration($configuration);
         $adapter->setContext($context);
 
         return new Ganesha(self::$strategyClass::create($adapter, $configuration));

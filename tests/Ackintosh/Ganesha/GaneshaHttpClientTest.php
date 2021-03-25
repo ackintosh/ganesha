@@ -99,6 +99,44 @@ class GaneshaHttpClientTest extends TestCase
     /**
      * @test
      */
+    public function recordsFailureOnConfiguredHttpStatusCodeAtRequestLevel(): void
+    {
+        $httpResponse = new MockResponse('', [ 'http_code' => 503 ]);
+        $client = $this->buildClient(null, [$httpResponse]);
+
+        $client->request('GET', 'http://api.example.com/awesome_resource/503', [
+            'ganesha.failure_status_codes' => [503]
+        ]);
+
+        self::assertSame(
+            1,
+            $this->adapter->load(
+                Storage\StorageKeys::KEY_PREFIX.'api.example.com'.Storage\StorageKeys::KEY_SUFFIX_FAILURE
+            )
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function recordsFailureOnConfiguredHttpStatusCodeAtClientLevel(): void
+    {
+        $httpResponse = new MockResponse('', [ 'http_code' => 503 ]);
+        $client = $this->buildClient(null, [$httpResponse], ['ganesha.failure_status_codes' => [503]]);
+
+        $client->request('GET', 'http://api.example.com/awesome_resource/503');
+
+        self::assertSame(
+            1,
+            $this->adapter->load(
+                Storage\StorageKeys::KEY_PREFIX.'api.example.com'.Storage\StorageKeys::KEY_SUFFIX_FAILURE
+            )
+        );
+    }
+
+    /**
+     * @test
+     */
     public function recordsFailureOnRequestTimedOut(): void
     {
         if (!getenv('RUN_IN_DOCKER_COMPOSE')) {
@@ -210,6 +248,7 @@ class GaneshaHttpClientTest extends TestCase
             [
                 'max_duration' => 3.0,
                 Ganesha\HttpClient\ServiceNameExtractor::OPTION_KEY => 'an_awesome_service',
+                'ganesha.failure_status_codes' => [500,503]
             ]
         );
     }
@@ -236,11 +275,11 @@ class GaneshaHttpClientTest extends TestCase
     /**
      * @param MockResponse[] $responses
      */
-    private function buildClient(?Ganesha $ganesha = null, array $responses = []): HttpClientInterface
+    private function buildClient(?Ganesha $ganesha = null, array $responses = [], array $options = []): HttpClientInterface
     {
         $client = (0 === \count($responses)) ? HttpClient::create() : new MockHttpClient($responses);
 
-        return new GaneshaHttpClient($client, $ganesha ?? $this->buildGanesha());
+        return new GaneshaHttpClient($client, $ganesha ?? $this->buildGanesha(), null, $options);
     }
 
     private function buildGanesha(): Ganesha

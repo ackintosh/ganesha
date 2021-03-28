@@ -11,7 +11,7 @@
     }
   ],
   "require": {
-    "php": ">=7.1.0",
+    "php": ">=7.3.0",
     "psr/http-message": "~1.0"
   },
   "suggest": {

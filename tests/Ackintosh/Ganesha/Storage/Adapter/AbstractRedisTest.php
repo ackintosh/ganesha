@@ -95,6 +95,20 @@ abstract class AbstractRedisTest extends TestCase
     /**
      * @test
      * @expectedException \Ackintosh\Ganesha\Exception\StorageException
+     * @expectedExceptionMessageRegExp /\AFailed to remove expired elements/
+     */
+    public function incrementThrowsExceptionWhenFailedToRunzRemRangeByScore()
+    {
+        $mock = $this->getMockBuilder(\Redis::class)->getMock();
+        $mock->method('zRemRangeByScore')
+            ->willReturn(false);
+
+        $this->createAdapterWithMock($mock)->increment($this->service);
+    }
+
+    /**
+     * @test
+     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
      * @expectedExceptionMessageRegExp /\AFailed to execute zAdd command/
      */
     public function incrementThrowsExceptionWhenFailedToRunzAdd()
@@ -125,13 +139,13 @@ abstract class AbstractRedisTest extends TestCase
      * @expectedException \Ackintosh\Ganesha\Exception\StorageException
      * @expectedExceptionMessageRegExp /\AFailed to remove expired elements/
      */
-    public function incrementThrowsExceptionWhenFailedToRunzRemRangeByScore()
+    public function loadThrowsExceptionWhenFailedToRunzRemRangeByScore()
     {
         $mock = $this->getMockBuilder(\Redis::class)->getMock();
         $mock->method('zRemRangeByScore')
             ->willReturn(false);
 
-        $this->createAdapterWithMock($mock)->increment($this->service);
+        $this->createAdapterWithMock($mock)->load($this->service);
     }
 
     /**

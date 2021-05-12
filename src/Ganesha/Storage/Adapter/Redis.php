@@ -72,11 +72,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
      */
     public function load(string $service): int
     {
-        $expires = microtime(true) - $this->configuration->timeWindow();
-
-        if ($this->redis->zRemRangeByScore($service, '-inf', $expires) === false) {
-            throw new StorageException('Failed to remove expired elements. service: ' . $service);
-        }
+        $this->removeExpiredElements($service);
 
         $r = $this->redis->zCard($service);
 
@@ -105,6 +101,9 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
     public function increment(string $service): void
     {
         $t = microtime(true);
+
+        $this->removeExpiredElements($service);
+
         $this->redis->zAdd($service, $t, $t);
     }
 
@@ -177,5 +176,19 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
     public function reset(): void
     {
         // TODO: Implement reset() method.
+    }
+
+    /**
+     * @param string $service
+     * 
+     * @throws StorageException
+     */
+    private function removeExpiredElements(string $service): void
+    {
+        $expires = microtime(true) - $this->configuration->timeWindow();
+
+        if ($this->redis->zRemRangeByScore($service, '-inf', $expires) === false) {
+            throw new StorageException('Failed to remove expired elements. service: ' . $service);
+        }
     }
 }

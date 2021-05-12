@@ -44,7 +44,15 @@ class StorageTest extends TestCase
             getenv('GANESHA_EXAMPLE_REDIS') ? getenv('GANESHA_EXAMPLE_REDIS') : 'localhost'
         );
         $r->flushAll();
-        $storage = new Storage(new Redis(($r)), new Ganesha\Storage\StorageKeys(), null);
+
+        $redisAdapter = new Redis($r);
+        $context = new Ganesha\Context(
+            Ganesha\Strategy\Rate::class,
+            $redisAdapter,
+            new Configuration(['timeWindow' => 3])
+        );
+        $redisAdapter->setContext($context);
+        $storage = new Storage($redisAdapter, new Ganesha\Storage\StorageKeys(), null);
 
         $service = 'test';
         $storage->incrementFailureCount($service);

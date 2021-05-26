@@ -84,7 +84,7 @@ final class RestFailureDetector implements FailureDetectorInterface
      */
     private function isFailureStatusCode(int $responseStatusCode, array $requestOptions): bool
     {
-        $failureStatusCodes = $requestOptions['ganesha.failure_status_codes'] ?? $this->defaultFailureStatusCodes;
+        $failureStatusCodes = $requestOptions[self::OPTION_KEY] ?? $this->defaultFailureStatusCodes;
 
         return \in_array($responseStatusCode, $failureStatusCodes, true);
     }

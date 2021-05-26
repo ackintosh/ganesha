@@ -549,7 +549,7 @@ By default Ganesha considers a request is successful as soon as the server respo
 Alternatively, you can use the `RestFailureDetector` implementation of `FailureDetectorInterface` to specify a list of HTTP Status Code to be considered as failure via an option passed to client.  
 This implementation will consider failure when these HTTP status codes are returned by the server:
 - 500 (Internal Server Error)
-- 502 (Bad Gateway ou Proxy Error)
+- 502 (Bad Gateway or Proxy Error)
 - 503 (Service Unavailable)
 - 504 (Gateway Time-out)
 - 505 (HTTP Version not supported)

@@ -539,6 +539,87 @@ $ganeshaClient = new GaneshaHttpClient(
 );
 ```
 
+### How does GaneshaHttpClient determine the failure?
+
+As documented in [Usage](https://github.com/ackintosh/ganesha#usage), Ganesha detects failures for each `$service`.
+Below, We will show you how GaneshaHttpClient specify failure explicitly.
+
+By default Ganesha considers a request is successful as soon as the server responded, whatever the HTTP status code.
+
+Alternatively, you can use the `RestFailureDetector` implementation of `FailureDetectorInterface` to specify a list of HTTP Status Code to be considered as failure via an option passed to client.  
+This implementation will consider failure when these HTTP status codes are returned by the server:
+- 500 (Internal Server Error)
+- 502 (Bad Gateway or Proxy Error)
+- 503 (Service Unavailable)
+- 504 (Gateway Time-out)
+- 505 (HTTP Version not supported)
+
+```php
+// via constructor argument
+$ganeshaClient = new GaneshaHttpClient(
+    $client, $ganesha, null,
+    new RestFailureDetector([503])
+);
+
+// via request method argument
+$ganeshaClient->request(
+    'GET',
+    'http://api.example.com/awesome_resource',
+    [
+        // 'ganesha.failure_status_codes' is defined as RestFailureDetector::OPTION_KEY
+        'ganesha.failure_status_codes' => [503],
+    ]
+);
+```
+
+Alternatively, you can apply your own rules by implementing a class that implements the `FailureDetectorInterface`.
+
+```php
+use Ackintosh\Ganesha\HttpClient\FailureDetectorInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
+
+final class SampleFailureDetector implements FailureDetectorInterface
+{
+    /**
+     * @override
+     */
+    public function isFailureResponse(ResponseInterface $response, array $requestOptions): bool
+    {
+        try { 
+            $jsonData = $response->toArray();
+        } catch (ExceptionInterface $e) {
+            return true;
+        }
+        
+        // Server is not RestFull and always returns HTTP 200 Status Code, but set an error flag in the JSON payload.
+        return true === ($jsonData['error'] ?? false);
+    }
+    
+    /**
+     * @override
+     */
+    public function getOptionKeys(): array
+    {
+       // No option is defined for this implementation
+       return [];
+    }
+}
+
+// ---
+
+$ganesha = Builder::withRateStrategy()
+    // ...
+    ->build();
+$ganeshaClient = new GaneshaHttpClient(
+    $client,
+    $ganesha,
+    null,
+    // Pass the failure detector as an argument of GaneshaHttpClient constructor.
+    new SampleFailureDetector()
+);
+```
+
 ## [Companies using Ganesha :rocket:](#table-of-contents)
 
 Here are some companies using Ganesha in production! We are proud of them. :elephant:

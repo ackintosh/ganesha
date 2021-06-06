@@ -586,16 +586,16 @@ final class SampleFailureDetector implements FailureDetectorInterface
      */
     public function isFailureResponse(ResponseInterface $response, array $requestOptions): bool
     {
-        try { 
+        try {
             $jsonData = $response->toArray();
         } catch (ExceptionInterface $e) {
             return true;
         }
-        
+
         // Server is not RestFull and always returns HTTP 200 Status Code, but set an error flag in the JSON payload.
         return true === ($jsonData['error'] ?? false);
     }
-    
+
     /**
      * @override
      */

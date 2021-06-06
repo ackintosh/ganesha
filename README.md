@@ -591,11 +591,11 @@ final class SampleFailureDetector implements FailureDetectorInterface
         } catch (ExceptionInterface $e) {
             return true;
         }
-        
+
         // Server is not RestFull and always returns HTTP 200 Status Code, but set an error flag in the JSON payload.
         return true === ($jsonData['error'] ?? false);
     }
-    
+
     /**
      * @override
      */

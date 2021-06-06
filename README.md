@@ -586,7 +586,7 @@ final class SampleFailureDetector implements FailureDetectorInterface
      */
     public function isFailureResponse(ResponseInterface $response, array $requestOptions): bool
     {
-        try { 
+        try {
             $jsonData = $response->toArray();
         } catch (ExceptionInterface $e) {
             return true;

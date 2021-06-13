@@ -28,7 +28,7 @@ abstract class AbstractRedisTest extends TestCase
      */
     private $context;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -94,11 +94,11 @@ abstract class AbstractRedisTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
-     * @expectedExceptionMessageRegExp /\AFailed to remove expired elements/
      */
     public function incrementThrowsExceptionWhenFailedToRunzRemRangeByScore()
     {
+        $this->expectExceptionMessageMatches("/\AFailed to remove expired elements/");
+        $this->expectException(StorageException::class);
         $mock = $this->getMockBuilder(\Redis::class)->getMock();
         $mock->method('zRemRangeByScore')
             ->willReturn(false);
@@ -108,11 +108,11 @@ abstract class AbstractRedisTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
-     * @expectedExceptionMessageRegExp /\AFailed to execute zAdd command/
      */
     public function incrementThrowsExceptionWhenFailedToRunzAdd()
     {
+        $this->expectExceptionMessageMatches("/\AFailed to execute zAdd command/");
+        $this->expectException(StorageException::class);
         $mock = $this->getMockBuilder(\Redis::class)->getMock();
         $mock->method('zAdd')
             ->willReturn(false);
@@ -122,11 +122,11 @@ abstract class AbstractRedisTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
-     * @expectedExceptionMessage exception test
      */
     public function incrementThrowsException()
     {
+        $this->expectExceptionMessage('exception test');
+        $this->expectException(StorageException::class);
         $mock = $this->getMockBuilder(\Redis::class)->getMock();
         $mock->method('zAdd')
             ->willThrowException(new \RedisException('exception test'));
@@ -136,11 +136,11 @@ abstract class AbstractRedisTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
-     * @expectedExceptionMessageRegExp /\AFailed to remove expired elements/
      */
     public function loadThrowsExceptionWhenFailedToRunzRemRangeByScore()
     {
+        $this->expectExceptionMessageMatches("/\AFailed to remove expired elements/");
+        $this->expectException(StorageException::class);
         $mock = $this->getMockBuilder(\Redis::class)->getMock();
         $mock->method('zRemRangeByScore')
             ->willReturn(false);
@@ -150,11 +150,11 @@ abstract class AbstractRedisTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
-     * @expectedExceptionMessageRegExp /\AFailed to execute zCard command/
      */
     public function loadThrowsExceptionWhenFailedToRunzCard()
     {
+        $this->expectExceptionMessageMatches("/\AFailed to execute zCard command/");
+        $this->expectException(StorageException::class);
         $mock = $this->getMockBuilder(\Redis::class)->getMock();
         $mock->method('zCard')
             ->willReturn(false);
@@ -164,11 +164,11 @@ abstract class AbstractRedisTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
-     * @expectedExceptionMessage exception test
      */
     public function loadThrowsException()
     {
+        $this->expectExceptionMessage('exception test');
+        $this->expectException(StorageException::class);
         $mock = $this->getMockBuilder(\Redis::class)->getMock();
         $mock->method('zCard')
             ->willThrowException(new \RedisException('exception test'));
@@ -215,11 +215,11 @@ abstract class AbstractRedisTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
-     * @expectedExceptionMessage exception test
      */
     public function loadLastFailureTimeThrowsException()
     {
+        $this->expectExceptionMessage('exception test');
+        $this->expectException(StorageException::class);
         $mock = $this->getMockBuilder(\Redis::class)->getMock();
         $mock->method('zRange')
             ->willThrowException(new \RedisException('exception test'));
@@ -246,11 +246,11 @@ abstract class AbstractRedisTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
-     * @expectedExceptionMessageRegExp /\AFailed to save status/
      */
     public function saveStatusThrowsExceptionWhenFailedToRunset()
     {
+        $this->expectExceptionMessageMatches("/\AFailed to save status/");
+        $this->expectException(StorageException::class);
         $mock = $this->getMockBuilder(\Redis::class)->getMock();
         $mock->method('set')
             ->willReturn(false);
@@ -260,11 +260,13 @@ abstract class AbstractRedisTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
-     * @expectedExceptionMessage exception test
+     *
+     *
      */
     public function saveStatusThrowsException()
     {
+        $this->expectExceptionMessage('exception test');
+        $this->expectException(StorageException::class);
         $mock = $this->getMockBuilder(\Redis::class)->getMock();
         $mock->method('set')
             ->willThrowException(new \RedisException('exception test'));
@@ -274,11 +276,11 @@ abstract class AbstractRedisTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\StorageException
-     * @expectedExceptionMessage exception test
      */
     public function loadStatusThrowsException()
     {
+        $this->expectExceptionMessage('exception test');
+        $this->expectException(\Ackintosh\Ganesha\Exception\StorageException::class);
         $mock = $this->getMockBuilder(\Redis::class)->getMock();
         $mock->method('get')
             ->willThrowException(new \RedisException('exception test'));

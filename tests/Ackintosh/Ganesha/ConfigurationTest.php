@@ -27,32 +27,32 @@ class ConfigurationTest extends TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage DateTime should be an instance of AdapterInterface
      */
     public function validateAdapter()
     {
+        $this->expectExceptionMessage("DateTime should be an instance of AdapterInterface");
+        $this->expectException(\InvalidArgumentException::class);
         Configuration::validate([Configuration::ADAPTER => new \DateTime]);
     }
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage DateTime should be an instance of StorageKeysInterface
      */
     public function validateStorageKey()
     {
+        $this->expectExceptionMessage("DateTime should be an instance of StorageKeysInterface");
+        $this->expectException(\InvalidArgumentException::class);
         Configuration::validate([Configuration::STORAGE_KEYS => new \DateTime()]);
     }
 
     /**
      * @test
      * @dataProvider validateIntegerProvider
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessageRegExp /^[a-zA-Z]+ should be an positive integer$/
      */
     public function validateInteger(string $key)
     {
+        $this->expectExceptionMessageMatches("/^[a-zA-Z]+ should be an positive integer$/");
+        $this->expectException(\InvalidArgumentException::class);
         Configuration::validate([$key => 0]);
     }
 
@@ -69,11 +69,11 @@ class ConfigurationTest extends TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage failureRateThreshold should be equal or less than 100
      */
     public function validateFailureRateThreshold()
     {
+        $this->expectExceptionMessage("failureRateThreshold should be equal or less than 100");
+        $this->expectException(\InvalidArgumentException::class);
         Configuration::validate([Configuration::FAILURE_RATE_THRESHOLD => 101]);
     }
 }

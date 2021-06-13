@@ -2,7 +2,6 @@
 namespace Ackintosh\Ganesha\Strategy;
 
 use Ackintosh\Ganesha\Storage\AdapterInterface;
-use Ackintosh\Ganesha\Strategy\Rate;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -12,10 +11,10 @@ class RateTest extends TestCase
 {
     /**
      * @test
-     * @expectedException \LogicException
      */
     public function validateThrowsExceptionWhenTheRequiredParamsIsMissing()
     {
+        $this->expectException(\LogicException::class);
         Rate::validate([]);
     }
 

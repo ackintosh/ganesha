@@ -1,6 +1,7 @@
 <?php
 namespace Ackintosh\Ganesha;
 
+use Ackintosh\Ganesha\Exception\RejectedException;
 use Ackintosh\Ganesha\Storage\Adapter\Memcached;
 use Ackintosh\Ganesha\Storage\Adapter\Redis;
 use GuzzleHttp\Client;
@@ -17,7 +18,7 @@ class GuzzleMiddlewareTest extends TestCase
      */
     private $adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!\extension_loaded('redis')) {
             self::markTestSkipped('No ext-redis present');
@@ -127,10 +128,11 @@ class GuzzleMiddlewareTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Ackintosh\Ganesha\Exception\RejectedException
      */
     public function reject()
     {
+        $this->expectException(RejectedException::class);
+
         // Build Ganesha which has count strategy with memcached adapter
         $m = new \Memcached();
         $m->addServer(

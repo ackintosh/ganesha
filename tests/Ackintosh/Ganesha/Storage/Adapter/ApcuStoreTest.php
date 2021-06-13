@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ApcuStoreTest extends TestCase
 {
-    protected function tearDown()
+    protected function tearDown(): void
     {
         apcu_clear_cache();
         parent::tearDown();

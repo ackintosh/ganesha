@@ -3,12 +3,10 @@ namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Exception\RejectedException;
+use Ackintosh\Ganesha\HttpClient\FailureDetectorInterface;
 use Ackintosh\Ganesha\HttpClient\ServiceNameExtractor;
 use Ackintosh\Ganesha\HttpClient\ServiceNameExtractorInterface;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Ackintosh\Ganesha\HttpClient\TransportFailureDetector;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\HttpClient\ResponseStreamInterface;
@@ -30,14 +28,24 @@ final class GaneshaHttpClient implements HttpClientInterface
      */
     private $serviceNameExtractor;
 
+    /**
+     * @var FailureDetectorInterface
+     */
+    private $failureDetector;
+
+    /**
+     * @param array<string, mixed> $defaultOptions An array containing valid GaneshaHttpClient options
+     */
     public function __construct(
         HttpClientInterface $client,
         Ganesha $ganesha,
-        ?ServiceNameExtractorInterface $serviceNameExtractor = null
+        ?ServiceNameExtractorInterface $serviceNameExtractor = null,
+        ?FailureDetectorInterface $failureDetector = null
     ) {
         $this->client = $client;
         $this->ganesha = $ganesha;
         $this->serviceNameExtractor = $serviceNameExtractor ?: new ServiceNameExtractor();
+        $this->failureDetector = $failureDetector ?: new TransportFailureDetector();
     }
 
     /**
@@ -53,20 +61,11 @@ final class GaneshaHttpClient implements HttpClientInterface
             throw new RejectedException(sprintf('"%s" is not available', $serviceName));
         }
 
-        // Do not propagate option unsupported by decorated client instance
-        unset($options[ServiceNameExtractor::OPTION_KEY]);
-
-        $response = $this->client->request($method, $url, $options);
-        try {
-            $response->getHeaders();
-
-            $this->ganesha->success($serviceName);
-        } catch (ClientExceptionInterface | ServerExceptionInterface $e) {
-            // 4xx and 5xx are considered as success because server responded
-            $this->ganesha->success($serviceName);
-        } catch (RedirectionExceptionInterface | TransportExceptionInterface $e) {
-            // 3xx when max redirection is reached and network issues are considered as failure
+        $response = $this->client->request($method, $url, $this->avoidGaneshaOptionsPropagation($options));
+        if ($this->failureDetector->isFailureResponse($response, $options)) {
             $this->ganesha->failure($serviceName);
+        } else {
+            $this->ganesha->success($serviceName);
         }
 
         return $response;
@@ -78,5 +77,22 @@ final class GaneshaHttpClient implements HttpClientInterface
     public function stream($responses, float $timeout = null): ResponseStreamInterface
     {
         return $this->client->stream($responses, $timeout);
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     */
+    private function avoidGaneshaOptionsPropagation(array $options): array
+    {
+        $optionsToUnset = $this->failureDetector->getOptionKeys();
+        // FIXME: ServiceNameExtractorInterface implementation should be able to provide its own options keys
+        $optionsToUnset[] = ServiceNameExtractor::OPTION_KEY;
+
+        foreach ($optionsToUnset as $optionName) {
+            unset($options[$optionName]);
+        }
+
+        return $options;
     }
 }

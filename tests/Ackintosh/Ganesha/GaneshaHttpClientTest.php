@@ -4,6 +4,8 @@ namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Exception\RejectedException;
+use Ackintosh\Ganesha\HttpClient\FailureDetectorInterface;
+use Ackintosh\Ganesha\HttpClient\RestFailureDetector;
 use Ackintosh\Ganesha\Storage\Adapter\Memcached;
 use Ackintosh\Ganesha\Storage\Adapter\Redis;
 use PHPUnit\Framework\TestCase;
@@ -46,7 +48,7 @@ class GaneshaHttpClientTest extends TestCase
      */
     public function recordsSuccessOn200(): void
     {
-        $httpResponse = new MockResponse('', [ 'http_code' => 200 ]);
+        $httpResponse = new MockResponse('', ['http_code' => 200]);
         $client = $this->buildClient(null, [$httpResponse]);
 
         $response = $client->request('GET', 'http://api.example.com/awesome_resource/200');
@@ -65,7 +67,7 @@ class GaneshaHttpClientTest extends TestCase
      */
     public function recordsSuccessOn400(): void
     {
-        $httpResponse = new MockResponse('', [ 'http_code' => 400 ]);
+        $httpResponse = new MockResponse('', ['http_code' => 400]);
         $client = $this->buildClient(null, [$httpResponse]);
 
         $client->request('GET', 'http://api.example.com/awesome_resource/400');
@@ -83,7 +85,7 @@ class GaneshaHttpClientTest extends TestCase
      */
     public function recordsSuccessOn500(): void
     {
-        $httpResponse = new MockResponse('', [ 'http_code' => 500 ]);
+        $httpResponse = new MockResponse('', ['http_code' => 500]);
         $client = $this->buildClient(null, [$httpResponse]);
 
         $client->request('GET', 'http://api.example.com/awesome_resource/500');
@@ -92,6 +94,52 @@ class GaneshaHttpClientTest extends TestCase
             1,
             $this->adapter->load(
                 Storage\StorageKeys::KEY_PREFIX.'api.example.com'.Storage\StorageKeys::KEY_SUFFIX_SUCCESS
+            )
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function recordsFailureOnConfiguredHttpStatusCodeAtRequestLevel(): void
+    {
+        $httpResponse = new MockResponse('', ['http_code' => 503]);
+        $client = $this->buildClient(null, [$httpResponse], new RestFailureDetector());
+
+        $client->request(
+            'GET',
+            'http://api.example.com/awesome_resource/503',
+            [
+                Ganesha\HttpClient\RestFailureDetector::OPTION_KEY => [503],
+            ]
+        );
+
+        self::assertSame(
+            1,
+            $this->adapter->load(
+                Storage\StorageKeys::KEY_PREFIX.'api.example.com'.Storage\StorageKeys::KEY_SUFFIX_FAILURE
+            )
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function recordsFailureOnConfiguredHttpStatusCodeAtClientLevel(): void
+    {
+        $httpResponse = new MockResponse('', ['http_code' => 503]);
+        $client = $this->buildClient(
+            null,
+            [$httpResponse],
+            new RestFailureDetector([503])
+        );
+
+        $client->request('GET', 'http://api.example.com/awesome_resource/503');
+
+        self::assertSame(
+            1,
+            $this->adapter->load(
+                Storage\StorageKeys::KEY_PREFIX.'api.example.com'.Storage\StorageKeys::KEY_SUFFIX_FAILURE
             )
         );
     }
@@ -146,7 +194,11 @@ class GaneshaHttpClientTest extends TestCase
         try {
             // Server will redirect 4 times before responding a 200
             // @see examples/server/redirect.php
-            $response = $client->request('GET', 'http://server/server/redirect.php?redirects=4', ['max_redirects' => 3]);
+            $response = $client->request(
+                'GET',
+                'http://server/server/redirect.php?redirects=4',
+                ['max_redirects' => 3]
+            );
             $response->getHeaders();
         } catch (RedirectionExceptionInterface $e) {
             $redirectionLoop = true;
@@ -196,8 +248,12 @@ class GaneshaHttpClientTest extends TestCase
      */
     public function doNotPropagateGaneshaOptionToDecoratedInstance(): void
     {
+        $failureDetectorOptionKeys = ['foo_option_key', 'bar_option_key'];
+        $failureDetector = $this->createMock(FailureDetectorInterface::class);
+        $failureDetector->method('getOptionKeys')->willReturn($failureDetectorOptionKeys);
+
         $decoratedClient = $this->createMock(HttpClientInterface::class);
-        $client = new GaneshaHttpClient($decoratedClient, $this->buildGanesha());
+        $client = new GaneshaHttpClient($decoratedClient, $this->buildGanesha(), null, $failureDetector);
 
         $decoratedClient
             ->expects(self::once())
@@ -207,10 +263,13 @@ class GaneshaHttpClientTest extends TestCase
         $client->request(
             'GET',
             'http://api.example.com/awesome_resource',
-            [
-                'max_duration' => 3.0,
-                Ganesha\HttpClient\ServiceNameExtractor::OPTION_KEY => 'an_awesome_service',
-            ]
+            \array_merge(
+                array_combine($failureDetectorOptionKeys, ['foo_option_value', 'bar_option_value']),
+                [
+                    'max_duration' => 3.0,
+                    Ganesha\HttpClient\ServiceNameExtractor::OPTION_KEY => 'an_awesome_service',
+                ]
+            )
         );
     }
 
@@ -236,11 +295,14 @@ class GaneshaHttpClientTest extends TestCase
     /**
      * @param MockResponse[] $responses
      */
-    private function buildClient(?Ganesha $ganesha = null, array $responses = []): HttpClientInterface
-    {
+    private function buildClient(
+        ?Ganesha $ganesha = null,
+        array $responses = [],
+        ?FailureDetectorInterface $failureDetector = null
+    ): HttpClientInterface {
         $client = (0 === \count($responses)) ? HttpClient::create() : new MockHttpClient($responses);
 
-        return new GaneshaHttpClient($client, $ganesha ?? $this->buildGanesha());
+        return new GaneshaHttpClient($client, $ganesha ?? $this->buildGanesha(), null, $failureDetector);
     }
 
     private function buildGanesha(): Ganesha

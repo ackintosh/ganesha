@@ -33,8 +33,7 @@ jobs:
         php-version:
           - "7.3"
           - "7.4"
-          # We'll enable "8.0" after that dropping PHP 7.1 support and bump up the PHPUnit version.
-          # - "8.0"
+          - "8.0"
     steps:
       - uses: actions/checkout@v2
 

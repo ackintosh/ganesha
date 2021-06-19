@@ -26,7 +26,7 @@ class MemcachedTest extends TestCase
      */
     private $service = 'testService';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!extension_loaded('memcached')) {
             self::markTestSkipped('No ext-memcached present');
@@ -362,7 +362,7 @@ class MemcachedTest extends TestCase
         $adapter = new Memcached($m);
 
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/^failed to get memcached keys/');
+        $this->expectExceptionMessageMatches('/^failed to get memcached keys/');
         $adapter->reset();
     }
 

@@ -8,19 +8,21 @@ class RedisStoreTest extends TestCase
 {
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     public function constructorThrowsExceptionIfTheClientIsNotSupported()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         new RedisStore(new \stdClass());
     }
 
     /**
      * @test
-     * @expectedException Ackintosh\Ganesha\Exception\StorageException
      */
     public function zCardThrowsExceptionIfFailed()
     {
+        $this->expectException(\Ackintosh\Ganesha\Exception\StorageException::class);
+
         $mock = $this->getMockBuilder(\Redis::class)
             ->setMethods(['zCard'])
             ->getMock();

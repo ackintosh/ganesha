@@ -9,20 +9,22 @@ class BuildGaneshaTest extends TestCase
 {
     /**
      * @test
-     * @expectedException \LogicException
-     * @expectedExceptionMessage adapter is required
      */
     public function validateThrowsExceptionWhenRequirementsAreNotSatisfied() {
+        $this->expectExceptionMessage('adapter is required');
+        $this->expectException(\LogicException::class);
+
         Builder::withRateStrategy()
             ->build();
     }
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Ackintosh\Ganesha\Storage\Adapter\Redis doesn't support expected Strategy: supportCountStrategy
      */
     public function validateThrowsExceptionWhenAdapterRequirementsAreNotSatisfied() {
+        $this->expectExceptionMessage("Ackintosh\Ganesha\Storage\Adapter\Redis doesn't support expected Strategy: supportCountStrategy");
+        $this->expectException(\InvalidArgumentException::class);
+
         if (!\extension_loaded('redis')) {
             self::markTestSkipped('No ext-redis present');
         }

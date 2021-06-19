@@ -16,7 +16,7 @@ class ApcuTest extends TestCase
 {
     private const EXPECT_KEY_REGEX = '/^\\^ .+( s| f| r| \\$| \\/)$/';
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         apcu_clear_cache();
         parent::tearDown();

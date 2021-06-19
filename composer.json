@@ -10,8 +10,14 @@
       "email": "sora.akatsuki@gmail.com"
     }
   ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/kornrunner/phpunit-testlistener-vcr"
+    }
+  ],
   "require": {
-    "php": ">=7.1.0",
+    "php": ">=7.3.0",
     "psr/http-message": "~1.0"
   },
   "suggest": {
@@ -22,11 +28,11 @@
     "ext-mongodb": "Allows the usage of MongoDBAdapter"
   },
   "require-dev": {
-    "phpunit/phpunit": "^7.5.19",
+    "phpunit/phpunit": "^9.5.4",
     "symfony/http-client": "^4.3|^5.0",
     "symfony/yaml": "^3.0|^4.0|^5.0",
     "php-vcr/php-vcr": "^1.4.5",
-    "php-vcr/phpunit-testlistener-vcr": "~3.2.1",
+    "php-vcr/phpunit-testlistener-vcr": "dev-php8 as 3.2.2",
     "php-coveralls/php-coveralls": "~2.0",
     "predis/predis": "^1.1",
     "guzzlehttp/guzzle": "~6.5",

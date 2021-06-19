@@ -1,7 +1,7 @@
 version: '2'
 services:
   server:
-    image: php:7.2-apache
+    image: php:7.4-apache
     container_name: server
     volumes:
       - ./examples:/var/www/html

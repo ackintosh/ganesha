@@ -12,7 +12,7 @@ Ganesha is PHP implementation of [Circuit Breaker pattern](http://martinfowler.c
 
 <div align="center">
 
-**If Ganesha is saving your service from system failures, please consider [donating](https://github.com/sponsors/ackintosh) to this project's author, [Akihito Nakano](#author), to show your :heart: and support. Thank you!**
+**If Ganesha is saving your service from system failures, please consider [supporting](https://github.com/sponsors/ackintosh) to this project's author, [Akihito Nakano](#author), to show your :heart: and support. Thank you!**
 
 [Sponsor @ackintosh on GitHub Sponsors](https://github.com/sponsors/ackintosh)
 
@@ -638,6 +638,7 @@ Here are some articles/videos introduce Ganesha! All of them are really shining 
 
 ### Articles
 
+- 2021/06/25 [Чек-лист: как оставаться отказоустойчивым, переходя на микросервисы на PHP (и как правильно падать) / Блог компании Skyeng / Хабр](https://habr.com/ru/company/skyeng/blog/560842/)
 - 2020/12/21 [장애 확산을 막기 위한 서킷브레이커 패턴을 PHP에서 구현해보자](https://saramin.github.io/2020-12-21-php-circuit-breaker-ganesha/)
 - 2020/04/22 [PHP Annotated – April 2020 | PhpStorm Blog](https://blog.jetbrains.com/phpstorm/2020/04/php-annotated-april-2020/)
 - 2020/03/23 [Circuit Breaker - SarvenDev](https://sarvendev.com/en/2020/03/circuit-breaker/)

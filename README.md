@@ -12,7 +12,7 @@ Ganesha is PHP implementation of [Circuit Breaker pattern](http://martinfowler.c
 
 <div align="center">
 
-**If Ganesha is saving your service from system failures, please consider [donating](https://github.com/sponsors/ackintosh) to this project's author, [Akihito Nakano](#author), to show your :heart: and support. Thank you!**
+**If Ganesha is saving your service from system failures, please consider [supporting](https://github.com/sponsors/ackintosh) to this project's author, [Akihito Nakano](#author), to show your :heart: and support. Thank you!**
 
 [Sponsor @ackintosh on GitHub Sponsors](https://github.com/sponsors/ackintosh)
 

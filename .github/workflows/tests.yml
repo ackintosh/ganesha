@@ -34,6 +34,9 @@ jobs:
           - "7.3"
           - "7.4"
           - "8.0"
+        composer-opts:
+          - ""
+          - --prefer-lowest --prefer-stable
     steps:
       - uses: actions/checkout@v2
 
@@ -55,7 +58,7 @@ jobs:
           fail-fast: true
 
       - name: Update dependencies with composer
-        run: composer update
+        run: composer update ${{ matrix.composer-opts }}
 
       - name: Run tests with PHPUnit
         run: vendor/bin/phpunit

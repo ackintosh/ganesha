@@ -31,9 +31,6 @@ before_script:
 script:
   - vendor/bin/phpunit
 
-after_success:
-    - travis_retry php vendor/bin/php-coveralls -v
-
 jobs:
   include:
     - stage: Coding Standards

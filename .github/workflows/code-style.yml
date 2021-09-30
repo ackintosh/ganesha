@@ -1,0 +1,29 @@
+name: Code style check
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  phpcs:
+    name: Code style check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # https://github.com/shivammathur/setup-php
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          tools: composer
+        env:
+          fail-fast: true
+
+      - name: Update dependencies with composer
+        run: composer update
+
+      - name: Run php-cs-fixer
+        run: ./vendor/bin/php-cs-fixer fix --dry-run --diff --diff-format=udiff .

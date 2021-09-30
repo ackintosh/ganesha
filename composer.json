@@ -36,6 +36,7 @@
     "php-coveralls/php-coveralls": "~2.0",
     "predis/predis": "^1.1",
     "guzzlehttp/guzzle": "~6.5",
+    "friendsofphp/php-cs-fixer": "^v3.1.0",
     "vimeo/psalm" : "*",
     "ext-redis": "~5.1",
     "ext-memcached": "~3.1",

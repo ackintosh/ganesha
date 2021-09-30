@@ -59,3 +59,11 @@ jobs:
 
       - name: Run tests with PHPUnit
         run: vendor/bin/phpunit
+
+      # https://github.com/php-coveralls/php-coveralls#github-actions
+      - name: Upload coverage results to Coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          composer global require php-coveralls/php-coveralls
+          php-coveralls --coverage_clover=build/logs/clover.xml -v

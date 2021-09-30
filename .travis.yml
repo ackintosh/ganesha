@@ -30,12 +30,3 @@ before_script:
 
 script:
   - vendor/bin/phpunit
-
-jobs:
-  include:
-    - stage: Coding Standards
-      php: 7.3
-      install:
-        - travis_retry wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer
-      script:
-        - php php-cs-fixer -v --diff fix --config=.php_cs.dist --dry-run --no-interaction

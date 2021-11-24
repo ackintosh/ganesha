@@ -84,7 +84,7 @@ class Ganesha
     public function success($service): void
     {
         try {
-            if ($this->strategy->recordSuccess($service) === self::STATUS_CALMED_DOWN) {
+            if ($this->isAvailable($service) && $this->strategy->recordSuccess($service) === self::STATUS_CALMED_DOWN) {
                 $this->notify(self::EVENT_CALMED_DOWN, $service, '');
             }
         } catch (StorageException $e) {

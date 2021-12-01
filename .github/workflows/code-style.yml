@@ -26,4 +26,4 @@ jobs:
         run: composer update
 
       - name: Run php-cs-fixer
-        run: ./vendor/bin/php-cs-fixer fix --dry-run --diff --diff-format=udiff .
+        run: ./vendor/bin/php-cs-fixer fix --dry-run --diff .

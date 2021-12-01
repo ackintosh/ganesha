@@ -13,4 +13,4 @@ GTAGS
 .DS_Store
 .idea
 /tmp
-
+.php-cs-fixer.cache

@@ -10,7 +10,8 @@ class BuildGaneshaTest extends TestCase
     /**
      * @test
      */
-    public function validateThrowsExceptionWhenRequirementsAreNotSatisfied() {
+    public function validateThrowsExceptionWhenRequirementsAreNotSatisfied()
+    {
         $this->expectExceptionMessage('adapter is required');
         $this->expectException(\LogicException::class);
 
@@ -21,7 +22,8 @@ class BuildGaneshaTest extends TestCase
     /**
      * @test
      */
-    public function validateThrowsExceptionWhenAdapterRequirementsAreNotSatisfied() {
+    public function validateThrowsExceptionWhenAdapterRequirementsAreNotSatisfied()
+    {
         $this->expectExceptionMessage("Ackintosh\Ganesha\Storage\Adapter\Redis doesn't support expected Strategy: supportCountStrategy");
         $this->expectException(\InvalidArgumentException::class);
 

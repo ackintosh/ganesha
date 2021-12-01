@@ -196,7 +196,9 @@ class Apcu implements AdapterInterface, TumblingTimeWindowInterface
     {
         $keyPrefix = preg_quote($this->storageKeys->prefix(), '/');
         $keySuffixes = array_map(
-            function (string $s) { return preg_quote($s, '/'); },
+            function (string $s) {
+                return preg_quote($s, '/');
+            },
             [
                 $this->storageKeys->success(),
                 $this->storageKeys->failure(),

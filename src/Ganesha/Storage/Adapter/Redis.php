@@ -180,7 +180,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
 
     /**
      * @param string $service
-     * 
+     *
      * @throws StorageException
      */
     private function removeExpiredElements(string $service): void

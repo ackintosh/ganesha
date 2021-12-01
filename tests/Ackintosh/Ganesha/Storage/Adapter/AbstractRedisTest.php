@@ -47,7 +47,8 @@ abstract class AbstractRedisTest extends TestCase
      */
     abstract protected function getRedisConnection();
 
-    private function createAdapterWithMock(MockObject $mock): Redis {
+    private function createAdapterWithMock(MockObject $mock): Redis
+    {
         $adapter = new Redis($mock);
         $adapter->setContext($this->context);
         return $adapter;

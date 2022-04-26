@@ -178,7 +178,7 @@ class RedisStore
     {
         try {
             $result = $this->redis->get($key);
-            if ($this->redis instanceof \Predis\ClientInterface  && $result === null) {
+            if ($this->redis instanceof \Predis\ClientInterface && $result === null) {
                 return false;
             }
             return $result;

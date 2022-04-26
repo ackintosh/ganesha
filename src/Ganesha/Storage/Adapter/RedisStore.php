@@ -8,12 +8,12 @@ use Exception;
 class RedisStore
 {
     /**
-     * @var \Predis\Client|\Redis|\RedisArray|\RedisCluster
+     * @var \Predis\ClientInterface|\Redis|\RedisArray|\RedisCluster
      */
     private $redis;
 
     /**
-     * @param \Redis|\RedisArray|\RedisCluster|\Predis\Client $redisClient
+     * @param \Redis|\RedisArray|\RedisCluster|\Predis\ClientInterface $redisClient
      *
      * @throws \InvalidArgumentException if redis client is not supported
      */
@@ -23,10 +23,10 @@ class RedisStore
             !$redisClient instanceof \Redis
             && !$redisClient instanceof \RedisArray
             && !$redisClient instanceof \RedisCluster
-            && !$redisClient instanceof \Predis\Client
+            && !$redisClient instanceof \Predis\ClientInterface
         ) {
             throw new \InvalidArgumentException(sprintf(
-                '%s() expects parameter 1 to be Redis, RedisArray, RedisCluster or Predis\Client, %s given',
+                '%s() expects parameter 1 to be Redis, RedisArray, RedisCluster, or \Predis\ClientInterface  %s given',
                 __METHOD__,
                 \is_object($redisClient) ? \get_class($redisClient) : \gettype($redisClient)
             ));
@@ -178,7 +178,7 @@ class RedisStore
     {
         try {
             $result = $this->redis->get($key);
-            if ($this->redis instanceof \Predis\Client && $result === null) {
+            if ($this->redis instanceof \Predis\ClientInterface && $result === null) {
                 return false;
             }
             return $result;

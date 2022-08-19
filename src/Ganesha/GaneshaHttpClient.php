@@ -95,4 +95,12 @@ final class GaneshaHttpClient implements HttpClientInterface
 
         return $options;
     }
+
+    public function withOptions(array $options): static
+    {
+        $clone = clone $this;
+        $clone->client = $this->client->withOptions($options);
+
+        return $clone;
+    }
 }

@@ -33,7 +33,7 @@
     "symfony/yaml": "^3.0|^4.0|^5.0|^6.0",
     "php-vcr/php-vcr": "^1.4.5",
     "php-vcr/phpunit-testlistener-vcr": "dev-php8 as 3.2.2",
-    "php-coveralls/php-coveralls": "~2.0",
+    "php-coveralls/php-coveralls": "~2.5",
     "predis/predis": "^1.1",
     "guzzlehttp/guzzle": "~6.5",
     "friendsofphp/php-cs-fixer": "^v3.1.0",

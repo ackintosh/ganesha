@@ -293,6 +293,21 @@ class GaneshaHttpClientTest extends TestCase
     }
 
     /**
+     * @test
+     */
+    public function buildWithOptions(): void
+    {
+        $client = $this->buildClient();
+        $clientWithOptions = $client->withOptions(['headers' => ['Content-Type: text/html']]);
+
+        $this->assertNotSame($client, $clientWithOptions);
+        $this->assertSame(\get_class($client), \get_class($clientWithOptions));
+
+        $response = $clientWithOptions->request('GET', 'http://server/server/index.php');
+        $this->assertSame(200, $response->getStatusCode());
+    }
+
+    /**
      * @param MockResponse[] $responses
      */
     private function buildClient(

@@ -96,6 +96,9 @@ final class GaneshaHttpClient implements HttpClientInterface
         return $options;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function withOptions(array $options): static
     {
         $clone = clone $this;

@@ -629,6 +629,7 @@ To add your company to the list, please visit [README.md](https://github.com/ack
 (alphabetical order)
 
 - [APISHIP LLC](https://apiship.ru)
+- [Bedrock Streaming](https://www.bedrockstreaming.com/)
 - [Dapda](https://dapda.com/)
 - [Wikia, Inc.](https://www.fandom.com)
 

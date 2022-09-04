@@ -212,7 +212,7 @@ The details to help us understand visually is shown below:
 
 ### Count
 
-If you want use the Count strategy use `Builder::buildWithCountStrategy()` to build an instance.
+If you prefer the Count strategy use `Builder::buildWithCountStrategy()` to build an instance.
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::withCountStrategy()
@@ -292,7 +292,7 @@ $ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
 
 ## [Customizing storage keys](#table-of-contents)
 
-If you want customize the keys to be used when storing circuit breaker information, set an instance which implements [StorageKeysInterface](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/StorageKeysInterface.php).
+If you want to customize the keys to be used when storing circuit breaker information, set an instance which implements [StorageKeysInterface](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/StorageKeysInterface.php).
 
 ```php
 class YourStorageKeys implements StorageKeysInterface
@@ -544,7 +544,7 @@ $ganeshaClient = new GaneshaHttpClient(
 As documented in [Usage](https://github.com/ackintosh/ganesha#usage), Ganesha detects failures for each `$service`.
 Below, We will show you how GaneshaHttpClient specify failure explicitly.
 
-By default Ganesha considers a request is successful as soon as the server responded, whatever the HTTP status code.
+By default, Ganesha considers a request is successful as soon as the server responded, whatever the HTTP status code.
 
 Alternatively, you can use the `RestFailureDetector` implementation of `FailureDetectorInterface` to specify a list of HTTP Status Code to be considered as failure via an option passed to client.  
 This implementation will consider failure when these HTTP status codes are returned by the server:
@@ -671,8 +671,18 @@ $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 
 ## [Requirements](#table-of-contents)
 
-- Ganesha supports PHP 7.3 or higher.
 - An extension or client library which is used by [the storage adapter](https://github.com/ackintosh/ganesha#adapters) you've choice will be required. Please check the [Adapters](https://github.com/ackintosh/ganesha#adapters) section for details.
+
+#### Version Guidance
+
+| Version | PHP Version |
+|---------|-------------|
+| 3.x     | >=8.0       |
+| 2.x     | >=7.3       |
+| 1.x     | >=7.1       |
+| 0.x     | >=5.6       |
+
+
 
 ## [Author](#table-of-contents)
 

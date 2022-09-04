@@ -659,8 +659,11 @@ Here are some articles/videos introduce Ganesha! All of them are really shining 
 We can run unit tests on a Docker container, so it is not necessary to install the dependencies in your machine.
 
 ```bash
-# Start redis, memcached server
+# Start data stores (Redis, Memcached, etc)
 $ docker-compose up
+
+# Run `composer install`
+$ docker-compose run --rm -w /tmp/ganesha -u ganesha client composer install
 
 # Run tests in container
 $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit

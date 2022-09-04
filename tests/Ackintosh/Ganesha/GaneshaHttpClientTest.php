@@ -293,6 +293,24 @@ class GaneshaHttpClientTest extends TestCase
     }
 
     /**
+     * @test
+     */
+    public function buildWithOptions(): void
+    {
+        $client = $this->buildClient();
+        // Attach extra data to the request as default.
+        $clientWithOptions = $client->withOptions(['user_data' => 'test']);
+
+        $this->assertNotSame($client, $clientWithOptions);
+        $this->assertSame(\get_class($client), \get_class($clientWithOptions));
+
+        $response = $clientWithOptions->request('GET', 'http://server/server/index.php');
+
+        // Test that the extra data can be obtained.
+        $this->assertSame('test', $response->getInfo('user_data'));
+    }
+
+    /**
      * @param MockResponse[] $responses
      */
     private function buildClient(

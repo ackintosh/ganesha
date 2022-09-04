@@ -31,8 +31,6 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.3"
-          - "7.4"
           - "8.0"
           - "8.1"
         composer-opts:
@@ -66,10 +64,7 @@ jobs:
 
       # https://github.com/php-coveralls/php-coveralls#github-actions
       - name: Upload coverage results to Coveralls
-        # NOTE: For now we would run this step only on php7.4 due to the error on php8.
-        # https://github.com/ackintosh/ganesha/runs/4375377952?check_suite_focus=true
-        # > PHP Fatal error:  Declaration of PhpCoveralls\Bundle\CoverallsBundle\Console\Application::getDefinition() must be compatible with ...
-        if: ${{ matrix.php-version == '7.4' }}
+        if: ${{ matrix.php-version == '8.0' }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

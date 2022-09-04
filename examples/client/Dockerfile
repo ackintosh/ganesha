@@ -1,4 +1,4 @@
-FROM php:7.4-cli
+FROM php:8.0-cli
 
 RUN apt-get update \
  && apt-get install --no-install-recommends -y git \
@@ -13,7 +13,7 @@ RUN apt-get update \
  && echo 'extension=memcached.so' >> /usr/local/etc/php/php.ini \
  && yes '' | pecl install redis \
  && echo 'extension=redis.so' >> /usr/local/etc/php/php.ini \
- && yes '' | pecl install xdebug-2.9.0 \
+ && yes '' | pecl install xdebug-3.1.5 \
  && echo 'zend_extension=xdebug.so' >> /usr/local/etc/php/php.ini \
  && yes '' | pecl install mongodb \
  && echo 'extension=mongodb.so' >> /usr/local/etc/php/php.ini \

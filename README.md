@@ -6,7 +6,7 @@ Ganesha is PHP implementation of [Circuit Breaker pattern](http://martinfowler.c
 
 ![ganesha](https://ackintosh.github.io/assets/images/ganesha.png)
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/ackintosh/ganesha.svg?style=flat-square)](https://packagist.org/packages/ackintosh/ganesha) [![Tests](https://github.com/ackintosh/ganesha/workflows/Tests/badge.svg)](https://github.com/ackintosh/ganesha/actions) [![Coverage Status](https://coveralls.io/repos/github/ackintosh/ganesha/badge.svg?branch=master)](https://coveralls.io/github/ackintosh/ganesha?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ackintosh/ganesha/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ackintosh/ganesha/?branch=master) [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.3-8892BF.svg?style=flat-square)](https://php.net/)
+[![Latest Stable Version](https://img.shields.io/packagist/v/ackintosh/ganesha.svg?style=flat-square)](https://packagist.org/packages/ackintosh/ganesha) [![Tests](https://github.com/ackintosh/ganesha/workflows/Tests/badge.svg)](https://github.com/ackintosh/ganesha/actions) [![Coverage Status](https://coveralls.io/repos/github/ackintosh/ganesha/badge.svg?branch=master)](https://coveralls.io/github/ackintosh/ganesha?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ackintosh/ganesha/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ackintosh/ganesha/?branch=master) [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%208.0-8892BF.svg?style=flat-square)](https://php.net/)
 
 </div>
 
@@ -212,7 +212,7 @@ The details to help us understand visually is shown below:
 
 ### Count
 
-If you want use the Count strategy use `Builder::buildWithCountStrategy()` to build an instance.
+If you prefer the Count strategy use `Builder::buildWithCountStrategy()` to build an instance.
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::withCountStrategy()
@@ -292,7 +292,7 @@ $ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
 
 ## [Customizing storage keys](#table-of-contents)
 
-If you want customize the keys to be used when storing circuit breaker information, set an instance which implements [StorageKeysInterface](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/StorageKeysInterface.php).
+If you want to customize the keys to be used when storing circuit breaker information, set an instance which implements [StorageKeysInterface](https://github.com/ackintosh/ganesha/blob/master/src/Ganesha/Storage/StorageKeysInterface.php).
 
 ```php
 class YourStorageKeys implements StorageKeysInterface
@@ -544,7 +544,7 @@ $ganeshaClient = new GaneshaHttpClient(
 As documented in [Usage](https://github.com/ackintosh/ganesha#usage), Ganesha detects failures for each `$service`.
 Below, We will show you how GaneshaHttpClient specify failure explicitly.
 
-By default Ganesha considers a request is successful as soon as the server responded, whatever the HTTP status code.
+By default, Ganesha considers a request is successful as soon as the server responded, whatever the HTTP status code.
 
 Alternatively, you can use the `RestFailureDetector` implementation of `FailureDetectorInterface` to specify a list of HTTP Status Code to be considered as failure via an option passed to client.  
 This implementation will consider failure when these HTTP status codes are returned by the server:
@@ -659,8 +659,11 @@ Here are some articles/videos introduce Ganesha! All of them are really shining 
 We can run unit tests on a Docker container, so it is not necessary to install the dependencies in your machine.
 
 ```bash
-# Start redis, memcached server
+# Start data stores (Redis, Memcached, etc)
 $ docker-compose up
+
+# Run `composer install`
+$ docker-compose run --rm -w /tmp/ganesha -u ganesha client composer install
 
 # Run tests in container
 $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
@@ -668,8 +671,16 @@ $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 
 ## [Requirements](#table-of-contents)
 
-- Ganesha supports PHP 7.3 or higher.
 - An extension or client library which is used by [the storage adapter](https://github.com/ackintosh/ganesha#adapters) you've choice will be required. Please check the [Adapters](https://github.com/ackintosh/ganesha#adapters) section for details.
+
+### Version Guidance
+
+| Version | PHP Version |
+|---------|-------------|
+| 3.x     | >=8.0       |
+| 2.x     | >=7.3       |
+| 1.x     | >=7.1       |
+| 0.x     | >=5.6       |
 
 ## [Author](#table-of-contents)
 

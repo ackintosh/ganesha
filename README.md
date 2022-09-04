@@ -673,7 +673,7 @@ $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 
 - An extension or client library which is used by [the storage adapter](https://github.com/ackintosh/ganesha#adapters) you've choice will be required. Please check the [Adapters](https://github.com/ackintosh/ganesha#adapters) section for details.
 
-#### Version Guidance
+### Version Guidance
 
 | Version | PHP Version |
 |---------|-------------|
@@ -681,8 +681,6 @@ $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 | 2.x     | >=7.3       |
 | 1.x     | >=7.1       |
 | 0.x     | >=5.6       |
-
-
 
 ## [Author](#table-of-contents)
 

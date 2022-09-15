@@ -5,7 +5,6 @@ use Ackintosh\Ganesha\Exception\StorageException;
 use Ackintosh\Ganesha\Storage\Adapter\TumblingTimeWindowInterface;
 use Ackintosh\Ganesha\Storage\Adapter\SlidingTimeWindowInterface;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
-use Ackintosh\Ganesha\Storage\StorageKeys;
 use Ackintosh\Ganesha\Storage\StorageKeysInterface;
 
 class Storage

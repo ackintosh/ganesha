@@ -4,6 +4,8 @@ namespace Ackintosh\Ganesha\Strategy\Count;
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
+use Ackintosh\Ganesha\Storage\Adapter\SlidingTimeWindowInterface;
+use Ackintosh\Ganesha\Storage\Adapter\TumblingTimeWindowInterface;
 
 class Builder
 {
@@ -27,6 +29,7 @@ class Builder
 
     /**
      * @param AdapterInterface $adapter
+     * @psalm-param (AdapterInterface&SlidingTimeWindowInterface)|(AdapterInterface&TumblingTimeWindowInterface) $adapter
      * @return $this
      */
     public function adapter(AdapterInterface $adapter): self
@@ -37,6 +40,7 @@ class Builder
 
     /**
      * @param int $failureCountThreshold
+     * @psalm-param int<1, max> $failureCountThreshold
      * @return $this
      */
     public function failureCountThreshold(int $failureCountThreshold): self
@@ -47,6 +51,7 @@ class Builder
 
     /**
      * @param int $intervalToHalfOpen
+     * @psalm-param int<1, max> $intervalToHalfOpen
      * @return $this
      */
     public function intervalToHalfOpen(int $intervalToHalfOpen): self

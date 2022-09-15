@@ -21,6 +21,7 @@ class Configuration
      */
     private $params;
 
+    /** @param array $params */
     public function __construct($params)
     {
         if (!isset($params[self::STORAGE_KEYS])) {

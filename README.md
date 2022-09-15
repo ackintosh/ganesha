@@ -639,6 +639,7 @@ Here are some articles/videos introduce Ganesha! All of them are really shining 
 
 ### Articles
 
+- 2022/09/02 [Using a circuit breaker to spare the API we are calling | Bedrock Tech Blog](https://tech.bedrockstreaming.com/2022/09/02/backend-circuit-breaker.html)
 - 2021/06/25 [Чек-лист: как оставаться отказоустойчивым, переходя на микросервисы на PHP (и как правильно падать) / Блог компании Skyeng / Хабр](https://habr.com/ru/company/skyeng/blog/560842/)
 - 2020/12/21 [장애 확산을 막기 위한 서킷브레이커 패턴을 PHP에서 구현해보자](https://saramin.github.io/2020-12-21-php-circuit-breaker-ganesha/)
 - 2020/04/22 [PHP Annotated – April 2020 | PhpStorm Blog](https://blog.jetbrains.com/phpstorm/2020/04/php-annotated-april-2020/)

@@ -2,7 +2,6 @@
 namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha\Storage\AdapterInterface;
-use LogicException;
 
 interface StrategyInterface
 {

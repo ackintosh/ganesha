@@ -113,6 +113,7 @@ class Ganesha
 
     /**
      * @param callable $callable
+     * @psalm-param callable(self::EVENT_*, string, string): void $callable
      * @return void
      */
     public function subscribe(callable $callable): void

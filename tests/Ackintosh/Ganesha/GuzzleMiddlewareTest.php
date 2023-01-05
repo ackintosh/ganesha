@@ -2,6 +2,7 @@
 namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha\Exception\RejectedException;
+use Ackintosh\Ganesha\GuzzleMiddleware\FailureDetectorInterface;
 use Ackintosh\Ganesha\Storage\Adapter\Memcached;
 use Ackintosh\Ganesha\Storage\Adapter\Redis;
 use GuzzleHttp\Client;
@@ -96,6 +97,28 @@ class GuzzleMiddlewareTest extends TestCase
 
     /**
      * @test
+     * @vcr guzzle_responses.yml
+     */
+    public function failureDetectorControlsIfResponseIsFailure()
+    {
+        $failureDetector = $this->createMock(FailureDetectorInterface::class);
+        $failureDetector->expects($this->once())->method('isFailureResponse')->willReturn(true);
+        $client = $this->buildClient($failureDetector);
+        $response = $client->get('http://api.example.com/awesome_resource/200');
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(
+            1,
+            $this->adapter->load(Storage\StorageKeys::KEY_PREFIX . 'api.example.com' . Storage\StorageKeys::KEY_SUFFIX_FAILURE)
+        );
+        $this->assertSame(
+            0,
+            $this->adapter->load(Storage\StorageKeys::KEY_PREFIX . 'api.example.com' . Storage\StorageKeys::KEY_SUFFIX_SUCCESS)
+        );
+    }
+
+    /**
+     * @test
      */
     public function recordsFailureOnRequestTimedOut()
     {
@@ -162,7 +185,7 @@ class GuzzleMiddlewareTest extends TestCase
     /**
      * @return Client
      */
-    private function buildClient()
+    private function buildClient(?FailureDetectorInterface $failureDetector = null)
     {
         $ganesha = Builder::withRateStrategy()
             ->timeWindow(30)
@@ -172,7 +195,8 @@ class GuzzleMiddlewareTest extends TestCase
             ->adapter($this->adapter)
             ->build();
 
-        $middleware = new GuzzleMiddleware($ganesha);
+
+        $middleware = new GuzzleMiddleware($ganesha, null, $failureDetector);
         $handlers = HandlerStack::create();
         $handlers->push($middleware);
 

@@ -40,11 +40,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Could not install memcached on PHP 8.0.0 · Issue #354 · shivammathur/setup-php
-      # https://github.com/shivammathur/setup-php/issues/354
-      - name: Install libmemcached
-        run: sudo apt-get install libmemcached-dev -y
-
       # https://github.com/shivammathur/setup-php
       - name: Install PHP
         uses: shivammathur/setup-php@v2

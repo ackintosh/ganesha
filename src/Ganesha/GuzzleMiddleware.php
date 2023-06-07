@@ -46,7 +46,7 @@ class GuzzleMiddleware
             $serviceName = $this->serviceNameExtractor->extract($request, $options);
 
             if (!$this->ganesha->isAvailable($serviceName)) {
-                return \GuzzleHttp\Promise\rejection_for(
+                return \GuzzleHttp\Promise\Create::rejectionFor(
                     new RejectedException(
                         sprintf('"%s" is not available', $serviceName)
                     )
@@ -62,11 +62,11 @@ class GuzzleMiddleware
                     } else {
                         $this->ganesha->success($serviceName);
                     }
-                    return \GuzzleHttp\Promise\promise_for($value);
+                    return \GuzzleHttp\Promise\Create::promiseFor($value);
                 },
                 function ($reason) use ($serviceName) {
                     $this->ganesha->failure($serviceName);
-                    return \GuzzleHttp\Promise\rejection_for($reason);
+                    return \GuzzleHttp\Promise\Create::rejectionFor($reason);
                 }
             );
         };

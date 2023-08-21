@@ -18,7 +18,7 @@
   ],
   "require": {
     "php": ">=8.0",
-    "psr/http-message": "~1.0"
+    "psr/http-message": "^1.0|^2.0"
   },
   "suggest": {
     "guzzlehttp/guzzle": "Allows the usage of the Guzzle Middleware",
@@ -35,7 +35,7 @@
     "php-vcr/phpunit-testlistener-vcr": "dev-php8 as 3.2.2",
     "php-coveralls/php-coveralls": "~2.5",
     "predis/predis": "^1.1",
-    "guzzlehttp/guzzle": "~6.5",
+    "guzzlehttp/guzzle": "^7.4.5",
     "friendsofphp/php-cs-fixer": "^v3.1.0",
     "vimeo/psalm" : "*",
     "ext-redis": "~5.1",

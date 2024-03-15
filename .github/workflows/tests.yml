@@ -46,7 +46,9 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           tools: composer
-          extensions: apcu, redis, memcached, mongodb
+          # Specific versions of extensions available on PECL can be set up by suffixing the extension's name with the version.
+          # https://github.com/shivammathur/setup-php?tab=readme-ov-file#heavy_plus_sign-php-extension-support
+          extensions: apcu, redis-5.3.7, memcached, mongodb
           ini-values: apc.enable_cli=1
           coverage: xdebug
         env:

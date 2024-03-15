@@ -19,6 +19,9 @@ jobs:
         with:
           php-version: 8.0
           tools: composer
+          # Specific versions of extensions available on PECL can be set up by suffixing the extension's name with the version.
+          # https://github.com/shivammathur/setup-php?tab=readme-ov-file#heavy_plus_sign-php-extension-support
+          extensions: apcu, redis-5.3.7, memcached, mongodb
         env:
           fail-fast: true
 

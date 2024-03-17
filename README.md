@@ -668,18 +668,19 @@ Here are some articles/videos introduce Ganesha! All of them are really shining 
 
 ### Articles
 
-- 2022/09/02 [Using a circuit breaker to spare the API we are calling | Bedrock Tech Blog](https://tech.bedrockstreaming.com/2022/09/02/backend-circuit-breaker.html)
-- 2021/06/25 [Чек-лист: как оставаться отказоустойчивым, переходя на микросервисы на PHP (и как правильно падать) / Блог компании Skyeng / Хабр](https://habr.com/ru/company/skyeng/blog/560842/)
-- 2020/12/21 [장애 확산을 막기 위한 서킷브레이커 패턴을 PHP에서 구현해보자](https://saramin.github.io/2020-12-21-php-circuit-breaker-ganesha/)
-- 2020/04/22 [PHP Annotated – April 2020 | PhpStorm Blog](https://blog.jetbrains.com/phpstorm/2020/04/php-annotated-april-2020/)
-- 2020/03/23 [Circuit Breaker - SarvenDev](https://sarvendev.com/en/2020/03/circuit-breaker/)
-- 2020/03/23 [PHP-Дайджест № 177 (23 марта – 6 апреля 2020) / Хабр](https://habr.com/ru/post/495838/)
-- 2019/08/01 [PHP Weekly. Archive. August 1, 2019. News, Articles and more all about PHP](http://www.phpweekly.com/archive/2019-08-01.html)
-- 2019/07/15 [PHP Annotated – July 2019 | PhpStorm Blog](https://blog.jetbrains.com/phpstorm/2019/07/php-annotated-july-2019/)
-- 2019/04/25 [PHP Weekly. Archive. April 25, 2019. News, Articles and more all about PHP](http://www.phpweekly.com/archive/2019-04-25.html)
-- 2019/03/18 [A Semana PHP - Edição Nº229 | Revue](https://www.getrevue.co/profile/asemanaphp/issues/a-semana-php-edicao-n-229-165581)
-- 2018/06/08 [Безопасное взаимодействие в распределенных системах / Блог компании Badoo / Хабр](https://habr.com/ru/company/badoo/blog/413555/)
-- 2018/01/22 [PHP DIGEST #12: NEWS & TOOLS (JANUARY 1 - JANUARY 14, 2018)](https://www.zfort.com/blog/php-digest-january-14-2018)
+- 2024-02-13 [Webhooks at scale @Yousign. Yousign s’appuie sur des webhooks pour… | by Fabien Paitry | Yousign Engineering & Product](https://medium.com/yousign-engineering-product/webhooks-at-scale-yousign-89677f9e8ef1)
+- 2022-09-02 [Using a circuit breaker to spare the API we are calling | Bedrock Tech Blog](https://tech.bedrockstreaming.com/2022/09/02/backend-circuit-breaker.html)
+- 2021-06-25 [Чек-лист: как оставаться отказоустойчивым, переходя на микросервисы на PHP (и как правильно падать) / Блог компании Skyeng / Хабр](https://habr.com/ru/company/skyeng/blog/560842/)
+- 2020-12-21 [장애 확산을 막기 위한 서킷브레이커 패턴을 PHP에서 구현해보자](https://saramin.github.io/2020-12-21-php-circuit-breaker-ganesha/)
+- 2020-04-22 [PHP Annotated – April 2020 | PhpStorm Blog](https://blog.jetbrains.com/phpstorm/2020/04/php-annotated-april-2020/)
+- 2020-03-23 [Circuit Breaker - SarvenDev](https://sarvendev.com/en/2020/03/circuit-breaker/)
+- 2020-03-23 [PHP-Дайджест № 177 (23 марта – 6 апреля 2020) / Хабр](https://habr.com/ru/post/495838/)
+- 2019-08-01 [PHP Weekly. Archive. August 1, 2019. News, Articles and more all about PHP](http://www.phpweekly.com/archive/2019-08-01.html)
+- 2019-07-15 [PHP Annotated – July 2019 | PhpStorm Blog](https://blog.jetbrains.com/phpstorm/2019/07/php-annotated-july-2019/)
+- 2019-04-25 [PHP Weekly. Archive. April 25, 2019. News, Articles and more all about PHP](http://www.phpweekly.com/archive/2019-04-25.html)
+- 2019-03-18 [A Semana PHP - Edição Nº229 | Revue](https://www.getrevue.co/profile/asemanaphp/issues/a-semana-php-edicao-n-229-165581)
+- 2018-06-08 [Безопасное взаимодействие в распределенных системах / Блог компании Badoo / Хабр](https://habr.com/ru/company/badoo/blog/413555/)
+- 2018-01-22 [PHP DIGEST #12: NEWS & TOOLS (JANUARY 1 - JANUARY 14, 2018)](https://www.zfort.com/blog/php-digest-january-14-2018)
 
 ### Videos
 

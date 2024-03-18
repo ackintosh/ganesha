@@ -13,7 +13,7 @@ RUN apt-get update \
  && echo 'extension=zip.so' >> /usr/local/etc/php/php.ini \
  && yes '' | pecl install memcached \
  && echo 'extension=memcached.so' >> /usr/local/etc/php/php.ini \
- && yes '' | pecl install redis \
+ && yes '' | pecl install redis-5.3.7 \
  && echo 'extension=redis.so' >> /usr/local/etc/php/php.ini \
  && yes '' | pecl install xdebug-3.1.5 \
  && echo 'zend_extension=xdebug.so' >> /usr/local/etc/php/php.ini \

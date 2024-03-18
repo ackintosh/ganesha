@@ -18,6 +18,7 @@ services:
       GANESHA_EXAMPLE_REDIS: "redis"
       GANESHA_EXAMPLE_MONGO: "mongo"
       RUN_IN_DOCKER_COMPOSE: 1
+      XDEBUG_MODE: coverage
   memcached:
     image: memcached:1.5.4
     container_name: memcached

@@ -1,4 +1,5 @@
 <?php
+
 const DEFAULT_REDIRECTS = 3;
 
 $current = $_GET['current'] ?? 0;

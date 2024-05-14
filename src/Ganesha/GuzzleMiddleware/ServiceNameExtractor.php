@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\GuzzleMiddleware;
 
 use Psr\Http\Message\RequestInterface;
@@ -15,12 +16,7 @@ class ServiceNameExtractor implements ServiceNameExtractorInterface
      */
     const HEADER_NAME = 'X-Ganesha-Service-Name';
 
-    /**
-     * @param RequestInterface $request
-     * @param array $requestOptions
-     * @return string
-     */
-    public function extract(RequestInterface $request, array $requestOptions)
+    public function extract(RequestInterface $request, array $requestOptions): string
     {
         if (array_key_exists(self::OPTION_KEY, $requestOptions)) {
             return $requestOptions[self::OPTION_KEY];

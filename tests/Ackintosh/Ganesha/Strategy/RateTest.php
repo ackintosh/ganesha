@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\Strategy;
 
 use Ackintosh\Ganesha\Storage\AdapterInterface;

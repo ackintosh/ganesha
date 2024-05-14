@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh;
 
 use Ackintosh\Ganesha\Builder;

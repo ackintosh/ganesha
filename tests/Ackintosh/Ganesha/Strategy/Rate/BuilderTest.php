@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\Strategy\Rate;
 
 use Ackintosh\Ganesha\Storage\StorageKeysInterface;

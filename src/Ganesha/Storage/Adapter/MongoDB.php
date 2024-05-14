@@ -25,12 +25,6 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
      */
     private $collectionName;
 
-    /**
-     * MongoDB constructor.
-     * @param \MongoDB\Driver\Manager $manager
-     * @param string $dbName
-     * @param string $collectionName
-     */
     public function __construct(\MongoDB\Driver\Manager $manager, string $dbName, string $collectionName)
     {
         $this->manager = $manager;
@@ -38,25 +32,17 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
         $this->collectionName = $collectionName;
     }
 
-    /**
-     * @return bool
-     */
     public function supportCountStrategy(): bool
     {
         return true;
     }
 
-    /**
-     * @return bool
-     */
     public function supportRateStrategy(): bool
     {
         return true;
     }
 
     /**
-     * @param Ganesha\Context $context
-     * @return void
      * @codeCoverageIgnore
      */
     public function setContext(Ganesha\Context $context): void
@@ -73,8 +59,6 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     }
 
     /**
-     * @param string $service
-     * @return int
      * @throws StorageException
      */
     public function load(string $service): int
@@ -93,9 +77,6 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     }
 
     /**
-     * @param string $service
-     * @param int $count
-     * @return void
      * @throws StorageException
      */
     public function save(string $service, int $count): void
@@ -104,8 +85,6 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     }
 
     /**
-     * @param string $service
-     * @return void
      * @throws StorageException
      */
     public function increment(string $service): void
@@ -114,8 +93,6 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     }
 
     /**
-     * @param string $service
-     * @return void
      * @throws StorageException
      */
     public function decrement(string $service): void
@@ -124,8 +101,6 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     }
 
     /**
-     * @param string $service
-     * @param int $lastFailureTime
      * @throws StorageException
      */
     public function saveLastFailureTime(string $service, int $lastFailureTime): void
@@ -134,8 +109,6 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     }
 
     /**
-     * @param  string $service
-     * @return int
      * @throws StorageException
      */
     public function loadLastFailureTime(string $service): int
@@ -153,8 +126,6 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     }
 
     /**
-     * @param string $service
-     * @param int $status
      * @throws StorageException
      */
     public function saveStatus(string $service, int $status): void
@@ -163,8 +134,6 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
     }
 
     /**
-     * @param  string $service
-     * @return int
      * @throws StorageException
      */
     public function loadStatus(string $service): int
@@ -193,11 +162,6 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
         return $this->dbName . '.' . $this->collectionName;
     }
 
-    /**
-     * @param $filter
-     * @param array $queryOptions
-     * @return \MongoDB\Driver\Cursor
-     */
     private function read(array $filter, array $queryOptions = []): Cursor
     {
         try {
@@ -210,31 +174,16 @@ class MongoDB implements AdapterInterface, TumblingTimeWindowInterface, SlidingT
         }
     }
 
-    /**
-     * @param $filter
-     * @param array $deleteOptions
-     * @return void
-     */
     private function delete(array $filter, array $deleteOptions = []): void
     {
         $this->bulkWrite($filter, $options = ['deleteOptions' => $deleteOptions], 'delete');
     }
 
-    /**
-     * @param $filter
-     * @param $newObj
-     * @param array $updateOptions
-     */
     private function update(array $filter, array $newObj, array $updateOptions = ['multi' => false, 'upsert' => true]): void
     {
         $this->bulkWrite($filter, $options = ['newObj' => $newObj, 'updateOptions' => $updateOptions], 'update');
     }
 
-    /**
-     * @param $filter
-     * @param array $options
-     * @param string $command
-     */
     private function bulkWrite(array $filter, array $options, string $command): void
     {
         try {

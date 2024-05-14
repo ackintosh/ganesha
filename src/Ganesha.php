@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh;
 
 use Ackintosh\Ganesha\Exception\StorageException;
@@ -48,23 +49,15 @@ class Ganesha
      */
     private static $disabled = false;
 
-    /**
-     * Ganesha constructor.
-     *
-     * @param StrategyInterface $strategy
-     */
-    public function __construct($strategy)
+    public function __construct(StrategyInterface $strategy)
     {
         $this->strategy = $strategy;
     }
 
     /**
-     * records failure
-     *
-     * @param string $service
-     * @return void
+     * Records failure
      */
-    public function failure($service): void
+    public function failure(string $service): void
     {
         try {
             if ($this->strategy->recordFailure($service) === self::STATUS_TRIPPED) {
@@ -76,12 +69,9 @@ class Ganesha
     }
 
     /**
-     * records success
-     *
-     * @param string $service
-     * @return void
+     * Records success
      */
-    public function success($service): void
+    public function success(string $service): void
     {
         try {
             if ($this->strategy->recordSuccess($service) === self::STATUS_CALMED_DOWN) {
@@ -92,11 +82,7 @@ class Ganesha
         }
     }
 
-    /**
-     * @param string $service
-     * @return bool
-     */
-    public function isAvailable($service): bool
+    public function isAvailable(string $service): bool
     {
         if (self::$disabled) {
             return true;
@@ -112,21 +98,13 @@ class Ganesha
     }
 
     /**
-     * @param callable $callable
      * @psalm-param callable(self::EVENT_*, string, string): void $callable
-     * @return void
      */
     public function subscribe(callable $callable): void
     {
         $this->subscribers[] = $callable;
     }
 
-    /**
-     * @param string $event
-     * @param string $service
-     * @param string $message
-     * @return void
-     */
     private function notify(string $event, string $service, string $message): void
     {
         foreach ($this->subscribers as $s) {
@@ -135,9 +113,7 @@ class Ganesha
     }
 
     /**
-     * disable
-     *
-     * @return void
+     * Disable
      */
     public static function disable(): void
     {
@@ -145,9 +121,7 @@ class Ganesha
     }
 
     /**
-     * enable
-     *
-     * @return void
+     * Enable
      */
     public static function enable(): void
     {
@@ -155,9 +129,7 @@ class Ganesha
     }
 
     /**
-     * resets all counts
-     *
-     * @return void
+     * Resets all counts
      */
     public function reset(): void
     {

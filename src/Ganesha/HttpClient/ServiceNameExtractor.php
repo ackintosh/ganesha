@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\HttpClient;
 
 final class ServiceNameExtractor implements ServiceNameExtractorInterface

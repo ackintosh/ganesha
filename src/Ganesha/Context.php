@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha\Storage\Adapter\SlidingTimeWindowInterface;
@@ -34,11 +35,6 @@ class Context
      */
     private $configuration;
 
-    /**
-     * @param string $strategyClass
-     * @param AdapterInterface $adapter
-     * @param Configuration $configuration
-     */
     public function __construct(string $strategyClass, AdapterInterface $adapter, Configuration $configuration)
     {
         $this->strategy = $this->determineStrategyContext($strategyClass, $adapter);

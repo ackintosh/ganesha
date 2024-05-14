@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha;

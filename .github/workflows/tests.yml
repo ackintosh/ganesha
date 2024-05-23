@@ -38,7 +38,7 @@ jobs:
           - ""
           - --prefer-lowest --prefer-stable
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       # https://github.com/shivammathur/setup-php
       - name: Install PHP

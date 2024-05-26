@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\Strategy\Count;
 
 use Ackintosh\Ganesha\Storage\StorageKeysInterface;

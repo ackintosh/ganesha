@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha;
@@ -20,10 +21,6 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
      */
     private $context;
 
-    /**
-     * Memcached constructor.
-     * @param \Memcached $memcached
-     */
     public function __construct(\Memcached $memcached)
     {
         // initial_value in (increment|decrement) requires \Memcached::OPT_BINARY_PROTOCOL
@@ -31,25 +28,17 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
         $this->memcached = $memcached;
     }
 
-    /**
-     * @return bool
-     */
     public function supportCountStrategy(): bool
     {
         return true;
     }
 
-    /**
-     * @return bool
-     */
     public function supportRateStrategy(): bool
     {
         return true;
     }
 
     /**
-     * @param Ganesha\Context $context
-     * @return void
      * @codeCoverageIgnore
      */
     public function setContext(Ganesha\Context $context): void
@@ -66,8 +55,6 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * @param string $service
-     * @return int
      * @throws StorageException
      */
     public function load(string $service): int
@@ -78,9 +65,6 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * @param string $service
-     * @param int $count
-     * @return void
      * @throws StorageException
      */
     public function save(string $service, int $count): void
@@ -91,8 +75,6 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * @param string $service
-     * @return void
      * @throws StorageException
      */
     public function increment(string $service): void
@@ -110,8 +92,6 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * @param string $service
-     * @return void
      * @throws StorageException
      */
     public function decrement(string $service): void
@@ -123,8 +103,6 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * @param string $service
-     * @param int    $lastFailureTime
      * @throws StorageException
      */
     public function saveLastFailureTime(string $service, int $lastFailureTime): void
@@ -135,8 +113,6 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * @param  string $service
-     * @return int
      * @throws StorageException
      */
     public function loadLastFailureTime(string $service): int
@@ -147,8 +123,6 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * @param string $service
-     * @param int    $status
      * @throws StorageException
      */
     public function saveStatus(string $service, int $status): void
@@ -159,8 +133,6 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * @param  string $service
-     * @return int
      * @throws StorageException
      */
     public function loadStatus(string $service): int
@@ -225,7 +197,6 @@ class Memcached implements AdapterInterface, TumblingTimeWindowInterface
     /**
      * Throws an exception if some error occurs in memcached.
      *
-     * @return void
      * @throws StorageException
      */
     private function throwExceptionIfErrorOccurred(): void

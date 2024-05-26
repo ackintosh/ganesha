@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\Strategy\Rate;
 
 use Ackintosh\Ganesha\Configuration;
@@ -12,8 +13,7 @@ class Builder
 {
     use BuildGanesha;
 
-    /** @var array */
-    private $params;
+    private array $params = [];
 
     /**
      * @var array
@@ -33,9 +33,7 @@ class Builder
     private static $adapterRequirement = 'supportRateStrategy';
 
     /**
-     * @param AdapterInterface $adapter
      * @psalm-param (AdapterInterface&SlidingTimeWindowInterface)|(AdapterInterface&TumblingTimeWindowInterface) $adapter
-     * @return $this
      */
     public function adapter(AdapterInterface $adapter): self
     {
@@ -44,9 +42,7 @@ class Builder
     }
 
     /**
-     * @param int $failureRateThreshold
      * @psalm-param int<1, 100> $failureRateThreshold
-     * @return $this
      */
     public function failureRateThreshold(int $failureRateThreshold): self
     {
@@ -55,9 +51,7 @@ class Builder
     }
 
     /**
-     * @param int $intervalToHalfOpen
      * @psalm-param int<1, max> $intervalToHalfOpen
-     * @return $this
      */
     public function intervalToHalfOpen(int $intervalToHalfOpen): self
     {
@@ -65,10 +59,6 @@ class Builder
         return $this;
     }
 
-    /**
-     * @param StorageKeysInterface $storageKeys
-     * @return $this
-     */
     public function storageKeys(StorageKeysInterface $storageKeys): self
     {
         $this->params[Configuration::STORAGE_KEYS] = $storageKeys;
@@ -76,9 +66,7 @@ class Builder
     }
 
     /**
-     * @param int $minimumRequests
      * @psalm-param int<1, max> $minimumRequests
-     * @return $this
      */
     public function minimumRequests(int $minimumRequests): self
     {
@@ -87,9 +75,7 @@ class Builder
     }
 
     /**
-     * @param int $timeWindow
      * @psalm-param int<1, max> $timeWindow
-     * @return $this
      */
     public function timeWindow(int $timeWindow): self
     {

@@ -1,4 +1,5 @@
 <?php
+
 use \Ackintosh\Ganesha;
 use \Ackintosh\Ganesha\Builder;
 

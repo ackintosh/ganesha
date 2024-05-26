@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha;
@@ -25,7 +26,6 @@ class Apcu implements AdapterInterface, TumblingTimeWindowInterface
 
     /**
      * Returns returns whether the adapter supports counting strategy
-     * @return bool
      */
     public function supportCountStrategy(): bool
     {
@@ -34,17 +34,12 @@ class Apcu implements AdapterInterface, TumblingTimeWindowInterface
 
     /**
      * Returns returns whether the adapter supports rating strategy
-     * @return bool
      */
     public function supportRateStrategy(): bool
     {
         return true;
     }
 
-    /**
-     * @param Ganesha\Context $context
-     * @return void
-     */
     public function setContext(Ganesha\Context $context): void
     {
         $this->storageKeys = $context->configuration()->storageKeys();
@@ -58,20 +53,11 @@ class Apcu implements AdapterInterface, TumblingTimeWindowInterface
         // nop
     }
 
-    /**
-     * @param  string $key
-     * @return int
-     */
     public function load(string $key): int
     {
         return (int) $this->apcuStore->fetch($key);
     }
 
-    /**
-     * @param  string $key
-     * @param  int    $count
-     * @return void
-     */
     public function save(string $key, int $count): void
     {
         $result = $this->apcuStore->store($key, $count);
@@ -81,10 +67,6 @@ class Apcu implements AdapterInterface, TumblingTimeWindowInterface
         }
     }
 
-    /**
-     * @param  string $key
-     * @return void
-     */
     public function increment(string $key): void
     {
         $this->apcuStore->inc($key, 1, $success);
@@ -95,12 +77,9 @@ class Apcu implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * decrement failure count
+     * Decrement failure count
      *
      * If the operation would decrease the value below 0, the new value must be 0.
-     *
-     * @param  string $key
-     * @return void
      */
     public function decrement(string $key): void
     {
@@ -124,11 +103,7 @@ class Apcu implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * sets last failure time
-     *
-     * @param  string $key
-     * @param  int    $lastFailureTime
-     * @return void
+     * Sets last failure time
      */
     public function saveLastFailureTime(string $key, int $lastFailureTime): void
     {
@@ -140,10 +115,7 @@ class Apcu implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * returns last failure time
-     *
-     * @param  string $key
-     * @return int | null
+     * Returns last failure time
      */
     public function loadLastFailureTime(string $key): ?int
     {
@@ -151,11 +123,7 @@ class Apcu implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * sets status
-     *
-     * @param  string $key
-     * @param  int    $status
-     * @return void
+     * Sets status
      */
     public function saveStatus(string $key, int $status): void
     {
@@ -167,10 +135,7 @@ class Apcu implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * returns status
-     *
-     * @param  string $key
-     * @return int
+     * Returns status
      */
     public function loadStatus(string $key): int
     {
@@ -188,9 +153,7 @@ class Apcu implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * resets all counts
-     *
-     * @return void
+     * Resets all counts
      */
     public function reset(): void
     {

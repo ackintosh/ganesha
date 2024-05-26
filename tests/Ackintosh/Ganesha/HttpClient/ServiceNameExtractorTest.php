@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\HttpClient;
 
 use PHPUnit\Framework\TestCase;

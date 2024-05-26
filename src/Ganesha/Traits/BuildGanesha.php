@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\Traits;
 
 use Ackintosh\Ganesha;
@@ -23,7 +24,6 @@ trait BuildGanesha
     }
 
     /**
-     * @return Ganesha
      * @throws \InvalidArgumentException
      */
     public function build(): Ganesha

@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\GuzzleMiddleware;
 
 use GuzzleHttp\Psr7\Request;

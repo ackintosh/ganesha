@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\Strategy\Count;
 
 use Ackintosh\Ganesha;
@@ -11,8 +12,7 @@ class Builder
 {
     use Ganesha\Traits\BuildGanesha;
 
-    /** @var array */
-    private $params;
+    private array $params = [];
 
     /** @var array */
     private static $requirements = [
@@ -28,9 +28,7 @@ class Builder
     private static $adapterRequirement = 'supportCountStrategy';
 
     /**
-     * @param AdapterInterface $adapter
      * @psalm-param (AdapterInterface&SlidingTimeWindowInterface)|(AdapterInterface&TumblingTimeWindowInterface) $adapter
-     * @return $this
      */
     public function adapter(AdapterInterface $adapter): self
     {
@@ -39,9 +37,7 @@ class Builder
     }
 
     /**
-     * @param int $failureCountThreshold
      * @psalm-param int<1, max> $failureCountThreshold
-     * @return $this
      */
     public function failureCountThreshold(int $failureCountThreshold): self
     {
@@ -50,9 +46,7 @@ class Builder
     }
 
     /**
-     * @param int $intervalToHalfOpen
      * @psalm-param int<1, max> $intervalToHalfOpen
-     * @return $this
      */
     public function intervalToHalfOpen(int $intervalToHalfOpen): self
     {
@@ -60,10 +54,6 @@ class Builder
         return $this;
     }
 
-    /**
-     * @param Ganesha\Storage\StorageKeysInterface $storageKeys
-     * @return $this
-     */
     public function storageKeys(Ganesha\Storage\StorageKeysInterface $storageKeys): self
     {
         $this->params[Configuration::STORAGE_KEYS] = $storageKeys;

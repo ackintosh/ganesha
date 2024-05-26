@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha;
 
 use Ackintosh\Ganesha\Storage\AdapterInterface;
@@ -16,13 +17,9 @@ class Configuration
     const INTERVAL_TO_HALF_OPEN = 'intervalToHalfOpen';
     const STORAGE_KEYS = 'storageKeys';
 
-    /**
-     * @var array
-     */
-    private $params;
+    private array $params;
 
-    /** @param array $params */
-    public function __construct($params)
+    public function __construct(array $params)
     {
         if (!isset($params[self::STORAGE_KEYS])) {
             $params[self::STORAGE_KEYS] = new StorageKeys();
@@ -61,7 +58,6 @@ class Configuration
     }
 
     /**
-     * @param array $params
      * @throws \InvalidArgumentException
      */
     public static function validate(array $params): void

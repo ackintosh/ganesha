@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha;
 
 use PHPUnit\Framework\TestCase;

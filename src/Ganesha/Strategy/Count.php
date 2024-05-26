@@ -1,4 +1,5 @@
 <?php
+
 namespace Ackintosh\Ganesha\Strategy;
 
 use Ackintosh\Ganesha;
@@ -19,21 +20,12 @@ class Count implements StrategyInterface
      */
     private $storage;
 
-    /**
-     * @param Configuration $configuration
-     * @param Storage $storage
-     */
     private function __construct(Configuration $configuration, Storage $storage)
     {
         $this->configuration = $configuration;
         $this->storage = $storage;
     }
 
-    /**
-     * @param Storage\AdapterInterface $adapter
-     * @param Configuration $configuration
-     * @return Count
-     */
     public static function create(Storage\AdapterInterface $adapter, Configuration $configuration): StrategyInterface
     {
         return new self(
@@ -46,10 +38,6 @@ class Count implements StrategyInterface
         );
     }
 
-    /**
-     * @param string $service
-     * @return int
-     */
     public function recordFailure(string $service): int
     {
         $this->storage->setLastFailureTime($service, time());
@@ -65,10 +53,6 @@ class Count implements StrategyInterface
         return Ganesha::STATUS_CALMED_DOWN;
     }
 
-    /**
-     * @param string $service
-     * @return int
-     */
     public function recordSuccess(string $service): ?int
     {
         $this->storage->decrementFailureCount($service);
@@ -84,26 +68,17 @@ class Count implements StrategyInterface
         return null;
     }
 
-    /**
-     * @return void
-     */
     public function reset(): void
     {
         $this->storage->reset();
     }
 
-    /**
-     * @param string $service
-     * @return bool
-     */
     public function isAvailable(string $service): bool
     {
         return $this->isClosed($service) || $this->isHalfOpen($service);
     }
 
     /**
-     * @param string $service
-     * @return bool
      * @throws StorageException
      */
     private function isClosed(string $service): bool
@@ -112,8 +87,6 @@ class Count implements StrategyInterface
     }
 
     /**
-     * @param string $service
-     * @return bool
      * @throws StorageException
      */
     private function isHalfOpen(string $service): bool

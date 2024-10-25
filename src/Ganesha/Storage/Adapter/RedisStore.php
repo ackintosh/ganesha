@@ -3,6 +3,7 @@
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha\Exception\StorageException;
+use Ackintosh\Ganesha\Storage;
 use Exception;
 
 class RedisStore
@@ -182,6 +183,53 @@ class RedisStore
                 return false;
             }
             return $result;
+        } catch (Exception $exception) {
+            throw new StorageException($exception->getMessage(), $exception->getCode(), $exception);
+        }
+    }
+
+    /**
+     * Resets the storage.
+     *
+     * @return  void
+     *
+     * @throws StorageException
+     */
+    public function reset(): void
+    {
+        try {
+            $redisPrefix = $this->redis->getOption(\Redis::OPT_PREFIX);
+            $ganeshaPrefix = Storage\StorageKeys::KEY_PREFIX;
+            $prefix = $redisPrefix . $ganeshaPrefix;
+            $suffixes = [
+                Storage\StorageKeys::KEY_SUFFIX_SUCCESS,
+                Storage\StorageKeys::KEY_SUFFIX_FAILURE,
+                Storage\StorageKeys::KEY_SUFFIX_REJECTION,
+                Storage\StorageKeys::KEY_SUFFIX_LAST_FAILURE_TIME,
+                Storage\StorageKeys::KEY_SUFFIX_STATUS,
+            ];
+            $suffixesRegex = implode('|', array_map('preg_quote', $suffixes));
+
+            $iterator = null;
+            do {
+                $keys = $this->redis->scan($iterator, $prefix . '*');
+                if ($keys !== false) {
+                    $keysToDelete = array_filter(array_map(function ($key) use ($prefix, $redisPrefix, $suffixesRegex) {
+                        return preg_match("/^{$prefix}(.*)(?:$suffixesRegex)$/", $key) ? substr($key, strlen($redisPrefix)) : null;
+                    }, $keys));
+
+                    if (!empty($keysToDelete)) {
+                        $deleted = $this->redis->del($keysToDelete);
+                        if ($deleted !== count($keysToDelete)) {
+                            throw new StorageException(sprintf(
+                                "Failed to delete all keys. Deleted %d out of %d keys.",
+                                $deleted,
+                                count($keysToDelete)
+                            ));
+                        }
+                    }
+                }
+            } while ($iterator > 0);
         } catch (Exception $exception) {
             throw new StorageException($exception->getMessage(), $exception->getCode(), $exception);
         }

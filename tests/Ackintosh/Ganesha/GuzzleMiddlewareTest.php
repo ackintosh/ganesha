@@ -155,8 +155,6 @@ class GuzzleMiddlewareTest extends TestCase
      */
     public function reject()
     {
-        $this->expectException(RejectedException::class);
-
         // Build Ganesha which has count strategy with memcached adapter
         $m = new \Memcached();
         $m->addServer(
@@ -179,6 +177,8 @@ class GuzzleMiddlewareTest extends TestCase
         $ganesha->failure($service);
         $ganesha->failure($service);
         $ganesha->failure($service);
+
+        $this->expectExceptionObject(RejectedException::withServiceName($service));
 
         $client->get('http://' . $service . '/awesome_resource');
     }

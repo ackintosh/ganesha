@@ -69,9 +69,7 @@ class GuzzleMiddleware
             if (!$this->ganesha->isAvailable($serviceName)) {
                 return call_user_func(
                     $this->rejectionForFunction,
-                    new RejectedException(
-                        sprintf('"%s" is not available', $serviceName)
-                    )
+                    RejectedException::withServiceName($serviceName),
                 );
             }
 

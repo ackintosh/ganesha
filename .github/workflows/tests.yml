@@ -41,6 +41,7 @@ jobs:
           - --prefer-lowest --prefer-stable
     # We have a dependency issue under the specific condition involving PHP 8.4 and  `--prefer-lowest --prefer-stable`,
     # so we will allow failure for the condition temporarily.
+    # Dropping the support for EOLed PHP version might resolve this.
     continue-on-error: ${{ matrix.php-version == '8.4' && matrix.composer-opts == '--prefer-lowest --prefer-stable' }}
     steps:
       - uses: actions/checkout@v4

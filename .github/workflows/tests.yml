@@ -29,6 +29,7 @@ jobs:
         ports:
           - 27017:27017
     strategy:
+      fail-fast: false
       matrix:
         php-version:
           - "8.0"

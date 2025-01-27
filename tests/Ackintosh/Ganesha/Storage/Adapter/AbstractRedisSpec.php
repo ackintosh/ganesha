@@ -8,7 +8,7 @@ use Ackintosh\Ganesha\Exception\StorageException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-abstract class AbstractRedisTest extends TestCase
+abstract class AbstractRedisSpec extends TestCase
 {
     /**
      * @var int

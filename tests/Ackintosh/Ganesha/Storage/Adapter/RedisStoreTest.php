@@ -24,7 +24,7 @@ class RedisStoreTest extends TestCase
         $this->expectException(\Ackintosh\Ganesha\Exception\StorageException::class);
 
         $mock = $this->getMockBuilder(\Redis::class)
-            ->setMethods(['zCard'])
+            ->onlyMethods(['zCard'])
             ->getMock();
         $mock->expects($this->any())
             ->method('zCard')

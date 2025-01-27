@@ -90,7 +90,7 @@ class MemcachedTest extends TestCase
     public function loadThrowsException()
     {
         $m = $this->getMockBuilder(\Memcached::class)
-            ->setMethods(['getResultCode'])
+            ->onlyMethods(['getResultCode'])
             ->getMock();
         $m->expects($this->once())
             ->method('getResultCode')
@@ -109,7 +109,7 @@ class MemcachedTest extends TestCase
     public function saveThrowsException()
     {
         $m = $this->getMockBuilder(\Memcached::class)
-            ->setMethods(['set'])
+            ->onlyMethods(['set'])
             ->getMock();
         $m->expects($this->once())
             ->method('set')
@@ -141,7 +141,7 @@ class MemcachedTest extends TestCase
     public function incrementThrowsException()
     {
         $m = $this->getMockBuilder(\Memcached::class)
-            ->setMethods(['increment'])
+            ->onlyMethods(['increment'])
             ->getMock();
         $m->expects($this->once())
             ->method('increment')
@@ -179,7 +179,7 @@ class MemcachedTest extends TestCase
     public function decrementThrowsException()
     {
         $m = $this->getMockBuilder(\Memcached::class)
-            ->setMethods(['decrement'])
+            ->onlyMethods(['decrement'])
             ->getMock();
         $m->expects($this->once())
             ->method('decrement')
@@ -210,7 +210,7 @@ class MemcachedTest extends TestCase
     public function saveLastFailureTimeThrowsException()
     {
         $m = $this->getMockBuilder(\Memcached::class)
-            ->setMethods(['set'])
+            ->onlyMethods(['set'])
             ->getMock();
         $m->expects($this->once())
             ->method('set')
@@ -229,7 +229,7 @@ class MemcachedTest extends TestCase
     public function loadLastFailureTimeThrowsException()
     {
         $m = $this->getMockBuilder(\Memcached::class)
-            ->setMethods(['getResultCode'])
+            ->onlyMethods(['getResultCode'])
             ->getMock();
         $m->expects($this->once())
             ->method('getResultCode')
@@ -260,7 +260,7 @@ class MemcachedTest extends TestCase
     public function saveStatusThrowsException()
     {
         $m = $this->getMockBuilder(\Memcached::class)
-            ->setMethods(['set'])
+            ->onlyMethods(['set'])
             ->getMock();
         $m->expects($this->once())
             ->method('set')
@@ -279,7 +279,7 @@ class MemcachedTest extends TestCase
     public function loadStatusThrowsException()
     {
         $m = $this->getMockBuilder(\Memcached::class)
-            ->setMethods(['getResultCode'])
+            ->onlyMethods(['getResultCode'])
             ->getMock();
         $m->expects($this->once())
             ->method('getResultCode')
@@ -299,7 +299,7 @@ class MemcachedTest extends TestCase
     public function resetWillDoNothingIfNoDataExists()
     {
         $m = $this->getMockBuilder(\Memcached::class)
-            ->setMethods(['getStats', 'getAllKeys', 'getResultCode'])
+            ->onlyMethods(['getStats', 'getAllKeys', 'getResultCode'])
             ->getMock();
         $m->expects($this->once())
             ->method('getStats')
@@ -325,7 +325,7 @@ class MemcachedTest extends TestCase
     public function resetThrowsExceptionWhenFailedToGetStats()
     {
         $m = $this->getMockBuilder(\Memcached::class)
-            ->setMethods(['getStats'])
+            ->onlyMethods(['getStats'])
             ->getMock();
         $m->expects($this->once())
             ->method('getStats')
@@ -346,7 +346,7 @@ class MemcachedTest extends TestCase
     public function resetThrowsExceptionWhenFailedToGetAllKeys()
     {
         $m = $this->getMockBuilder(\Memcached::class)
-            ->setMethods(['getStats', 'getAllKeys', 'getResultCode'])
+            ->onlyMethods(['getStats', 'getAllKeys', 'getResultCode'])
             ->getMock();
         $m->expects($this->once())
             ->method('getStats')

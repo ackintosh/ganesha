@@ -1,4 +1,4 @@
-FROM php:8.0-cli
+FROM php:8.1-cli
 
 COPY install_composer.sh /tmp/
 

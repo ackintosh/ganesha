@@ -2,21 +2,20 @@
 
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
-class RedisRedisSpec extends AbstractRedisSpec
+use RedisArray;
+
+class RedisArrayTest extends AbstractRedisSpec
 {
     /**
-     * @return \Redis
+     * @return RedisArray
      */
-    protected function getRedisConnection(): \Redis
+    protected function getRedisConnection(): RedisArray
     {
         if (!\extension_loaded('redis')) {
             self::markTestSkipped('No ext-redis present');
         }
 
-        $r = new \Redis();
-        $r->connect(
-            getenv('GANESHA_EXAMPLE_REDIS') ?: 'localhost'
-        );
+        $r = new RedisArray([getenv('GANESHA_EXAMPLE_REDIS') ?: 'localhost']);
         $r->flushAll();
 
         return $r;

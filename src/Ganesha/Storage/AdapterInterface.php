@@ -8,12 +8,12 @@ use Ackintosh\Ganesha\Context;
 interface AdapterInterface
 {
     /**
-     * Returns returns whether the adapter supports counting strategy
+     * Returns whether the adapter supports counting strategy
      */
     public function supportCountStrategy(): bool;
 
     /**
-     * Returns returns whether the adapter supports rating strategy
+     * Returns whether the adapter supports rating strategy
      */
     public function supportRateStrategy(): bool;
 

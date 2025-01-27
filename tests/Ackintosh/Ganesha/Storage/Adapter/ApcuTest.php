@@ -667,8 +667,8 @@ class ApcuTest extends TestCase
     }
 
     private function getApcu(
-        ApcuStore $apcStore = null,
-        StorageKeysInterface $storageKeys = null
+        ?ApcuStore $apcStore = null,
+        ?StorageKeysInterface $storageKeys = null
     ): Apcu {
         $apc = new Apcu($apcStore);
         $context = new Ganesha\Context(
@@ -680,7 +680,7 @@ class ApcuTest extends TestCase
         return $apc;
     }
 
-    private function getConfiguration(StorageKeysInterface $storageKeys = null)
+    private function getConfiguration(?StorageKeysInterface $storageKeys = null)
     {
         $configuration = $this->createMock(Configuration::class);
         $configuration->method('storageKeys')

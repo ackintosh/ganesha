@@ -24,6 +24,6 @@
     </include>
   </source>
   <extensions>
-    <bootstrap class="Ackintosh\Vcr\VcrExtension" />
+    <bootstrap class="VCR\PHPUnit\TestListener\Extension\VCRExtension" />
   </extensions>
 </phpunit>

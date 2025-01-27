@@ -13,7 +13,7 @@
   "repositories": [
     {
       "type": "git",
-      "url": "https://github.com/kornrunner/phpunit-testlistener-vcr"
+      "url": "https://github.com/marmichalski/phpunit-testlistener-vcr"
     }
   ],
   "require": {
@@ -32,7 +32,7 @@
     "symfony/http-client": "^5.3.12|^6.0",
     "symfony/yaml": "^3.0|^4.0|^5.0|^6.0",
     "php-vcr/php-vcr": "dev-master#c0aeeba0f3804fcfdb9cd6b390b0cb3be250c070 as 1.9.0",
-    "php-vcr/phpunit-testlistener-vcr": "dev-php8 as 3.2.2",
+    "php-vcr/phpunit-testlistener-vcr": "dev-phpunit-evt-system",
     "php-coveralls/php-coveralls": "~2.5",
     "predis/predis": "^1.1",
     "guzzlehttp/guzzle": "^7.4.5",

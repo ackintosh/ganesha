@@ -28,7 +28,7 @@ class Storage
     public function __construct(
         AdapterInterface $adapter,
         StorageKeysInterface $storageKeys,
-        callable $serviceNameDecorator = null
+        ?callable $serviceNameDecorator = null
     ) {
         $this->adapter = $adapter;
         $this->serviceNameDecorator = $serviceNameDecorator;

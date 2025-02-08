@@ -19,13 +19,13 @@ class Apcu implements AdapterInterface, TumblingTimeWindowInterface
     /**
      * @param ApcuStore|null $apcuStore Backing store for testing (optional)
      */
-    public function __construct(ApcuStore $apcuStore = null)
+    public function __construct(?ApcuStore $apcuStore = null)
     {
         $this->apcuStore = $apcuStore ?? new ApcuStore();
     }
 
     /**
-     * Returns returns whether the adapter supports counting strategy
+     * Returns whether the adapter supports counting strategy
      */
     public function supportCountStrategy(): bool
     {
@@ -33,7 +33,7 @@ class Apcu implements AdapterInterface, TumblingTimeWindowInterface
     }
 
     /**
-     * Returns returns whether the adapter supports rating strategy
+     * Returns whether the adapter supports rating strategy
      */
     public function supportRateStrategy(): bool
     {

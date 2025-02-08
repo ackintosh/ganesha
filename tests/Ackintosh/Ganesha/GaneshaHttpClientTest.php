@@ -239,7 +239,7 @@ class GaneshaHttpClientTest extends TestCase
         $ganesha->failure($service);
         $ganesha->failure($service);
 
-        $this->expectException(RejectedException::class);
+        $this->expectExceptionObject(RejectedException::withServiceName($service));
         $client->request('GET', 'http://'.$service.'/awesome_resource');
     }
 

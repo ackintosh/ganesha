@@ -59,7 +59,7 @@ final class GaneshaHttpClient implements HttpClientInterface
         $serviceName = $this->serviceNameExtractor->extract($method, $url, $options);
 
         if (!$this->ganesha->isAvailable($serviceName)) {
-            throw new RejectedException(sprintf('"%s" is not available', $serviceName));
+            throw RejectedException::withServiceName($serviceName);
         }
 
         $response = $this->client->request($method, $url, $this->avoidGaneshaOptionsPropagation($options));

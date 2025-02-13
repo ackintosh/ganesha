@@ -668,6 +668,7 @@ Here are some articles/videos introduce Ganesha! All of them are really shining 
 
 ### Articles
 
+- 2025-02-05 [Unorthodox Monoliths in Laravel | Studocu Tech](https://medium.com/studocu-techblog/unorthodox-monoliths-in-laravel-ebb41277780e)
 - 2024-02-13 [Webhooks at scale @Yousign. Yousign s’appuie sur des webhooks pour… | by Fabien Paitry | Yousign Engineering & Product](https://medium.com/yousign-engineering-product/webhooks-at-scale-yousign-89677f9e8ef1)
 - 2022-09-02 [Using a circuit breaker to spare the API we are calling | Bedrock Tech Blog](https://tech.bedrockstreaming.com/2022/09/02/backend-circuit-breaker.html)
 - 2021-06-25 [Чек-лист: как оставаться отказоустойчивым, переходя на микросервисы на PHP (и как правильно падать) / Блог компании Skyeng / Хабр](https://habr.com/ru/company/skyeng/blog/560842/)

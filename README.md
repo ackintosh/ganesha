@@ -10,19 +10,7 @@ Ganesha is PHP implementation of [Circuit Breaker pattern](http://martinfowler.c
 
 </div>
 
-<div align="center">
-
-**If Ganesha is saving your service from system failures, please consider [supporting](https://github.com/sponsors/ackintosh) to this project's author, [Akihito Nakano](#author), to show your :heart: and support. Thank you!**
-
-[Sponsor @ackintosh on GitHub Sponsors](https://github.com/sponsors/ackintosh)
-
-</div>
-
----
-
-This is one of the [Circuit Breaker](https://martinfowler.com/bliki/CircuitBreaker.html) implementation in PHP which has been actively developed and production ready - well-tested and well-documented. :muscle:  You can integrate Ganesha to your existing code base easily as Ganesha provides just simple interfaces and [Guzzle Middleware](https://github.com/ackintosh/ganesha#ganesha-heart-guzzle) behaves transparency.
-
-If you have an idea about enhancement, bugfix..., please let me know via [Issues](https://github.com/ackintosh/ganesha/issues). :sparkles:
+This is one of the [Circuit Breaker](https://martinfowler.com/bliki/CircuitBreaker.html) implementations in PHP that is actively developed, production-ready, well-tested and well-documented. :muscle: You can easily integrate Ganesha into your existing code base, as Ganesha provides just simple interfaces and [Guzzle Middleware](https://github.com/ackintosh/ganesha#ganesha-heart-guzzle) behaves transparency.
 
 ## Table of contents
 

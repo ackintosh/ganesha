@@ -3,6 +3,7 @@
 namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use Ackintosh\Ganesha\Exception\StorageException;
+use Illuminate\Redis\Connections\PhpRedisConnection;
 use Exception;
 
 class RedisStore
@@ -24,6 +25,7 @@ class RedisStore
             && !$redisClient instanceof \RedisArray
             && !$redisClient instanceof \RedisCluster
             && !$redisClient instanceof \Predis\ClientInterface
+            && !$redisClient instanceof PhpRedisConnection
         ) {
             throw new \InvalidArgumentException(sprintf(
                 '%s() expects parameter 1 to be Redis, RedisArray, RedisCluster, or \Predis\ClientInterface  %s given',

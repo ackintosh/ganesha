@@ -13,11 +13,11 @@
   "repositories": [
     {
       "type": "git",
-      "url": "https://github.com/kornrunner/phpunit-testlistener-vcr"
+      "url": "https://github.com/marmichalski/phpunit-testlistener-vcr"
     }
   ],
   "require": {
-    "php": ">=8.0",
+    "php": "^8.1",
     "psr/http-message": "^1.0|^2.0"
   },
   "suggest": {
@@ -28,11 +28,11 @@
     "ext-mongodb": "Allows the usage of MongoDBAdapter"
   },
   "require-dev": {
-    "phpunit/phpunit": "^9.5.10",
+    "phpunit/phpunit": "^10.5.41",
     "symfony/http-client": "^5.3.12|^6.0",
     "symfony/yaml": "^3.0|^4.0|^5.0|^6.0",
-    "php-vcr/php-vcr": "^1.4.5",
-    "php-vcr/phpunit-testlistener-vcr": "dev-php8 as 3.2.2",
+    "php-vcr/php-vcr": "dev-master#c0aeeba0f3804fcfdb9cd6b390b0cb3be250c070 as 1.9.0",
+    "php-vcr/phpunit-testlistener-vcr": "dev-phpunit-evt-system",
     "php-coveralls/php-coveralls": "~2.5",
     "predis/predis": "^1.1",
     "guzzlehttp/guzzle": "^7.4.5",

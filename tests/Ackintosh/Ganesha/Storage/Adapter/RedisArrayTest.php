@@ -4,7 +4,7 @@ namespace Ackintosh\Ganesha\Storage\Adapter;
 
 use RedisArray;
 
-class RedisArrayTest extends AbstractRedisTest
+class RedisArrayTest extends AbstractRedisSpec
 {
     /**
      * @return RedisArray

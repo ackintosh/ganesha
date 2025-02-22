@@ -66,26 +66,24 @@ class GaneshaTest extends TestCase
     /**
      * @test
      */
-    public function notifyTripped()
+    public function tripsOnce()
     {
-        $ganesha = $this->buildGanesha(
-            2,
-            10
-        );
+        $ganesha = $this->buildGanesha(2, 10);
 
-        $receiver = $this->getMockBuilder('\stdClass')
-            ->setMethods(['receive'])
-            ->getMock();
-        $receiver->expects($this->once())
-            ->method('receive')
-            ->with(Ganesha::EVENT_TRIPPED, $this->service, '');
+        $calledTimes = 0;
 
-        $ganesha->subscribe(function ($event, $service, $message) use ($receiver) {
-            $receiver->receive($event, $service, $message);
+        $ganesha->subscribe(function ($event, $service, $message) use (&$calledTimes) {
+            $this->assertSame(Ganesha::EVENT_TRIPPED, $event);
+            $this->assertSame($this->service, $service);
+            $this->assertSame('', $message);
+
+            ++$calledTimes;
         });
 
         $ganesha->failure($this->service);
         $ganesha->failure($this->service);
+
+        $this->assertSame(1, $calledTimes);
     }
 
 

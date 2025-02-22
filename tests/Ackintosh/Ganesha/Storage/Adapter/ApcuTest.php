@@ -690,7 +690,7 @@ class ApcuTest extends TestCase
 
     private function getStorageKeys()
     {
-        $storageKeys = $this->getMockForAbstractClass(StorageKeysInterface::class);
+        $storageKeys = $this->createMock(StorageKeysInterface::class);
         $storageKeys->method('prefix')->willReturn('ganesha_');
         $storageKeys->method('success')->willReturn('_success');
         $storageKeys->method('failure')->willReturn('_failure');
@@ -702,16 +702,16 @@ class ApcuTest extends TestCase
 
     private function getSuccessKey()
     {
-        return sprintf('ganesha_%s_success', $this->getName());
+        return sprintf('ganesha_%s_success', $this->name());
     }
 
     private function getLastFailureTimeKey()
     {
-        return sprintf('ganesha_%s_last_failure_time', $this->getName());
+        return sprintf('ganesha_%s_last_failure_time', $this->name());
     }
 
     private function getStatusKey()
     {
-        return sprintf('ganesha_%s_status', $this->getName());
+        return sprintf('ganesha_%s_status', $this->name());
     }
 }

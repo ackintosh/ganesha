@@ -17,7 +17,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: 8.1
           tools: composer
           # Specific versions of extensions available on PECL can be set up by suffixing the extension's name with the version.
           # https://github.com/shivammathur/setup-php?tab=readme-ov-file#heavy_plus_sign-php-extension-support

@@ -5,7 +5,7 @@ namespace Ackintosh\Ganesha\Storage\Adapter;
 use Predis\Client;
 use Predis\ClientInterface;
 
-class PredisRedisTest extends AbstractRedisTest
+class PredisRedisTest extends AbstractRedisSpec
 {
     protected function getRedisConnection(): ClientInterface
     {

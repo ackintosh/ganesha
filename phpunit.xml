@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="tests/bootstrap.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
-  <coverage processUncoveredFiles="true">
-    <include>
-      <directory suffix=".php">./src</directory>
-    </include>
+<phpunit
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+  bootstrap="tests/bootstrap.php"
+  colors="true"
+>
+  <coverage>
     <report>
       <!-- https://github.com/php-coveralls/php-coveralls#phpunit -->
       <clover outputFile="build/logs/clover.xml"/>
@@ -16,7 +18,12 @@
     </testsuite>
   </testsuites>
   <logging/>
-  <listeners>
-    <listener class="VCR\PHPUnit\TestListener\VCRTestListener" file="vendor/php-vcr/phpunit-testlistener-vcr/src/VCRTestListener.php"/>
-  </listeners>
+  <source>
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </source>
+  <extensions>
+    <bootstrap class="VCR\PHPUnit\TestListener\Extension\VCRExtension" />
+  </extensions>
 </phpunit>

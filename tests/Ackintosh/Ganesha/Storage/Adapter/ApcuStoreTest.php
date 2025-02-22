@@ -22,7 +22,7 @@ class ApcuStoreTest extends TestCase
      */
     public function test_dec()
     {
-        $key = $this->getName();
+        $key = $this->name();
         $store = new ApcuStore();
 
         $this->assertSame(-1, $store->dec($key));
@@ -37,7 +37,7 @@ class ApcuStoreTest extends TestCase
      */
     public function test_delete()
     {
-        $key = $this->getName();
+        $key = $this->name();
         $value = __METHOD__;
         $store = new ApcuStore();
 
@@ -52,7 +52,7 @@ class ApcuStoreTest extends TestCase
      */
     public function test_exists()
     {
-        $key = $this->getName();
+        $key = $this->name();
         $value = __METHOD__;
         $store = new ApcuStore();
 
@@ -67,7 +67,7 @@ class ApcuStoreTest extends TestCase
      */
     public function test_fetch()
     {
-        $key = $this->getName();
+        $key = $this->name();
         $value = __METHOD__;
         $store = new ApcuStore();
 
@@ -88,7 +88,7 @@ class ApcuStoreTest extends TestCase
      */
     public function test_inc()
     {
-        $key = $this->getName();
+        $key = $this->name();
         $store = new ApcuStore();
 
         $this->assertSame(1, $store->inc($key));
@@ -103,7 +103,7 @@ class ApcuStoreTest extends TestCase
      */
     public function test_store()
     {
-        $key = $this->getName();
+        $key = $this->name();
         $value = __METHOD__;
         $store = new ApcuStore();
 
@@ -130,7 +130,7 @@ class ApcuStoreTest extends TestCase
      */
     public function test_getIterator(?string $pattern, int $expectCount)
     {
-        $name = $this->getName();
+        $name = $this->name();
         $keys = array_map(
             function ($index) use ($name) {
                 return sprintf('%s %d', $name, $index);

@@ -696,12 +696,13 @@ $ docker-compose run --rm -w /tmp/ganesha -u ganesha client vendor/bin/phpunit
 
 ### Version Guidance
 
-| Version | PHP Version |
-|---------|-------------|
-| 3.x     | >=8.0       |
-| 2.x     | >=7.3       |
-| 1.x     | >=7.1       |
-| 0.x     | >=5.6       |
+| Version | PHP Version | Latest Release                                                         |
+|---------|-------------|------------------------------------------------------------------------|
+| 4.x     | >=8.1       | [Latest Release](https://github.com/ackintosh/ganesha/releases/latest) |
+| 3.x     | >=8.0       | [3.2.0](https://github.com/ackintosh/ganesha/releases/tag/3.2.0)       |
+| 2.x     | >=7.3       | [2.0.2](https://github.com/ackintosh/ganesha/releases/tag/2.0.2)       |
+| 1.x     | >=7.1       | [1.3.0](https://github.com/ackintosh/ganesha/releases/tag/1.3.0)       |
+| 0.x     | >=5.6       | [0.5.0](https://github.com/ackintosh/ganesha/releases/tag/0.5.0)       |
 
 ## [Author](#table-of-contents)
 

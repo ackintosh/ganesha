@@ -200,7 +200,7 @@ The details to help us understand visually is shown below:
 
 ### Count
 
-If you prefer the Count strategy use `Builder::buildWithCountStrategy()` to build an instance.
+If you prefer the Count strategy use `Builder::withCountStrategy()` to build an instance.
 
 ```php
 $ganesha = Ackintosh\Ganesha\Builder::withCountStrategy()

@@ -40,7 +40,7 @@
     "vimeo/psalm" : "*",
     "ext-redis": "~5.1",
     "ext-memcached": "~3.1",
-    "ext-mongodb": "~1.6"
+    "ext-mongodb": ">=1.6"
   },
   "autoload": {
     "psr-4": {

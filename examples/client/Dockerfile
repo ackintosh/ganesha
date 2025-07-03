@@ -5,6 +5,7 @@ COPY install_composer.sh /tmp/
 RUN apt-get update \
  && apt-get install --no-install-recommends -y git \
  && apt-get install --no-install-recommends -y libmemcached-dev \
+ && apt-get install --no-install-recommends -y libssl-dev \
  && apt-get install --no-install-recommends -y zlib1g-dev \
  && apt-get install --no-install-recommends -y unzip \
  && apt-get install --no-install-recommends -y libzip-dev \
@@ -17,7 +18,7 @@ RUN apt-get update \
  && echo 'extension=redis.so' >> /usr/local/etc/php/php.ini \
  && yes '' | pecl install xdebug-3.1.5 \
  && echo 'zend_extension=xdebug.so' >> /usr/local/etc/php/php.ini \
- && yes '' | pecl install mongodb \
+ && yes '' | pecl install mongodb-1.21.1 \
  && echo 'extension=mongodb.so' >> /usr/local/etc/php/php.ini \
  && yes '' | pecl install apcu \
  && echo 'extension=apcu.so' >> /usr/local/etc/php/php.ini \

@@ -501,12 +501,6 @@ $ganeshaClient->request('GET', 'http://api.example.com/awesome_resource');
 You can also specify `$service` via a option passed to client, or request header. If both are specified, the option value takes precedence.
 
 ```php
-// via constructor argument
-$ganeshaClient = new GaneshaHttpClient($client, $ganesha, [
-    // 'ganesha.service_name' is defined as ServiceNameExtractor::OPTION_KEY
-    'ganesha.service_name' => 'specified_service_name',
-]);
-
 // via request method argument
 $ganeshaClient->request(
     'GET',

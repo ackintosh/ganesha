@@ -50,7 +50,7 @@ jobs:
           tools: composer
           # Specific versions of extensions available on PECL can be set up by suffixing the extension's name with the version.
           # https://github.com/shivammathur/setup-php?tab=readme-ov-file#heavy_plus_sign-php-extension-support
-          extensions: apcu, redis-5.3.7, memcached, mongodb-1.21.0
+          extensions: apcu, redis-5.3.7, memcached, mongodb-1.21.1
           ini-values: apc.enable_cli=1
           coverage: xdebug
         env:

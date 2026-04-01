@@ -154,7 +154,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
      */
     private function removeExpiredElements(string $service): void
     {
-        $expires = microtime(true) - $this->configuration->timeWindow();
+        $expires = (string)(microtime(true) - $this->configuration->timeWindow());
 
         if ($this->redis->zRemRangeByScore($service, '-inf', $expires) === false) {
             throw new StorageException('Failed to remove expired elements. service: ' . $service);

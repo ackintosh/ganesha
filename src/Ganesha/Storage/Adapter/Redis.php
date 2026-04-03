@@ -146,7 +146,7 @@ class Redis implements AdapterInterface, SlidingTimeWindowInterface
 
     public function reset(): void
     {
-        // TODO: Implement reset() method.
+        $this->redis->reset();
     }
 
     /**

@@ -413,6 +413,9 @@ class MemcachedTest extends TestCase
             ->intervalToHalfOpen(10)
             ->build();
 
+        // Ensure memcache is cleared
+        sleep(1);
+
         // Record successes.
         // Since Memcached adapter implements `TumblingTimeWindow`, the count is recorded into a key which based on timestamp.
         $serviceName = 'outdatedCountsShouldBeEvicted';
@@ -441,8 +444,8 @@ class MemcachedTest extends TestCase
             (int)$this->memcached->get($failureKeyForTheTumblingTimeWindow)
         );
 
-        // Since sleeping 15 seconds as below, the `TumblingTimeWindow` contains the success count recorded above is outdated.
-        sleep(15);
+        // Since sleeping 10 seconds as below, the `TumblingTimeWindow` contains the success count recorded above is outdated.
+        sleep(10);
 
         // The count should be got cleared as the `TumblingTimeWindow` is outdated at this point.
         self::assertFalse($this->memcached->get($successKeyForTheTumblingTimeWindow));

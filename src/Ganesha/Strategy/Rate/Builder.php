@@ -8,6 +8,7 @@ use Ackintosh\Ganesha\Storage\Adapter\SlidingTimeWindowInterface;
 use Ackintosh\Ganesha\Storage\Adapter\TumblingTimeWindowInterface;
 use Ackintosh\Ganesha\Storage\StorageKeysInterface;
 use Ackintosh\Ganesha\Traits\BuildGanesha;
+use Psr\Clock\ClockInterface;
 
 class Builder
 {
@@ -80,6 +81,12 @@ class Builder
     public function timeWindow(int $timeWindow): self
     {
         $this->params[Configuration::TIME_WINDOW] = $timeWindow;
+        return $this;
+    }
+
+    public function clock(ClockInterface $clock): self
+    {
+        $this->params[Configuration::CLOCK] = $clock;
         return $this;
     }
 }

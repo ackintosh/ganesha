@@ -37,6 +37,8 @@ trait BuildGanesha
         $adapter = $this->params[Configuration::ADAPTER];
         unset($this->params[Configuration::ADAPTER]);
 
+        $clock = $this->params[Configuration::CLOCK] ?? null;
+
         $configuration = new Configuration($this->params);
         $context = new Ganesha\Context(self::$strategyClass, $adapter, $configuration);
 
@@ -44,6 +46,6 @@ trait BuildGanesha
         $adapter->setConfiguration($configuration);
         $adapter->setContext($context);
 
-        return new Ganesha(self::$strategyClass::create($adapter, $configuration));
+        return new Ganesha(self::$strategyClass::create($adapter, $configuration, $clock));
     }
 }

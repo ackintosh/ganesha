@@ -24,7 +24,7 @@ class Rate implements StrategyInterface
      */
     private $storage;
 
-	private ClockInterface $clock;
+    private ClockInterface $clock;
 
     /**
      * @var array
@@ -41,13 +41,13 @@ class Rate implements StrategyInterface
      * @param Configuration $configuration
      */
     private function __construct(
-		Configuration $configuration,
-		Storage $storage,
-		ClockInterface $clock,
-	) {
+        Configuration $configuration,
+        Storage $storage,
+        ClockInterface $clock,
+    ) {
         $this->configuration = $configuration;
         $this->storage = $storage;
-		$this->clock = $clock;
+        $this->clock = $clock;
     }
 
     /**
@@ -67,11 +67,11 @@ class Rate implements StrategyInterface
     }
 
     public static function create(
-		Storage\AdapterInterface $adapter,
-		Configuration $configuration,
-		?ClockInterface $clock = null
-	): StrategyInterface {
-		$clock = $clock ?? new NativeClock();
+        Storage\AdapterInterface $adapter,
+        Configuration $configuration,
+        ?ClockInterface $clock = null
+    ): StrategyInterface {
+        $clock = $clock ?? new NativeClock();
         $serviceNameDecorator = $adapter instanceof Storage\Adapter\TumblingTimeWindowInterface ? self::serviceNameDecorator($configuration->timeWindow(), $clock) : null;
 
         return new self(
@@ -81,7 +81,7 @@ class Rate implements StrategyInterface
                 $configuration->storageKeys(),
                 $serviceNameDecorator
             ),
-			$clock,
+            $clock,
         );
     }
 
@@ -203,7 +203,7 @@ class Rate implements StrategyInterface
      */
     private function isHalfOpen(string $service): bool
     {
-		$time = $this->clock->now()->getTimestamp();
+        $time = $this->clock->now()->getTimestamp();
 
         if (is_null($lastFailureTime = $this->storage->getLastFailureTime($service))) {
             return false;
@@ -220,7 +220,7 @@ class Rate implements StrategyInterface
     private static function serviceNameDecorator(int $timeWindow, ClockInterface $clock, bool $current = true): \Closure
     {
         return function ($service) use ($timeWindow, $clock, $current) {
-			$time = $clock->now()->getTimestamp();
+            $time = $clock->now()->getTimestamp();
 
             return sprintf(
                 '%s.%d',

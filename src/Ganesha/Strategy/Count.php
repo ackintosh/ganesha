@@ -22,23 +22,23 @@ class Count implements StrategyInterface
      */
     private $storage;
 
-	private ClockInterface $clock;
+    private ClockInterface $clock;
 
     private function __construct(
-		Configuration $configuration,
-		Storage $storage,
-		ClockInterface $clock,
-	) {
+        Configuration $configuration,
+        Storage $storage,
+        ClockInterface $clock,
+    ) {
         $this->configuration = $configuration;
         $this->storage = $storage;
-		$this->clock = $clock;
+        $this->clock = $clock;
     }
 
     public static function create(
-		Storage\AdapterInterface $adapter,
-		Configuration $configuration,
-		?ClockInterface $clock = null,
-	): StrategyInterface {
+        Storage\AdapterInterface $adapter,
+        Configuration $configuration,
+        ?ClockInterface $clock = null,
+    ): StrategyInterface {
         return new self(
             $configuration,
             new Storage(
@@ -46,7 +46,7 @@ class Count implements StrategyInterface
                 $configuration->storageKeys(),
                 null
             ),
-			$clock ?? new NativeClock(),
+            $clock ?? new NativeClock(),
         );
     }
 
@@ -107,7 +107,7 @@ class Count implements StrategyInterface
             return false;
         }
 
-		$time = $this->clock->now()->getTimestamp();
+        $time = $this->clock->now()->getTimestamp();
 
         if (($time - $lastFailureTime) > $this->configuration->intervalToHalfOpen()) {
             $this->storage->setFailureCount($service, $this->configuration->failureCountThreshold());

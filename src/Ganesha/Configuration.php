@@ -5,6 +5,7 @@ namespace Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 use Ackintosh\Ganesha\Storage\StorageKeys;
 use Ackintosh\Ganesha\Storage\StorageKeysInterface;
+use Psr\Clock\ClockInterface;
 
 class Configuration
 {
@@ -16,6 +17,8 @@ class Configuration
     const MINIMUM_REQUESTS = 'minimumRequests';
     const INTERVAL_TO_HALF_OPEN = 'intervalToHalfOpen';
     const STORAGE_KEYS = 'storageKeys';
+
+    const CLOCK = 'clock';
 
     private array $params;
 
@@ -55,6 +58,11 @@ class Configuration
     public function storageKeys(): StorageKeysInterface
     {
         return $this->params[self::STORAGE_KEYS];
+    }
+
+    public function clock(): ?ClockInterface
+    {
+        return $this->params[self::CLOCK] ?? null;
     }
 
     /**

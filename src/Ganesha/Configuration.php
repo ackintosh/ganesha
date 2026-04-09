@@ -60,11 +60,6 @@ class Configuration
         return $this->params[self::STORAGE_KEYS];
     }
 
-    public function clock(): ?ClockInterface
-    {
-        return $this->params[self::CLOCK] ?? null;
-    }
-
     /**
      * @throws \InvalidArgumentException
      */

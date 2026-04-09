@@ -5,10 +5,12 @@ namespace Ackintosh\Ganesha\Strategy;
 use Ackintosh\Ganesha;
 use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Exception\StorageException;
+use Ackintosh\Ganesha\NativeClock;
 use Ackintosh\Ganesha\Storage;
 use Ackintosh\Ganesha\StrategyInterface;
 use InvalidArgumentException;
 use LogicException;
+use Psr\Clock\ClockInterface;
 
 class Rate implements StrategyInterface
 {
@@ -21,6 +23,8 @@ class Rate implements StrategyInterface
      * @var Storage
      */
     private $storage;
+
+    private ClockInterface $clock;
 
     /**
      * @var array
@@ -36,10 +40,14 @@ class Rate implements StrategyInterface
     /**
      * @param Configuration $configuration
      */
-    private function __construct(Configuration $configuration, Storage $storage)
-    {
+    private function __construct(
+        Configuration $configuration,
+        Storage $storage,
+        ClockInterface $clock,
+    ) {
         $this->configuration = $configuration;
         $this->storage = $storage;
+        $this->clock = $clock;
     }
 
     /**
@@ -58,9 +66,13 @@ class Rate implements StrategyInterface
         }
     }
 
-    public static function create(Storage\AdapterInterface $adapter, Configuration $configuration): StrategyInterface
-    {
-        $serviceNameDecorator = $adapter instanceof Storage\Adapter\TumblingTimeWindowInterface ? self::serviceNameDecorator($configuration->timeWindow()) : null;
+    public static function create(
+        Storage\AdapterInterface $adapter,
+        Configuration $configuration,
+        ?ClockInterface $clock = null
+    ): StrategyInterface {
+        $clock = $clock ?? new NativeClock();
+        $serviceNameDecorator = $adapter instanceof Storage\Adapter\TumblingTimeWindowInterface ? self::serviceNameDecorator($configuration->timeWindow(), $clock) : null;
 
         return new self(
             $configuration,
@@ -68,13 +80,14 @@ class Rate implements StrategyInterface
                 $adapter,
                 $configuration->storageKeys(),
                 $serviceNameDecorator
-            )
+            ),
+            $clock,
         );
     }
 
     public function recordFailure(string $service): int
     {
-        $this->storage->setLastFailureTime($service, time());
+        $this->storage->setLastFailureTime($service, $this->clock->now()->getTimestamp());
         $this->storage->incrementFailureCount($service);
         if (
             $this->storage->getStatus($service) === Ganesha::STATUS_CALMED_DOWN
@@ -158,7 +171,7 @@ class Rate implements StrategyInterface
 
     private function isClosedInPreviousTimeWindow(string $service): bool
     {
-        $failure = $this->storage->getFailureCountByCustomKey(self::keyForPreviousTimeWindow($service, $this->configuration->timeWindow()));
+        $failure = $this->storage->getFailureCountByCustomKey(self::keyForPreviousTimeWindow($service, $this->configuration->timeWindow(), $this->clock));
         if (
             $failure === 0
             || ($failure / $this->configuration->minimumRequests()) * 100 < $this->configuration->failureRateThreshold()
@@ -166,8 +179,8 @@ class Rate implements StrategyInterface
             return true;
         }
 
-        $success = $this->storage->getSuccessCountByCustomKey(self::keyForPreviousTimeWindow($service, $this->configuration->timeWindow()));
-        $rejection = $this->storage->getRejectionCountByCustomKey(self::keyForPreviousTimeWindow($service, $this->configuration->timeWindow()));
+        $success = $this->storage->getSuccessCountByCustomKey(self::keyForPreviousTimeWindow($service, $this->configuration->timeWindow(), $this->clock));
+        $rejection = $this->storage->getRejectionCountByCustomKey(self::keyForPreviousTimeWindow($service, $this->configuration->timeWindow(), $this->clock));
 
         return $this->isClosedInTimeWindow($failure, $success, $rejection);
     }
@@ -190,32 +203,36 @@ class Rate implements StrategyInterface
      */
     private function isHalfOpen(string $service): bool
     {
+        $time = $this->clock->now()->getTimestamp();
+
         if (is_null($lastFailureTime = $this->storage->getLastFailureTime($service))) {
             return false;
         }
 
-        if ((time() - $lastFailureTime) > $this->configuration->intervalToHalfOpen()) {
-            $this->storage->setLastFailureTime($service, time());
+        if (($time - $lastFailureTime) > $this->configuration->intervalToHalfOpen()) {
+            $this->storage->setLastFailureTime($service, $time);
             return true;
         }
 
         return false;
     }
 
-    private static function serviceNameDecorator(int $timeWindow, $current = true)
+    private static function serviceNameDecorator(int $timeWindow, ClockInterface $clock, bool $current = true): \Closure
     {
-        return function ($service) use ($timeWindow, $current) {
+        return function ($service) use ($timeWindow, $clock, $current) {
+            $time = $clock->now()->getTimestamp();
+
             return sprintf(
                 '%s.%d',
                 $service,
-                $current ? (int)floor(time() / $timeWindow) : (int)floor((time() - $timeWindow) / $timeWindow)
+                $current ? (int)floor($time / $timeWindow) : (int)floor(($time - $timeWindow) / $timeWindow)
             );
         };
     }
 
-    private static function keyForPreviousTimeWindow(string $service, int $timeWindow)
+    private static function keyForPreviousTimeWindow(string $service, int $timeWindow, ClockInterface $clock): string
     {
-        $f = self::serviceNameDecorator($timeWindow, false);
+        $f = self::serviceNameDecorator($timeWindow, $clock, false);
         return $f($service);
     }
 }

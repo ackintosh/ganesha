@@ -7,6 +7,7 @@ use Ackintosh\Ganesha\Configuration;
 use Ackintosh\Ganesha\Storage\AdapterInterface;
 use Ackintosh\Ganesha\Storage\Adapter\SlidingTimeWindowInterface;
 use Ackintosh\Ganesha\Storage\Adapter\TumblingTimeWindowInterface;
+use Psr\Clock\ClockInterface;
 
 class Builder
 {
@@ -57,6 +58,12 @@ class Builder
     public function storageKeys(Ganesha\Storage\StorageKeysInterface $storageKeys): self
     {
         $this->params[Configuration::STORAGE_KEYS] = $storageKeys;
+        return $this;
+    }
+
+    public function clock(ClockInterface $clock): self
+    {
+        $this->params[Configuration::CLOCK] = $clock;
         return $this;
     }
 }

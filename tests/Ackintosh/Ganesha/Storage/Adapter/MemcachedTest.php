@@ -424,7 +424,7 @@ class MemcachedTest extends TestCase
 
         $reflection = new \ReflectionMethod(Ganesha\Strategy\Rate::class, 'serviceNameDecorator');
         $reflection->setAccessible(true);
-        $serviceNameDecorator = $reflection->invokeArgs(null, [$timeWindow]);
+        $serviceNameDecorator = $reflection->invokeArgs(null, [$timeWindow, new Ganesha\NativeClock()]);
         $storageKeys = new Ganesha\Storage\StorageKeys();
 
         $successKeyForTheTumblingTimeWindow = $storageKeys->prefix() . $serviceNameDecorator($serviceName) . $storageKeys->success();

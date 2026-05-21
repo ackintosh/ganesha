@@ -15,3 +15,4 @@ GTAGS
 /tmp
 .php-cs-fixer.cache
 .phpunit.result.cache
+.claude/

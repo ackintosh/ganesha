@@ -2,6 +2,7 @@
 
 **Channel**: [Hand-Rolled Code](channel.md)  
 **Project**: [Ganesha](https://github.com/ackintosh/ganesha) — PHP Circuit Breaker library  
+**Episode**: 2 — continues from [episode-1.md](episode-1.md)  
 **Task**: Implement the `reset()` method in the Redis storage adapter  
 **Estimated duration**: 15–20 minutes  
 
@@ -9,15 +10,9 @@
 
 ## Scene 1 — Introduction (camera on screen, terminal open)
 
-> "Hey everyone, welcome. This is my first video. This channel is about coding by hand — writing real software with my own hands, no AI autocomplete, no generated boilerplate. Just me and a keyboard. I'm planning to post sessions like this regularly, so if that sounds interesting, feel free to subscribe.
+> "Hey everyone, welcome back. Last time I introduced Ganesha — a PHP circuit breaker library I've been maintaining — and walked through the basic API.
 >
-> Today I'm going to do some coding on an open-source PHP library called **Ganesha** — which is a circuit breaker implementation I've been maintaining.
-
-> If you're not familiar with the circuit breaker pattern — it's a design pattern used in distributed systems to prevent cascading failures. Think of it like an electrical circuit breaker: when too many failures happen, the circuit 'trips' and stops sending requests to a broken service, giving it time to recover.
-
-> Ganesha supports two strategies for detecting failures: a **Rate strategy**, which tracks the failure rate as a percentage over a sliding time window, and a **Count strategy**, which simply counts how many failures have occurred.
-
-> Today's task is pretty focused. I found a TODO comment in the codebase, and I want to take care of it."
+> Today's task is more focused. I found a TODO comment in the codebase, and I want to take care of it."
 
 ---
 

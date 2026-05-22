@@ -30,7 +30,9 @@
 
 *Optionally show the diagram image from the README.*
 
-> "Ganesha implements this pattern in PHP."
+> "This pattern was popularized by Michael Nygard in his 2007 book *Release It!*, and Martin Fowler later wrote a well-known article about it on his website. If you want to go deeper on the concept, Fowler's article is a great starting point — I'll link it in the description.
+>
+> Ganesha implements this pattern in PHP."
 
 ---
 
@@ -75,7 +77,7 @@ $ganesha = Ackintosh\Ganesha\Builder::withCountStrategy()
 > - `failureCountThreshold(3)` — the circuit trips after 3 consecutive failures
 > - `intervalToHalfOpen(10)` — 10 seconds after tripping, Ganesha allows one trial request through
 >
-> The adapter is how Ganesha persists its state. Here I'm using Redis. Ganesha supports several adapters — Redis, Memcached, APCu, and MongoDB."
+> The adapter is how Ganesha persists its state. Here I'm using Redis. Ganesha supports multiple storage adapters — Redis and Memcached are the ones I'd recommend."
 
 ---
 

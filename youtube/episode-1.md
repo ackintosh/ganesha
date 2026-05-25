@@ -9,7 +9,7 @@
 
 ## Scene 1 — Channel intro (camera on screen, terminal open)
 
-> "Hey everyone, welcome to Hand-Rolled Code. This channel is about coding by hand — writing real software with my own hands, no AI autocomplete, no generated boilerplate. Just me and a keyboard. All right. I'm planning to post sessions like this regularly, so if that sounds interesting, feel free to subscribe.
+> "Hey everyone, welcome to Hand-Rolled Code. This channel is about coding by hand — no vibe coding, no AI doing the thinking for me. Just me working through problems the old-fashioned way. I think there's real value in writing every line yourself — it forces you to actually understand what you're doing. All right. I'm planning to post sessions like this regularly, so if that sounds interesting, feel free to subscribe.
 >
 > Today I want to introduce a PHP library called **Ganesha** — a circuit breaker implementation I've been maintaining. We're going to look at what the circuit breaker is, why it's useful, and how Ganesha implements it. And I'll walk through the basic API so you can start using it in your own projects. Cool, let's get into it."
 

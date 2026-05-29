@@ -9,13 +9,19 @@
 
 ## Scene 1 — Channel intro (camera on screen, terminal open)
 
+*show the channel image*
+
 > "Hey everyone, welcome to Hand-Rolled Code. This channel is about coding by hand — no vibe coding, no AI doing the thinking for me. Just me working through problems the old-fashioned way. I think there's real value in writing every line yourself — it forces you to actually understand what you're doing. All right. I'm planning to post sessions like this regularly, so if that sounds interesting, feel free to subscribe.
->
+
+*Show the Ganesha logo*
+
 > Today I want to introduce a PHP library called **Ganesha** — a circuit breaker implementation I've been maintaining. We're going to look at what the circuit breaker is, why it's useful, and how Ganesha implements it. And I'll walk through the basic API so you can start using it in your own projects. Cool, let's get into it."
 
 ---
 
 ## Scene 2 — What is the circuit breaker pattern?
+
+*Show episode-1-scene-02.png*
 
 > "All right, let me start with the concept, because the code makes a lot more sense once you understand what problem we're solving.
 >
@@ -28,9 +34,13 @@
 > - **Open** — failures exceeded the threshold, requests are blocked
 > - **Half-Open** — a trial period, one request is allowed through to test recovery
 
-*Optionally show the diagram image from the README.*
+*Show Release It*
 
-> "This pattern was popularized by Michael Nygard in his 2007 book *Release It!*, and Martin Fowler later wrote a well-known article about it on his website. If you want to go deeper on the concept, Fowler's article is a great starting point — I'll link it in the description.
+> "This pattern was popularized by Michael Nygard in his 2007 book *Release It!*.
+
+*Show Fowler's article*
+
+> and Martin Fowler later wrote a well-known article about it on his website. If you want to go deeper on the concept, Fowler's article is a great starting point — I'll link it in the description.
 >
 > All right. Ganesha implements this pattern in PHP."
 

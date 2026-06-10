@@ -40,27 +40,13 @@
 
 *Show Fowler's article*
 
-> and Martin Fowler later wrote a well-known article about it on his website. If you want to go deeper on the concept, Fowler's article is a great starting point — I'll link it in the description.
+> and Martin Fowler wrote a well-known article about it on his website. If you want to go deeper on the concept, Fowler's article is a great starting point — I'll link it in the description.
 >
 > All right. Ganesha implements this pattern in PHP."
 
 ---
 
-## Scene 3 — Installing Ganesha
-
-*Open terminal.*
-
-> "All right, let me install it. Ganesha is on Packagist, so it's just a Composer command."
-
-```bash
-composer require ackintosh/ganesha
-```
-
-> "Cool. That's it. No extra extensions required for the basic setup."
-
----
-
-## Scene 4 — Building Ganesha with the Count Strategy
+## Scene 3 — Building Ganesha with the Count Strategy
 
 *Open a new PHP file, for example `demo.php`.*
 
@@ -91,7 +77,7 @@ $ganesha = Ackintosh\Ganesha\Builder::withCountStrategy()
 
 ---
 
-## Scene 5 — The basic API: `isAvailable()`, `success()`, `failure()`
+## Scene 4 — The basic API: `isAvailable()`, `success()`, `failure()`
 
 > "All right. Ganesha's API is deliberately minimal. There are three methods you need to know."
 
@@ -123,7 +109,7 @@ try {
 
 ---
 
-## Scene 6 — Watching the circuit trip
+## Scene 5 — Watching the circuit trip
 
 > "All right, let me show what actually happens when failures accumulate."
 
@@ -141,7 +127,7 @@ var_dump($ganesha->isAvailable($service)); // bool(false)
 
 ---
 
-## Scene 7 — Subscribing to events
+## Scene 6 — Subscribing to events
 
 > "All right. Ganesha also publishes events when the circuit state changes. This is useful for logging or alerting."
 
@@ -160,7 +146,7 @@ $ganesha->subscribe(function (string $event, string $service, string $message): 
 
 ---
 
-## Scene 8 — Brief mention of the Rate Strategy
+## Scene 7 — Brief mention of the Rate Strategy
 
 > "Okay, I mentioned there's a second strategy — the **Rate strategy**. Instead of counting raw failures, it tracks the failure rate as a percentage over a sliding time window. This is better for high-traffic services where a fixed count doesn't scale well.
 
@@ -178,7 +164,7 @@ $ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
 
 ---
 
-## Scene 9 — Tease for Episode 2
+## Scene 8 — Tease for Episode 2
 
 *Open [src/Ganesha/Storage/Adapter/Redis.php](../src/Ganesha/Storage/Adapter/Redis.php), navigate to the `reset()` method.*
 

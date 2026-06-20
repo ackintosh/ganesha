@@ -30,7 +30,7 @@
 > There are three states:
 > - **Closed** — everything is normal, requests go through
 > - **Open** — failures exceeded the threshold, requests are blocked
-> - **Half-Open** — a trial period, one request is allowed through to test recovery
+> - **Half-Open** — a trial period, one request is allowed to test recovery
 
 > "This pattern was popularized by Michael Nygard in his 2007 book *Release It!*.
 > and Martin Fowler wrote a well-known article about it on his website. If you want to go deeper on the concept, Fowler's article is a great starting point — I'll link it in the description.
@@ -63,13 +63,13 @@ $ganesha = Ackintosh\Ganesha\Builder::withCountStrategy()
     ->build();
 ```
 
-> "All right, let me walk through the options:
+> All right, the adapter is how Ganesha persists its state. Here I'm using Redis. Ganesha supports multiple storage adapters — Redis and Memcached are the ones I'd recommend."
+
+> "let me walk through the options:
 >
 > - `failureCountThreshold(3)` — the circuit trips after 3 consecutive failures
 > - `intervalToHalfOpen(10)` — 10 seconds after tripping, Ganesha allows one trial request through
 >
-> Cool. The adapter is how Ganesha persists its state. Here I'm using Redis. Ganesha supports multiple storage adapters — Redis and Memcached are the ones I'd recommend."
-
 ---
 
 ## Scene 3 — The basic API: `isAvailable()`, `success()`, `failure()`
@@ -130,32 +130,38 @@ var_dump($ganesha->isAvailable($service)); // bool(false)
 
 ```php
 $ganesha->subscribe(function (string $event, string $service, string $message): void {
-    error_log(sprintf('[Ganesha] %s: %s', $event, $service));
+    echo sprintf('%s(%s): %s', $event, $service);
 });
 ```
 
-> "There are three events:
-> - `EVENT_TRIPPED` — the circuit just opened
-> - `EVENT_CALMED_DOWN` — the circuit recovered and closed again
-> - `EVENT_STORAGE_ERROR` — the storage backend had a problem
->
-> Cool. And notice that storage errors are handled gracefully — if Redis goes down, Ganesha defaults to returning `true` from `isAvailable()` rather than crashing your application. It fails open, which is usually the right default for a circuit breaker."
+> It's a good idea to use different log levels depending on the event type 
+
+```php
+$ganesha->subscribe(function (string $event, string $service, string $message): void {
+     switch ($event) {
+        case \Ackintosh\Ganesha::EVENT_TRIPPED:
+            echo sprintf('[ERROR] the circuit just opened %s(%s): %s', $event, $service, $message);
+        case \Ackintosh\Ganesha::EVENT_CALMED_DOWN:
+            echo sprintf('[INFO] the circuit recovered and closed again %s(%s): %s', $event, $service, $message);
+        case \Ackintosh\Ganesha::EVENT_STORAGE_ERROR:
+            echo sprintf('[WARN] the storage backend had a problem %s(%s): %s', $event, $service, $message);
+        default:
+            break;
+    }
+});
+```
+
+> "All right, let's run it again and confirm that the logs are output as expected."
 
 ---
 
 ## Scene 6 — Brief mention of the Rate Strategy
 
-> "Okay, I mentioned there's a second strategy — the **Rate strategy**. Instead of counting raw failures, it tracks the failure rate as a percentage over a sliding time window. This is better for high-traffic services where a fixed count doesn't scale well.
+> "All right, let me add a quick note about the strategy. 
 
-```php
-$ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
-    ->adapter(new Ackintosh\Ganesha\Storage\Adapter\Redis($redis))
-    ->failureRateThreshold(50)   // trip if 50% of requests fail
-    ->minimumRequests(10)        // but only after at least 10 requests
-    ->timeWindow(30)             // measured over a 30-second window
-    ->intervalToHalfOpen(10)
-    ->build();
-```
+*Open the README, navigate to the Rate strategy.*
+
+> I mentioned there's a second strategy — the **Rate strategy**. Instead of counting failures, it tracks the failure rate as a percentage over a sliding time window. This is better for high-traffic services where a fixed count doesn't scale.
 
 > "All right. We won't go deeper into this today, but the API is identical — same three methods, same event system. Cool."
 
@@ -163,13 +169,13 @@ $ganesha = Ackintosh\Ganesha\Builder::withRateStrategy()
 
 ## Scene 7 — Tease for Episode 2
 
-*Open [src/Ganesha/Storage/Adapter/Redis.php](../src/Ganesha/Storage/Adapter/Redis.php), navigate to the `reset()` method.*
-
 > "All right, before I wrap up — let me show you something I found in the codebase."
+
+*Open [src/Ganesha/Storage/Adapter/Redis.php](../src/Ganesha/Storage/Adapter/Redis.php), navigate to the `reset()` method.*
 
 *Scroll to the `reset()` method's TODO comment.*
 
-> "There's a TODO here. The `reset()` method — which is supposed to clear all circuit breaker state — is not implemented for the Redis adapter. If you call `$ganesha->reset()` right now with Redis, nothing happens. All right.
+> "There's a TODO here. The `reset()` method — which is supposed to clear all circuit breaker state — is not implemented for the Redis adapter. If you call `$ganesha->reset()` right now with Redis, nothing happens.
 >
 > So in the next video, I'm going to fix this. We'll look at how Redis is storing Ganesha's data, figure out the right approach to delete it all safely, write the implementation, and test it.
 >
